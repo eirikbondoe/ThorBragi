@@ -1,0 +1,43 @@
+{
+  "url": "http://127.0.0.1:8081/",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "Thorøisjen Jakkobbsen",
+      "hasCanvas": false,
+      "bodyTextLen": 286,
+      "bodyTextHash": "fd25a03361f0270e353d40a344b1cdf88a71173ccb08f80cd094ce51bc5b3c11",
+      "bodyTextPrefix": "Thorøisjen Jakkobbsen BONDOVA Sitt. Syng. La banen vente. Fortse",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-built.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "Thorøisjen Jakkobbsen",
+      "hasCanvas": false,
+      "bodyTextLen": 299,
+      "bodyTextHash": "2cc94ff466fdd6cfcd38ede8205c1ceb25d6fde81f54028e6bfa6e348d51ed02",
+      "bodyTextPrefix": "Thorøisjen Jakkobbsen BONDOVA Sitt. Syng. La banen vente. Fortse",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-built-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/app-builder-built.json",
+  "divergesFromBaseline": true,
+  "baselineReasons": [
+    "desktop: title changed (\"Lydvenn\" -> \"Thorøisjen Jakkobbsen\")",
+    "desktop: body text changed (375 -> 286 chars, hash mismatch)",
+    "mobile: title changed (\"Lydvenn\" -> \"Thorøisjen Jakkobbsen\")",
+    "mobile: body text changed (411 -> 299 chars, hash mismatch)"
+  ]
+}

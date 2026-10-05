@@ -1,0 +1,36 @@
+{
+  "url": "http://127.0.0.1:8080/",
+  "viewports": {
+    "desktop": {
+      "width": 1280,
+      "height": 800,
+      "status": 200,
+      "title": "Lydvenn",
+      "hasCanvas": false,
+      "bodyTextLen": 375,
+      "bodyTextHash": "8198a76afe3bd3879005bbb523d70ce721fab2de38bb0f39edc7c194a6202d3a",
+      "bodyTextPrefix": "LYDVENN Et helt studio. Ingen knotter. Det en innspillingsprodus",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-preview.png"
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "status": 200,
+      "title": "Lydvenn",
+      "hasCanvas": false,
+      "bodyTextLen": 411,
+      "bodyTextHash": "34de86ac69ef11ef2a881da882c63a0782bfbbf9d50dfa775db80f6a246c3423",
+      "bodyTextPrefix": "LYDVENN Et helt studio. Ingen knotter. Det en innspillingsprodus",
+      "horizontalOverflow": false,
+      "consoleErrors": [],
+      "pageErrors": [],
+      "screenshot": "/workspace/screenshots/app-builder-preview-mobile.png"
+    }
+  },
+  "brandWarnings": [],
+  "authWarnings": [],
+  "verdictFile": "/workspace/screenshots/app-builder-preview.json"
+}
