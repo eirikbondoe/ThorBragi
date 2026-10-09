@@ -1,1 +1,0 @@
-import{c as e}from"./link-Cov37-hO.js";import{n as t}from"./index-DIbkj7r4.js";import{t as n}from"./lyric-link-AOTTo-wR.js";var r=e();function i(){let{code:e}=t.useParams();return(0,r.jsx)(n,{code:e})}export{i as component};

@@ -1,8 +1,8 @@
 import { o as __toESM } from "../_runtime.mjs";
 import { J as require_react, S as require_jsx_runtime } from "../_libs/@tanstack/react-router+[...].mjs";
-import { i as Route$2 } from "./router-fKveQLSU.mjs";
-import { a as isLyricCue, c as roomId, u as useP2PRoom } from "./lyric-link-De0ArgJz.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/lag._code-f6wipq12.js
+import { i as Route$2 } from "./router-CcE4xOFd.mjs";
+import { a as isLyricCue, c as roomId, u as useP2PRoom } from "./lyric-link-DpThLPER.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/lag._code-yemQeDFD.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function OverlayScreen({ code }) {

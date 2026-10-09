@@ -2,7 +2,7 @@ import { S as require_jsx_runtime } from "../_libs/@tanstack/react-router+[...].
 import { n as clsx, t as cva } from "../_libs/class-variance-authority+clsx.mjs";
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
 import { n as persist, r as create, t as createJSONStorage } from "../_libs/zustand.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/mark-lLZAXZY-.js
+//#region node_modules/.nitro/vite/services/ssr/assets/mark-Dbp9pnc0.js
 var import_jsx_runtime = require_jsx_runtime();
 function cn(...inputs) {
 	return twMerge(clsx(inputs));
@@ -610,65 +610,21 @@ function TrackChips({ song, trackId, onPick }) {
 		})
 	});
 }
-function Mark({ className = "h-7 w-auto" }) {
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("svg", {
-		viewBox: "0 0 64 88",
-		className,
-		"aria-hidden": true,
-		children: [
-			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("defs", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("clipPath", {
-				id: "lydvenn-stone",
-				children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", { d: "M32 4 L60 32 L32 84 L4 32 Z" })
-			}) }),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("g", {
-				clipPath: "url(#lydvenn-stone)",
-				children: [
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("rect", {
-						width: "64",
-						height: "36",
-						fill: "var(--color-crystal)"
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("rect", {
-						y: "36",
-						width: "64",
-						height: "16",
-						fill: "var(--color-gold)"
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("rect", {
-						y: "52",
-						width: "64",
-						height: "36",
-						fill: "var(--color-violet)"
-					})
-				]
-			}),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
-				d: "M18 30 H46 V38 H36 V58 H28 V38 H18 Z",
-				fill: "var(--color-ink)"
-			})
-		]
+function Mark({ className = "h-12 w-12" }) {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
+		src: "/mark.jpg",
+		alt: "",
+		className: `${className} rounded-md object-cover`
 	});
 }
 function Logo({ large = false }) {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 		className: large ? "flex items-center gap-4" : "inline-flex items-center gap-2",
-		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Mark, { className: large ? "h-16 w-auto shrink-0" : "h-7 w-auto shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Mark, { className: large ? "h-20 w-20 shrink-0" : "h-12 w-12 shrink-0" }), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
 			className: "min-w-0",
-			children: [large ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h1", {
-				className: "font-display text-3xl leading-none sm:text-4xl",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-					className: "block",
-					children: "Thorøisjen"
-				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-					className: "block",
-					children: "Jakkobbsen"
-				})]
-			}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("h1", {
-				className: "block font-display text-xs leading-tight",
-				children: ["Thorøisjen", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-					className: "block",
-					children: "Jakkobbsen"
-				})]
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
+				className: large ? "font-display text-4xl leading-none" : "font-display text-base leading-none",
+				children: "ThorSound"
 			}), large ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 				className: "mt-2 text-xs font-medium tracking-widest text-muted uppercase",
 				children: "Bondova · Bondø Human AI"

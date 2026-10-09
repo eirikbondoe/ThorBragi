@@ -1,16 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
-  <rect width="32" height="32" fill="#0A1128"/>
-  <g transform="translate(6.2 2.4) scale(0.305)">
-    <g clip-path="url(#stone)">
-      <rect width="64" height="36" fill="#2EC8E6"/>
-      <rect y="36" width="64" height="16" fill="#D4A24A"/>
-      <rect y="52" width="64" height="36" fill="#6C4DFF"/>
-    </g>
-    <path d="M18 30 H46 V38 H36 V58 H28 V38 H18 Z" fill="#F4EFEA"/>
-  </g>
-  <defs>
-    <clipPath id="stone">
-      <path d="M32 4 L60 32 L32 84 L4 32 Z"/>
-    </clipPath>
-  </defs>
+  <rect width="32" height="32" rx="6" fill="#0A1128"/>
+  <path d="M10 12 L12.2 7.2 L14.4 12 Z" fill="#F4EFEA"/>
+  <path d="M17.6 12 L19.8 7.2 L22 12 Z" fill="#F4EFEA"/>
+  <circle cx="16" cy="16.5" r="6.2" fill="#F4EFEA"/>
+  <path d="M20.5 14.5 L27 8" stroke="#D4A24A" stroke-width="1.4" stroke-linecap="round"/>
+  <circle cx="25.2" cy="9.2" r="0.7" fill="#D4A24A"/>
+  <circle cx="26.4" cy="7.6" r="0.7" fill="#D4A24A"/>
+  <ellipse cx="11.2" cy="23.5" rx="5.2" ry="2.1" transform="rotate(-28 11.2 23.5)" fill="#2EC8E6"/>
+  <circle cx="13.2" cy="16.2" r="0.7" fill="#0A1128"/>
+  <circle cx="17.4" cy="16.2" r="0.7" fill="#0A1128"/>
 </svg>

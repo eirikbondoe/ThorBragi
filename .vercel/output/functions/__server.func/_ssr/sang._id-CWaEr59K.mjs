@@ -1,11 +1,11 @@
 import { o as __toESM } from "../_runtime.mjs";
 import { J as require_react, S as require_jsx_runtime, y as Link } from "../_libs/@tanstack/react-router+[...].mjs";
-import { A as Cast, C as Headphones, D as Circle, E as Columns2, F as ArrowUp, I as ArrowDown, L as Activity, M as Cable, N as Bot, O as ChevronRight, P as AudioLines, S as ListMusic, T as Drum, _ as Radio, a as Users, b as Mic, c as Trash2, d as Sparkles, f as SlidersHorizontal, g as Repeat, h as Scissors, i as Video, j as Captions, k as ChevronLeft, l as Timer, m as ScrollText, n as Waves, o as Tv, p as Share2, r as WandSparkles, t as Wind, u as Square, v as Play, w as Ear, x as MessageSquare, y as Music2 } from "../_libs/lucide-react.mjs";
-import { n as Route } from "./router-fKveQLSU.mjs";
-import { _ as songDuration, a as Meter, c as Slider, d as activeTake, f as activeVideoTake, g as putAudio, h as hydrateStudio, l as TrackChips, m as getAudio, n as Choices, o as PanelHead, p as formatTime, r as KIND_LABEL, s as SECTION_LABEL, t as Button, u as Wave, v as useStudio } from "./mark-lLZAXZY-.mjs";
-import { i as SammenPanel, l as useLyricLink, n as LyricLink, o as lyricIndex, r as Prompter, s as lyricLines } from "./lyric-link-De0ArgJz.mjs";
-import { n as Shell, t as GearGuide } from "./shell-K9lprTdv.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/sang._id-Bd8V9yMB.js
+import { A as ChevronLeft, C as Headphones, D as Columns2, E as Drum, F as AudioLines, I as ArrowUp, L as ArrowDown, M as Captions, N as Cable, O as Circle, P as Bot, R as Activity, S as ListMusic, T as Ear, _ as Radio, a as Users, b as Mic, c as Trash2, d as Sparkles, f as SlidersHorizontal, g as Repeat, h as Scissors, i as Video, j as Cast, k as ChevronRight, l as Timer, m as ScrollText, n as Waves, o as Tv, p as Share2, r as WandSparkles, t as Wind, u as Square, v as Play, w as FileAudio, x as MessageSquare, y as Music2 } from "../_libs/lucide-react.mjs";
+import { n as Route } from "./router-CcE4xOFd.mjs";
+import { _ as songDuration, a as Meter, c as Slider, d as activeTake, f as activeVideoTake, g as putAudio, h as hydrateStudio, l as TrackChips, m as getAudio, n as Choices, o as PanelHead, p as formatTime, r as KIND_LABEL, s as SECTION_LABEL, t as Button, u as Wave, v as useStudio } from "./mark-Dbp9pnc0.mjs";
+import { i as SammenPanel, l as useLyricLink, n as LyricLink, o as lyricIndex, r as Prompter, s as lyricLines } from "./lyric-link-DpThLPER.mjs";
+import { n as Shell, t as GearGuide } from "./shell--g2eojab.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/sang._id-CWaEr59K.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function producerAdvice(song) {
@@ -14,7 +14,7 @@ function producerAdvice(song) {
 	if (song.tracks.length === 0) notes.push({
 		id: "start",
 		title: "Begynn i ett spor",
-		text: "Syng og spill samtidig. Ett opptak er en hel låt. Headset på. Frisbeegolf får ikke være med på opptaket, og det får ikke høyttaleren heller.",
+		text: "Syng og spill i ett opptak. Headset på, så høyttaleren ikke blir med.",
 		job: "opptak"
 	});
 	for (const track of withAudio) {
@@ -23,19 +23,19 @@ function producerAdvice(song) {
 		if (take.peak > .94) notes.push({
 			id: `hot-${track.id}`,
 			title: `${track.name} er for sterk`,
-			text: "Du slo i taket. Hold mikrofonen litt unna, og ta et nytt forsøk. Dette er ikke en bakke du skal løpe opp.",
+			text: "Lydnivået slo i taket. Hold mikrofonen litt lenger unna, og ta opp på nytt.",
 			job: "opptak"
 		});
 		else if (take.peak < .06 && take.duration > .8) notes.push({
 			id: `quiet-${track.id}`,
 			title: `${track.name} er nesten borte`,
-			text: "Nærmere mikrofonen, eller opp i Balanse. Hvisking er søtt. Borte er det ikke.",
+			text: "Hold mikrofonen nærmere, eller skru sporet opp i Balanse.",
 			job: "balanse"
 		});
 		if (take.peaks.slice(0, 4).every((p) => p < .04) && take.peaks.some((p) => p > .18)) notes.push({
 			id: `trim-${track.id}`,
 			title: `Stille før ${track.name.toLowerCase()}`,
-			text: "Et tomt strekk før du tør. Klipp det. Låten skal starte når du gjør det.",
+			text: "Det er stille før lyden starter. Klipp det vekk.",
 			job: "klipp"
 		});
 	}
@@ -44,67 +44,67 @@ function producerAdvice(song) {
 	if (vocal && guitar && vocal.volume + .12 < guitar.volume) notes.push({
 		id: "mask",
 		title: "Gitaren tar stemmen",
-		text: "Stemmen skal sitte foran. Gitaren er kjekk. Den skal ikke snakke over deg.",
+		text: "Skru stemmen opp, eller gitaren ned, i Balanse.",
 		job: "balanse"
 	});
 	if (vocal && vocal.room === "tort") notes.push({
 		id: "room",
-		title: "Stemmen står i et skap",
-		text: "Litt stue gjør at stemmen setter seg. Kirke er for dem som vil høres ut som de har gått seg vill.",
+		title: "Stemmen er tørr",
+		text: "Velg Stue under Romklang hvis stemmen høres tørr ut.",
 		job: "rom"
 	});
 	if (song.tracks.length === 1 && song.tracks[0]?.kind !== "samtidig" && withAudio.length === 1) notes.push({
 		id: "layer",
 		title: "Ett lag til",
-		text: "Ta opp det som mangler oppå det du har. Headset. Du jogger ikke mellom sporene.",
+		text: "Ta opp det som mangler oppå det du har. Headset på.",
 		job: "opptak"
 	});
 	if (!activeVideoTake(song)) notes.push({
 		id: "video",
 		title: "Film det samtidig",
-		text: "Kamera og mikrofon i samme forsøk. Du får en film. Den stikker ikke av gårde selv.",
+		text: "Kamera og mikrofon i samme opptak. Filmen lagres på telefonen.",
 		job: "bilde"
 	});
 	else notes.push({
 		id: "koble",
 		title: "Bilde til OBS eller Prism",
-		text: "En lenke de kan legge oppå kameraet. Thorøisjen sender ikke. Han sitter pent.",
+		text: "En lenke OBS eller Prism kan legge oppå kameraet. ThorSound sender ikke.",
 		job: "koble"
 	});
 	if (song.lyrics.trim()) notes.push({
 		id: "sammen",
 		title: "Flere kan se teksten",
-		text: "Si koden. Teksten går nedover på de andre skjermene. Ingen må løpe etter den.",
+		text: "Si koden. Teksten går nedover på de andre skjermene.",
 		job: "sammen"
 	});
 	if (withAudio.length > 0 || activeVideoTake(song)) notes.push({
 		id: "ut",
 		title: "Klar til å legge ut",
-		text: "YouTube, Smule eller en kort film. Du limer inn. Banen får ingen kredit.",
+		text: "YouTube, Smule eller en kort film. Du limer inn selv.",
 		job: "ut"
 	});
 	if (!song.lyrics.trim()) notes.push({
 		id: "lyrics",
 		title: "Teksten er tom",
-		text: "Skriv linjene. De ligger foran deg neste gang du trykker på den røde.",
+		text: "Skriv linjene. De vises store neste gang du tar opp.",
 		job: "tekst"
 	});
 	if (song.sections.length === 0) notes.push({
 		id: "form",
 		title: "Låten har ingen deler",
-		text: "Merk vers og refreng. Formen husker du. Banekartet kan noen andre ta.",
+		text: "Merk vers og refreng, så formen er synlig.",
 		job: "deler"
 	});
 	if (song.bpm >= 140) notes.push({
 		id: "bpm",
-		title: "Tempoet er en bakke",
-		text: "Ordene rekker ikke fram. Senk det. Sangen skal pustes, ikke løpes.",
+		title: "Tempoet er høyt",
+		text: "Det går fort. Senk tempoet hvis ordene ikke rekker fram.",
 		job: "tempo"
 	});
 	if (withAudio.length > 0 && notes.filter((n) => n.id !== "lyrics" && n.id !== "form").length === 0) notes.push({
 		id: "finish",
 		title: "Klar for å høres ferdig ut",
-		text: "Prøv Ferdig lyd på Radio, og skru mellom Før og etter. Du mikser ikke. Du velger den frekke.",
+		text: "Velg Ferdig lyd, og hør før og etter.",
 		job: "ferdig"
 	});
 	return notes.slice(0, 5);
@@ -113,181 +113,187 @@ var JOBS = [
 	{
 		id: "opptak",
 		title: "Ta opp",
-		text: "Stemme, gitar eller begge. Flere forsøk. Ingen runde i skogen.",
+		text: "Stemme, gitar eller begge. Du kan ta flere forsøk.",
 		icon: Mic
 	},
 	{
 		id: "utstyr",
 		title: "Koble utstyr",
-		text: "Headset, mikrofon og gitar. I den rekkefølgen.",
+		text: "Headset først, så mikrofon, så gitar.",
 		icon: Cable
 	},
 	{
 		id: "ai",
 		title: "Rådgiver",
-		text: "Thorøisjen hører på låten og sier ifra. Han forlater ikke telefonen.",
+		text: "Hører på låten her i telefonen. Ingenting sendes ut.",
 		icon: Bot
 	},
 	{
 		id: "prov",
 		title: "Prøv noe",
-		text: "Telefon, kor og robot. Ett trykk. Angre er lov.",
+		text: "Telefon, kor eller robot. Trykk en gang til for å angre.",
 		icon: WandSparkles
 	},
 	{
 		id: "bilde",
 		title: "Bilde og lyd",
-		text: "Film og mikrofon samtidig. Du ser bra ut når du sitter.",
+		text: "Film og mikrofon samtidig.",
 		icon: Video
 	},
 	{
 		id: "sending",
 		title: "Sending",
-		text: "Tittel og tekst oppå bildet. Ingenting går ut før du vil.",
+		text: "Tittel og tekst oppå bildet. Ingenting går ut.",
 		icon: Radio
 	},
 	{
 		id: "koble",
 		title: "Koble bilde",
-		text: "OBS, Prism, samtale. De sender. Du bare ser dyr ut.",
+		text: "OBS, Prism eller videosamtale. De sender.",
 		icon: Cast
 	},
 	{
 		id: "filmklipp",
 		title: "Klipp filmen",
-		text: "Kutt starten, der du finner inhalatoren.",
+		text: "Kutt starten og slutten.",
 		icon: Scissors
 	},
 	{
 		id: "filmlagre",
 		title: "Lagre filmen",
-		text: "Klipp og tekst brennes inn. Filen blir på telefonen.",
+		text: "Klipp og tekst blir med i filen på telefonen.",
 		icon: Share2
 	},
 	{
 		id: "monitor",
 		title: "Sjekk mikrofon",
-		text: "For svak, for sterk, eller akkurat der den biter.",
+		text: "Viser om lyden er for svak eller for sterk.",
 		icon: Headphones
+	},
+	{
+		id: "rens",
+		title: "Rens og tekst",
+		text: "Demper støy, løfter stemmer, skriver teksten.",
+		icon: FileAudio
 	},
 	{
 		id: "tempo",
 		title: "Tempo og klikk",
-		text: "Raskere enn hull fire. Saktere enn panikken etterpå.",
+		text: "Hvor fort låten går, og et klikk å spille mot.",
 		icon: Timer
 	},
 	{
 		id: "trommer",
 		title: "Trommer",
-		text: "En rytme under. Krever ikke skritteller.",
+		text: "En rytme under. Kan skrus av.",
 		icon: Drum
 	},
 	{
 		id: "grep",
-		title: "Grep og stemming",
-		text: "Toneart og en tone å stemme mot. Ikke en disc.",
+		title: "Akkorder og stemming",
+		text: "Spill grepa. Stem de seks strengene.",
 		icon: Music2
 	},
 	{
 		id: "tekst",
 		title: "Tekst",
-		text: "Ordene foran deg, så du slipper å huske dem i motvind.",
+		text: "Ordene vises store mens du tar opp.",
 		icon: ScrollText
 	},
 	{
 		id: "sammen",
 		title: "Sammen",
-		text: "Flere skjermer. Teksten går. Ingen må jogge etter.",
+		text: "Samme tekst på flere skjermer. Den går av seg selv.",
 		icon: Captions
 	},
 	{
 		id: "ut",
 		title: "Legg ut",
-		text: "YouTube, Smule og korte filmer. Lim inn selv.",
+		text: "YouTube, Smule eller en kort film. Du limer inn selv.",
 		icon: Tv
 	},
 	{
 		id: "deler",
 		title: "Delene i låten",
-		text: "Vers, refreng, bro. Formen, ikke banekartet.",
+		text: "Vers, refreng og bro.",
 		icon: ListMusic
 	},
 	{
 		id: "forsok",
 		title: "Velg forsøk",
-		text: "Behold det beste. Resten får hvile, stakkars.",
+		text: "Velg hvilket opptak som skal høres.",
 		icon: Sparkles
 	},
 	{
 		id: "klipp",
 		title: "Klipp",
-		text: "Kutt stillheten før du tør, og den etter du er ferdig.",
+		text: "Kutt stillhet før og etter.",
 		icon: Scissors
 	},
 	{
 		id: "balanse",
 		title: "Balanse",
-		text: "Hvem som skal høres. Stemmen vinner. Alltid.",
+		text: "Hvor høyt hvert spor skal være.",
 		icon: SlidersHorizontal
 	},
 	{
 		id: "tone",
 		title: "Tone",
-		text: "Varm, klar, eller frekk nok for radio.",
+		text: "Varm, klar eller radio.",
 		icon: AudioLines
 	},
 	{
 		id: "jevn",
 		title: "Jevn lyd",
-		text: "Hvisking og roping møtes på midten. Høflig.",
+		text: "Hvisking og roping blir likere.",
 		icon: Activity
 	},
 	{
 		id: "rom",
 		title: "Romklang",
-		text: "Fra tørt kjøkken til et rom du kan gå deg vill i.",
+		text: "Tørt, stue, scene eller kirke.",
 		icon: Waves
 	},
 	{
 		id: "ekko",
 		title: "Ekko",
-		text: "Et svar rett bak deg. Nærmere enn en medspiller.",
+		text: "Et kort svar bak stemmen.",
 		icon: Repeat
 	},
 	{
 		id: "sus",
 		title: "Sus og romling",
-		text: "Tar brummen. Lar pusten få være litt frekk.",
+		text: "Tar brum. Lar pusten være.",
 		icon: Wind
 	},
 	{
 		id: "tvilling",
 		title: "Tvillingstemme",
-		text: "En myk kopi ved siden av. Du, bare slemmere.",
+		text: "En myk kopi ved siden av stemmen.",
 		icon: Users
 	},
 	{
 		id: "ab",
 		title: "Før og etter",
-		text: "Rått, og så med produsenten oppå. Velg den du tør å vise.",
+		text: "Hør rått, og hør med lyden på.",
 		icon: Columns2
 	},
 	{
 		id: "ferdig",
 		title: "Ferdig lyd",
-		text: "Hjemme, radio eller myk. Ett valg. Ingen oppvarming.",
+		text: "Hjemme, radio eller myk. Ett valg.",
 		icon: Ear
 	},
 	{
 		id: "rad",
 		title: "Produsentens råd",
-		text: "Korte, frekke beskjeder. Ta dem. De er billige.",
+		text: "Korte beskjeder om det som ligger i låten.",
 		icon: MessageSquare
 	},
 	{
 		id: "del",
 		title: "Lagre og del",
-		text: "En lydfil du kan sende, i stedet for en runde til.",
+		text: "En lydfil du kan sende.",
 		icon: Share2
 	}
 ];
@@ -297,7 +303,8 @@ var JOB_GROUPS = [
 		ids: [
 			"opptak",
 			"utstyr",
-			"monitor"
+			"monitor",
+			"rens"
 		]
 	},
 	{
@@ -698,12 +705,158 @@ function detectPitch(samples, sampleRate) {
 	const cents = Math.round((exact - midi) * 100);
 	return {
 		note: NOTE_NAMES[(midi % 12 + 12) % 12] ?? "?",
-		cents
+		cents,
+		freq
 	};
 }
 function pitchHint(cents) {
 	if (Math.abs(cents) <= 12) return "treffer";
 	return cents < 0 ? "litt under" : "litt over";
+}
+var STRINGS = [
+	{
+		id: "E2",
+		name: "E",
+		freq: 82.41
+	},
+	{
+		id: "A2",
+		name: "A",
+		freq: 110
+	},
+	{
+		id: "D3",
+		name: "D",
+		freq: 146.83
+	},
+	{
+		id: "G3",
+		name: "G",
+		freq: 196
+	},
+	{
+		id: "B3",
+		name: "B",
+		freq: 246.94
+	},
+	{
+		id: "E4",
+		name: "E",
+		freq: 329.63
+	}
+];
+var OPEN_CHORDS = [
+	{
+		name: "C",
+		freqs: [
+			261.63,
+			329.63,
+			392
+		]
+	},
+	{
+		name: "D",
+		freqs: [
+			146.83,
+			185,
+			220
+		]
+	},
+	{
+		name: "E",
+		freqs: [
+			164.81,
+			207.65,
+			246.94
+		]
+	},
+	{
+		name: "F",
+		freqs: [
+			174.61,
+			220,
+			261.63
+		]
+	},
+	{
+		name: "G",
+		freqs: [
+			196,
+			246.94,
+			293.66
+		]
+	},
+	{
+		name: "A",
+		freqs: [
+			220,
+			277.18,
+			329.63
+		]
+	},
+	{
+		name: "B",
+		freqs: [
+			246.94,
+			311.13,
+			369.99
+		]
+	},
+	{
+		name: "Am",
+		freqs: [
+			220,
+			261.63,
+			329.63
+		]
+	},
+	{
+		name: "Dm",
+		freqs: [
+			146.83,
+			174.61,
+			220
+		]
+	},
+	{
+		name: "Em",
+		freqs: [
+			164.81,
+			196,
+			246.94
+		]
+	},
+	{
+		name: "F#m",
+		freqs: [
+			185,
+			220,
+			277.18
+		]
+	},
+	{
+		name: "Bm",
+		freqs: [
+			246.94,
+			293.66,
+			369.99
+		]
+	}
+];
+function nearestString(freq) {
+	let best = STRINGS[0];
+	let bestGap = Infinity;
+	for (const string of STRINGS) {
+		const gap = Math.abs(1200 * Math.log2(freq / string.freq));
+		if (gap < bestGap) {
+			bestGap = gap;
+			best = string;
+		}
+	}
+	return bestGap < 70 ? best : null;
+}
+function stringCents(freq, target) {
+	return Math.round(1200 * Math.log2(freq / target));
 }
 var LOOK_FILTER = {
 	rett: "none",
@@ -1207,7 +1360,6 @@ function VideoBooth({ song, engine, snap, graphics }) {
 					}) : null,
 					phase === "rec" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
 						variant: "signal",
-						className: "rec-pulse",
 						onClick: () => recRef.current?.stop(),
 						children: "Stopp"
 					}) : null,
@@ -1434,7 +1586,7 @@ function FilmLagrePanel({ song }) {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", { children: [
 		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(PanelHead, {
 			title: "Lagre filmen",
-			lede: "Klippet, utseendet og teksten brennes inn i en fil du kan legge ut selv. Thorøisjen sender ikke direkte."
+			lede: "Klippet, utseendet og teksten brennes inn i en fil du kan legge ut selv. ThorSound sender ikke direkte."
 		}),
 		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
 			onClick: () => void download(),
@@ -1505,7 +1657,7 @@ function communityPack(song, id) {
 	const hook = lines.split("\n")[0] || name;
 	if (id === "smule") return {
 		title: name,
-		body: `${lines}\n\nSyng med meg. Kode ${song.roomCode}.\nÅpne Thorøisjen Jakkobbsen, trykk Snik deg inn på en tekst, og skriv koden.`.trim()
+		body: `${lines}\n\nSyng med meg. Kode ${song.roomCode}.\nÅpne ThorSound, trykk Tekstkode, og skriv koden.`.trim()
 	};
 	if (id === "kort") return {
 		title: hook.slice(0, 80),
@@ -1637,7 +1789,7 @@ function UtPanel({ song, engine }) {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", { children: [
 		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(PanelHead, {
 			title: "Legg ut",
-			lede: "Velg hvor sangen skal bo. Bildet, lengden og teksten tilpasses. Thorøisjen legger ikke ut selv. Du limer inn."
+			lede: "Velg hvor sangen skal bo. Bildet, lengden og teksten tilpasses. ThorSound legger ikke ut selv. Du limer inn."
 		}),
 		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 			className: "grid gap-2",
@@ -1791,7 +1943,7 @@ var TARGETS = [
 	{
 		id: "direkte",
 		label: "Direkte",
-		text: "YouTube og andre. OBS eller Prism sender. Thorøisjen gjør det ikke."
+		text: "YouTube og andre. OBS eller Prism sender. ThorSound gjør det ikke."
 	}
 ];
 function KoblePanel({ song }) {
@@ -1858,7 +2010,7 @@ function KoblePanel({ song }) {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", { children: [
 		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(PanelHead, {
 			title: "Koble bilde",
-			lede: "OBS, Prism og videosamtale tar imot et bilde. Thorøisjen gir dem teksten og tittelen. Selve sendingen gjør de."
+			lede: "OBS, Prism og videosamtale tar imot et bilde. ThorSound gir dem teksten og tittelen. Selve sendingen gjør de."
 		}),
 		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 			className: "grid gap-2",
@@ -1912,7 +2064,7 @@ function KoblePanel({ song }) {
 			children: [
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: "Koble teksten til OBS eller Prism, som over." }),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: "Der velger du YouTube eller en annen kanal og trykker send." }),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: "Thorøisjen ber ikke om strømmenøkkel, og sender ikke selv." })
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: "ThorSound ber ikke om strømmenøkkel, og sender ikke selv." })
 			]
 		}) : null,
 		/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -2117,7 +2269,7 @@ function AdvisorPanel({ song, go }) {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", { children: [
 		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(PanelHead, {
 			title: "Rådgiveren",
-			lede: "Thorøisjen Jakkobbsen hører på det som ligger i låten og sier ifra. Han sitter i telefonen. Ingenting sendes ut."
+			lede: "ThorSound hører på det som ligger i låten og sier ifra. Han sitter i telefonen. Ingenting sendes ut."
 		}),
 		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 			className: "grid gap-2",
@@ -2135,7 +2287,7 @@ function AdvisorPanel({ song, go }) {
 			children: [
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 					className: "text-xs font-medium tracking-widest text-lamp uppercase",
-					children: "Thorøisjen sier"
+					children: "ThorSound sier"
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 					className: "mt-2 text-lg leading-snug",
@@ -2217,6 +2369,329 @@ function TryPanel({ song, focusId, setFocusId }) {
 		})
 	] });
 }
+function encodeWav(buffer) {
+	const channels = Math.min(2, buffer.numberOfChannels);
+	const sampleRate = buffer.sampleRate;
+	const length = buffer.length;
+	const block = channels * 2;
+	const dataSize = length * block;
+	const out = new ArrayBuffer(44 + dataSize);
+	const view = new DataView(out);
+	writeStr(view, 0, "RIFF");
+	view.setUint32(4, 36 + dataSize, true);
+	writeStr(view, 8, "WAVE");
+	writeStr(view, 12, "fmt ");
+	view.setUint32(16, 16, true);
+	view.setUint16(20, 1, true);
+	view.setUint16(22, channels, true);
+	view.setUint32(24, sampleRate, true);
+	view.setUint32(28, sampleRate * block, true);
+	view.setUint16(32, block, true);
+	view.setUint16(34, 16, true);
+	writeStr(view, 36, "data");
+	view.setUint32(40, dataSize, true);
+	const chans = [];
+	for (let c = 0; c < channels; c++) chans.push(buffer.getChannelData(c));
+	let offset = 44;
+	for (let i = 0; i < length; i++) for (let c = 0; c < channels; c++) {
+		const sample = Math.max(-1, Math.min(1, chans[c][i] ?? 0));
+		view.setInt16(offset, sample < 0 ? sample * 32768 : sample * 32767, true);
+		offset += 2;
+	}
+	return new Blob([out], { type: "audio/wav" });
+}
+function writeStr(view, offset, text) {
+	for (let i = 0; i < text.length; i++) view.setUint8(offset + i, text.charCodeAt(i));
+}
+function measureBuffer(buffer, bars = 72) {
+	const data = buffer.getChannelData(0);
+	const size = Math.max(1, Math.floor(data.length / bars));
+	const peaks = [];
+	let peak = 0;
+	for (let i = 0; i < bars; i++) {
+		let max = 0;
+		const start = i * size;
+		const end = Math.min(data.length, start + size);
+		for (let j = start; j < end; j += 8) max = Math.max(max, Math.abs(data[j] ?? 0));
+		peaks.push(max);
+		peak = Math.max(peak, max);
+	}
+	return {
+		peaks,
+		peak
+	};
+}
+var MAX_SECONDS = 1200;
+async function cleanSpeech(blob) {
+	const ctx = new AudioContext();
+	try {
+		const decoded = await ctx.decodeAudioData(await blob.arrayBuffer());
+		if (decoded.duration > MAX_SECONDS) throw new Error("For langt. Klipp det ned til tjue minutter.");
+		const lifted = gateAndLift(await filterVoice(mixMono(decoded), decoded.sampleRate), decoded.sampleRate);
+		const listenBuf = ctx.createBuffer(1, lifted.length, decoded.sampleRate);
+		listenBuf.getChannelData(0).set(lifted);
+		const speechBuf = speechBuffer(resampleLinear(lifted, decoded.sampleRate, 16e3), 16e3);
+		return {
+			listen: encodeWav(listenBuf),
+			speech: encodeWav(speechBuf),
+			duration: decoded.duration
+		};
+	} finally {
+		await ctx.close();
+	}
+}
+function mixMono(buffer) {
+	const out = new Float32Array(buffer.length);
+	const channels = buffer.numberOfChannels;
+	for (let c = 0; c < channels; c++) {
+		const data = buffer.getChannelData(c);
+		for (let i = 0; i < data.length; i++) out[i] += data[i] / channels;
+	}
+	return out;
+}
+async function filterVoice(samples, sampleRate) {
+	const offline = new OfflineAudioContext(1, samples.length, sampleRate);
+	const buffer = offline.createBuffer(1, samples.length, sampleRate);
+	buffer.getChannelData(0).set(samples);
+	const src = offline.createBufferSource();
+	src.buffer = buffer;
+	const high = offline.createBiquadFilter();
+	high.type = "highpass";
+	high.frequency.value = 110;
+	high.Q.value = .7;
+	const mud = offline.createBiquadFilter();
+	mud.type = "peaking";
+	mud.frequency.value = 240;
+	mud.gain.value = -4;
+	mud.Q.value = .7;
+	const presence = offline.createBiquadFilter();
+	presence.type = "peaking";
+	presence.frequency.value = 2800;
+	presence.gain.value = 4.5;
+	presence.Q.value = .9;
+	const low = offline.createBiquadFilter();
+	low.type = "lowpass";
+	low.frequency.value = 7200;
+	const comp = offline.createDynamicsCompressor();
+	comp.threshold.value = -26;
+	comp.knee.value = 12;
+	comp.ratio.value = 5;
+	comp.attack.value = .004;
+	comp.release.value = .22;
+	src.connect(high).connect(mud).connect(presence).connect(low).connect(comp).connect(offline.destination);
+	src.start();
+	return (await offline.startRendering()).getChannelData(0).slice();
+}
+function gateAndLift(samples, sampleRate) {
+	const hop = Math.max(1, Math.floor(sampleRate * .01));
+	const frame = hop * 2;
+	const rms = [];
+	for (let i = 0; i < samples.length; i += hop) {
+		let sum = 0;
+		const end = Math.min(samples.length, i + frame);
+		for (let j = i; j < end; j++) sum += samples[j] * samples[j];
+		rms.push(Math.sqrt(sum / (end - i)));
+	}
+	const sorted = [...rms].sort((a, b) => a - b);
+	const noise = sorted[Math.floor(sorted.length * .2)] ?? .01;
+	const open = Math.max(noise * 2.6, .012);
+	const out = new Float32Array(samples.length);
+	let gain = .08;
+	for (let i = 0; i < samples.length; i++) {
+		const target = (rms[Math.min(rms.length - 1, Math.floor(i / hop))] ?? 0) < open ? .05 : 1;
+		gain += (target - gain) * (target > gain ? .03 : .004);
+		out[i] = samples[i] * gain;
+	}
+	let peak = 0;
+	for (let i = 0; i < out.length; i++) peak = Math.max(peak, Math.abs(out[i]));
+	const lift = peak > .001 ? Math.min(.82 / peak, 4) : 1;
+	for (let i = 0; i < out.length; i++) out[i] = Math.tanh(out[i] * lift);
+	return out;
+}
+function resampleLinear(samples, from, to) {
+	const length = Math.max(1, Math.ceil(samples.length / from * to));
+	const out = new Float32Array(length);
+	const ratio = from / to;
+	const last = samples.length - 1;
+	for (let i = 0; i < length; i++) {
+		const pos = Math.min(last, i * ratio);
+		const i0 = Math.floor(pos);
+		const i1 = Math.min(last, i0 + 1);
+		const frac = pos - i0;
+		out[i] = samples[i0] * (1 - frac) + samples[i1] * frac;
+	}
+	return out;
+}
+function speechBuffer(samples, sampleRate) {
+	const buffer = new OfflineAudioContext(1, samples.length, sampleRate).createBuffer(1, samples.length, sampleRate);
+	buffer.getChannelData(0).set(samples);
+	return buffer;
+}
+function CleanPanel({ song, go }) {
+	const setLyrics = useStudio((state) => state.setLyrics);
+	const [source, setSource] = (0, import_react.useState)(null);
+	const [sourceName, setSourceName] = (0, import_react.useState)("");
+	const [busy, setBusy] = (0, import_react.useState)("");
+	const [error, setError] = (0, import_react.useState)("");
+	const [note, setNote] = (0, import_react.useState)("");
+	const [text, setText] = (0, import_react.useState)("");
+	const [listenUrl, setListenUrl] = (0, import_react.useState)("");
+	const [listenBlob, setListenBlob] = (0, import_react.useState)(null);
+	const urlRef = (0, import_react.useRef)("");
+	const takes = song.tracks.flatMap((track) => track.takes.map((take) => ({
+		id: take.audioId,
+		label: `${track.name} · ${Math.round(take.duration)}s`
+	})));
+	(0, import_react.useEffect)(() => () => {
+		if (urlRef.current) URL.revokeObjectURL(urlRef.current);
+	}, []);
+	async function run() {
+		if (!source || busy) return;
+		setBusy("Renser…");
+		setError("");
+		setNote("");
+		try {
+			const cleaned = await cleanSpeech(source);
+			if (urlRef.current) URL.revokeObjectURL(urlRef.current);
+			const url = URL.createObjectURL(cleaned.listen);
+			urlRef.current = url;
+			setListenBlob(cleaned.listen);
+			setListenUrl(url);
+			setBusy("Skriver teksten…");
+			const form = new FormData();
+			form.append("file", cleaned.speech, "tale.wav");
+			const res = await fetch("/api/transcribe", {
+				method: "POST",
+				body: form
+			});
+			const body = await res.json();
+			if (!res.ok || !body.ok || !body.text) {
+				setText("");
+				setError(body.error || "Lyden er renset. Teksten kom ikke.");
+				return;
+			}
+			setText(body.text);
+			setNote("Lyden er renset. Les gjennom teksten før du bruker den.");
+		} catch (err) {
+			setError(err instanceof Error ? err.message : "Klarte ikke å lese filen.");
+		} finally {
+			setBusy("");
+		}
+	}
+	async function mail() {
+		const title = song.title || "Samtale";
+		const body = `${title}\n\n${text}`;
+		if (body.length > 1800) {
+			await navigator.clipboard.writeText(body);
+			window.location.href = `mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent("Teksten er kopiert. Lim den inn her.")}`;
+			setNote("Teksten var lang, så den ligger i utklippstavlen. Lim den inn i e-posten.");
+			return;
+		}
+		window.location.href = `mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}`;
+	}
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", { children: [
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(PanelHead, {
+			title: "Rens og tekst",
+			lede: "Lomme, asfalt og den som puster i mikrofonen blir svakere. Stemmene blir stående. Teksten kan bli sangtekst, eller en e-post. Opptil tjue minutter."
+		}),
+		/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
+			className: "block text-sm",
+			children: ["Lydfil", /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+				type: "file",
+				accept: "audio/*",
+				className: "mt-1 block w-full text-sm",
+				onChange: (event) => {
+					const file = event.target.files?.[0] ?? null;
+					setSource(file);
+					setSourceName(file?.name ?? "");
+					setError("");
+				}
+			})]
+		}),
+		takes.length ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "mt-4",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "text-sm",
+				children: "Eller et opptak i låten"
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "mt-2 flex flex-wrap gap-2",
+				children: takes.map((take) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+					variant: sourceName === take.label ? "primary" : "quiet",
+					onClick: () => {
+						getAudio(take.id).then((blob) => {
+							if (!blob) {
+								setError("Fant ikke opptaket.");
+								return;
+							}
+							setSource(blob);
+							setSourceName(take.label);
+							setError("");
+						});
+					},
+					children: take.label
+				}, take.id))
+			})]
+		}) : null,
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+			className: "mt-3 text-sm text-muted",
+			children: sourceName || "Ingen lyd valgt."
+		}),
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+			className: "mt-3",
+			disabled: !source || Boolean(busy),
+			onClick: () => void run(),
+			children: busy || "Rens og skriv tekst"
+		}),
+		error ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+			className: "mt-3 text-sm text-signal",
+			children: error
+		}) : null,
+		note ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+			className: "mt-3 text-sm text-muted",
+			children: note
+		}) : null,
+		listenUrl ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("audio", {
+			className: "mt-4 w-full",
+			controls: true,
+			src: listenUrl
+		}) : null,
+		listenBlob ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+			className: "mt-2",
+			variant: "quiet",
+			onClick: () => {
+				const url = URL.createObjectURL(listenBlob);
+				const link = document.createElement("a");
+				link.href = url;
+				link.download = `${song.title || "samtale"}-rent.wav`;
+				link.click();
+				URL.revokeObjectURL(url);
+			},
+			children: "Last ned ren lyd"
+		}) : null,
+		text || listenUrl ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("textarea", {
+			value: text,
+			onChange: (event) => setText(event.target.value),
+			rows: 10,
+			"aria-label": "Tekst fra samtalen",
+			placeholder: "Teksten kommer her.",
+			className: "mt-4 w-full rounded-md border border-line px-4 py-3 text-sm leading-relaxed"
+		}) : null,
+		text ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+			className: "mt-3 flex flex-wrap gap-2",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+				onClick: () => {
+					setLyrics(song.id, text);
+					go("tekst");
+				},
+				children: "Bruk som sangtekst"
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+				variant: "quiet",
+				onClick: () => void mail(),
+				children: "Send på e-post"
+			})]
+		}) : null
+	] });
+}
 var KINDS = [
 	{
 		id: "samtidig",
@@ -2289,6 +2764,10 @@ function JobPanel({ job, ...props }) {
 			go: props.go
 		});
 		case "utstyr": return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(GearGuide, { go: props.go });
+		case "rens": return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CleanPanel, {
+			song: props.song,
+			go: props.go
+		});
 		case "deler": return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(SectionsPanel, { ...props });
 		case "forsok": return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TakesPanel, { ...props });
 		case "klipp": return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TrimPanel, { ...props });
@@ -2347,7 +2826,7 @@ function RecordPanel({ song, engine, snap }) {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", { children: [
 		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(PanelHead, {
 			title: "Ta opp",
-			lede: "Headset på. Høyttaleren har anstrengelsesastma og blir med på opptaket hvis du lar den. Fire slag, så er du i gang."
+			lede: "Headset på, så høyttaleren ikke blir med. Telefonen teller fire slag. Så tar den opp."
 		}),
 		!busy ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 			className: "mb-5 grid grid-cols-2 gap-2",
@@ -2383,7 +2862,7 @@ function RecordPanel({ song, engine, snap }) {
 				})
 			] }) : snap.recording ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 				type: "button",
-				className: "rec-pulse flex size-28 items-center justify-center rounded-full bg-signal text-sm font-medium text-signal-ink",
+				className: "flex size-28 items-center justify-center rounded-full bg-signal text-sm font-medium text-signal-ink",
 				onClick: () => void finish(),
 				children: "Stopp"
 			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(RecordClock, {})] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
@@ -2454,7 +2933,7 @@ function MonitorPanel({ engine, snap }) {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", { children: [
 		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(PanelHead, {
 			title: "Sjekk mikrofon",
-			lede: "Vi sender ikke lyden ut i høyttaleren, så den ikke piper. Stolpen skal danse i midten når du spiller normalt."
+			lede: "Lyden går ikke ut i høyttaleren. Stolpen skal ligge i midten når du snakker normalt."
 		}),
 		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
 			variant: snap.listening ? "quiet" : "primary",
@@ -2562,53 +3041,161 @@ function DrumPanel({ song }) {
 function KeyPanel({ song, engine, snap }) {
 	const setKey = useStudio((state) => state.setKey);
 	const info = keyInfo(song.keyName);
-	(0, import_react.useEffect)(() => () => engine.current?.stopListen(), [engine]);
+	const [tab, setTab] = (0, import_react.useState)("akkorder");
+	const [stringId, setStringId] = (0, import_react.useState)("A2");
+	const [hearing, setHearing] = (0, import_react.useState)(null);
+	const target = STRINGS.find((item) => item.id === stringId) ?? STRINGS[1];
+	const cents = snap.listening && snap.freq ? stringCents(snap.freq, target.freq) : null;
+	const near = snap.listening && snap.freq ? nearestString(snap.freq) : null;
+	const inTune = cents !== null && Math.abs(cents) <= 8;
+	const others = OPEN_CHORDS.filter((chord) => !info.chords.some((own) => own.name === chord.name));
+	(0, import_react.useEffect)(() => () => {
+		engine.current?.stopListen();
+		engine.current?.stopChords();
+		engine.current?.reference(null);
+	}, [engine]);
+	function hearString(id) {
+		const next = STRINGS.find((item) => item.id === id);
+		if (!next) return;
+		setStringId(id);
+		if (hearing === id) {
+			engine.current?.reference(null);
+			setHearing(null);
+			return;
+		}
+		engine.current?.reference(next.freq);
+		setHearing(id);
+	}
+	let tuneText = "Velg en streng. Spill den. Nålen skal ligge i midten.";
+	if (snap.listening && cents === null) tuneText = "Jeg hører ingenting ennå. Plukk strengen.";
+	else if (cents !== null && Math.abs(cents) > 60) tuneText = near && near.id !== target.id ? `Det er ikke denne. Nærmest er ${near.name}.` : "Det er ikke denne strengen.";
+	else if (inTune) tuneText = "Der. Den stemmer.";
+	else if (cents !== null && cents < 0) tuneText = "Litt slakk. Stram forsiktig.";
+	else if (cents !== null) tuneText = "Litt stram. Slipp forsiktig.";
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", { children: [
 		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(PanelHead, {
-			title: "Grep og stemming",
-			lede: "Velg toneart. Trykk på et grep for å høre det. Grunntonen er den du stemmer gitaren mot."
-		}),
-		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-			className: "mb-4 flex flex-wrap gap-2",
-			children: KEYS.map((key) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
-				type: "button",
-				"aria-pressed": song.keyName === key.id,
-				onClick: () => setKey(song.id, key.id),
-				className: song.keyName === key.id ? "min-h-11 min-w-11 rounded-full border border-lamp bg-surface-2 px-4" : "min-h-11 min-w-11 rounded-full border border-line bg-surface px-4",
-				children: key.id
-			}, key.id))
-		}),
-		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-			className: "grid grid-cols-2 gap-2",
-			children: info.chords.map((chord) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Button, {
-				variant: "quiet",
-				onClick: () => engine.current?.previewChord(chord.freqs),
-				children: ["Hør ", chord.name]
-			}, chord.name))
+			title: "Akkorder og stemming",
+			lede: "Spill grepa som en gitar, i låtens tempo. Stem strengene mot en tone, ikke mot hukommelsen."
 		}),
 		/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			className: "mt-4 flex flex-wrap gap-2",
-			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-				variant: "primary",
-				onClick: () => engine.current?.previewChord([info.root]),
-				children: "Hør grunntonen"
-			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-				variant: "quiet",
-				onClick: () => snap.listening ? engine.current?.stopListen() : void engine.current?.startListen(),
-				children: snap.listening ? "Slutt å stemme" : "Stem med mikrofon"
+			className: "mb-4 grid grid-cols-2 gap-2",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+				type: "button",
+				"aria-pressed": tab === "akkorder",
+				onClick: () => setTab("akkorder"),
+				className: tab === "akkorder" ? "min-h-11 rounded-md border border-lamp bg-surface-2" : "min-h-11 rounded-md border border-line bg-surface",
+				children: "Akkorder"
+			}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+				type: "button",
+				"aria-pressed": tab === "stemmer",
+				onClick: () => setTab("stemmer"),
+				className: tab === "stemmer" ? "min-h-11 rounded-md border border-lamp bg-surface-2" : "min-h-11 rounded-md border border-line bg-surface",
+				children: "Stemmer"
 			})]
 		}),
-		snap.listening ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
-			className: "mt-4 font-display text-4xl",
-			children: [
-				snap.note ?? "…",
-				" ",
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-					className: "text-lg text-muted",
-					children: snap.hint ?? "spill en tone"
-				})
-			]
-		}) : null
+		tab === "akkorder" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "mb-4 flex flex-wrap gap-2",
+				children: KEYS.map((key) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+					type: "button",
+					"aria-pressed": song.keyName === key.id,
+					onClick: () => setKey(song.id, key.id),
+					className: song.keyName === key.id ? "min-h-11 min-w-11 rounded-md border border-lamp bg-surface-2 px-3" : "min-h-11 min-w-11 rounded-md border border-line bg-surface px-3",
+					children: key.id
+				}, key.id))
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "grid grid-cols-4 gap-2",
+				children: info.chords.map((chord, index) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+					type: "button",
+					onClick: () => {
+						engine.current?.stopChords();
+						engine.current?.strum(chord.freqs);
+					},
+					className: snap.chords && snap.chordIndex === index ? "min-h-16 rounded-md border border-lamp bg-surface-2 font-display text-2xl" : "min-h-16 rounded-md border border-line bg-surface font-display text-2xl",
+					children: chord.name
+				}, chord.name))
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+				className: "mt-3 text-sm text-muted",
+				children: [
+					"Ett grep per takt. ",
+					song.bpm,
+					" slag."
+				]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+				className: "mt-3 w-full",
+				onClick: () => snap.chords ? engine.current?.stopChords() : engine.current?.loopChords(info.chords.map((chord) => chord.freqs), song.bpm),
+				children: snap.chords ? "Stopp runden" : "Spill runden"
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+				className: "mt-6 text-sm font-medium",
+				children: "Andre grep"
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "mt-2 grid grid-cols-4 gap-2",
+				children: others.map((chord) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+					type: "button",
+					onClick: () => {
+						engine.current?.stopChords();
+						engine.current?.strum(chord.freqs);
+					},
+					className: "min-h-12 rounded-md border border-line bg-surface font-display text-lg",
+					children: chord.name
+				}, chord.name))
+			})
+		] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+				className: "grid grid-cols-6 gap-1.5",
+				children: STRINGS.map((item) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+					type: "button",
+					"aria-pressed": stringId === item.id,
+					"aria-label": `${item.name}-streng${hearing === item.id ? ", referansetone på" : ""}`,
+					onClick: () => hearString(item.id),
+					className: stringId === item.id ? "flex min-h-16 flex-col items-center justify-center rounded-md border border-lamp bg-surface-2" : "flex min-h-16 flex-col items-center justify-center rounded-md border border-line bg-surface",
+					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: "font-display text-xl",
+						children: item.name
+					}), hearing === item.id || item.id === "E2" || item.id === "E4" ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: `text-[10px] ${hearing === item.id ? "text-lamp" : "text-muted"}`,
+						children: hearing === item.id ? "lyd" : item.id === "E2" ? "lav" : "lys"
+					}) : null]
+				}, item.id))
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "mt-2 text-sm text-muted",
+				children: "Trykk en streng for å høre den. Trykk igjen for å slå den av."
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+				className: "relative mt-5 h-3 rounded-full bg-surface",
+				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: "absolute top-0 left-1/2 h-3 w-px bg-lamp" }), cents !== null ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+					className: `absolute top-1/2 size-4 -translate-x-1/2 -translate-y-1/2 rounded-full ${inTune ? "bg-lamp" : "bg-signal"}`,
+					style: { left: `${50 + Math.max(-50, Math.min(50, cents))}%` }
+				}) : null]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+				className: "mt-3 font-display text-4xl",
+				children: [
+					snap.listening ? snap.note ?? "…" : target.name,
+					" ",
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+						className: "text-lg text-muted",
+						children: cents === null ? "" : `${cents > 0 ? "+" : ""}${cents} cent`
+					})
+				]
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+				className: "mt-1 text-sm text-muted",
+				children: tuneText
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+				className: "mt-4",
+				variant: snap.listening ? "quiet" : "primary",
+				onClick: () => snap.listening ? engine.current?.stopListen() : void engine.current?.startListen(),
+				children: snap.listening ? "Slutt å lytte" : "Lytt til strengen"
+			})
+		] })
 	] });
 }
 function LyricsPanel({ song }) {
@@ -3197,58 +3784,6 @@ function SharePanel({ song, engine }) {
 function safeName(title) {
 	return title.replace(/[^\p{L}\p{N}\-_ ]/gu, "").trim() || "lat";
 }
-function encodeWav(buffer) {
-	const channels = Math.min(2, buffer.numberOfChannels);
-	const sampleRate = buffer.sampleRate;
-	const length = buffer.length;
-	const block = channels * 2;
-	const dataSize = length * block;
-	const out = new ArrayBuffer(44 + dataSize);
-	const view = new DataView(out);
-	writeStr(view, 0, "RIFF");
-	view.setUint32(4, 36 + dataSize, true);
-	writeStr(view, 8, "WAVE");
-	writeStr(view, 12, "fmt ");
-	view.setUint32(16, 16, true);
-	view.setUint16(20, 1, true);
-	view.setUint16(22, channels, true);
-	view.setUint32(24, sampleRate, true);
-	view.setUint32(28, sampleRate * block, true);
-	view.setUint16(32, block, true);
-	view.setUint16(34, 16, true);
-	writeStr(view, 36, "data");
-	view.setUint32(40, dataSize, true);
-	const chans = [];
-	for (let c = 0; c < channels; c++) chans.push(buffer.getChannelData(c));
-	let offset = 44;
-	for (let i = 0; i < length; i++) for (let c = 0; c < channels; c++) {
-		const sample = Math.max(-1, Math.min(1, chans[c][i] ?? 0));
-		view.setInt16(offset, sample < 0 ? sample * 32768 : sample * 32767, true);
-		offset += 2;
-	}
-	return new Blob([out], { type: "audio/wav" });
-}
-function writeStr(view, offset, text) {
-	for (let i = 0; i < text.length; i++) view.setUint8(offset + i, text.charCodeAt(i));
-}
-function measureBuffer(buffer, bars = 72) {
-	const data = buffer.getChannelData(0);
-	const size = Math.max(1, Math.floor(data.length / bars));
-	const peaks = [];
-	let peak = 0;
-	for (let i = 0; i < bars; i++) {
-		let max = 0;
-		const start = i * size;
-		const end = Math.min(data.length, start + size);
-		for (let j = start; j < end; j += 8) max = Math.max(max, Math.abs(data[j] ?? 0));
-		peaks.push(max);
-		peak = Math.max(peak, max);
-	}
-	return {
-		peaks,
-		peak
-	};
-}
 var EMPTY_SNAP = {
 	playing: false,
 	recording: false,
@@ -3259,6 +3794,9 @@ var EMPTY_SNAP = {
 	level: 0,
 	note: null,
 	hint: null,
+	freq: null,
+	chords: false,
+	chordIndex: -1,
 	error: null,
 	notice: null
 };
@@ -3631,6 +4169,12 @@ var StudioEngine = class {
 	level = 0;
 	note = null;
 	hint = null;
+	freq = null;
+	chordOn = false;
+	chordIndex = -1;
+	chordGen = 0;
+	chordTimer = null;
+	refOsc = null;
 	error = null;
 	notice = null;
 	stream = null;
@@ -3650,6 +4194,8 @@ var StudioEngine = class {
 		this.gen += 1;
 		this.recordAbort = true;
 		cancelAnimationFrame(this.raf);
+		this.stopChords();
+		this.reference(null);
 		this.stopPerformance();
 		this.stopStream();
 		this.ctx?.close();
@@ -3833,20 +4379,83 @@ var StudioEngine = class {
 		this.emit();
 	}
 	previewChord(freqs) {
+		this.strum(freqs);
+	}
+	strum(freqs) {
+		this.playStrum(freqs);
+	}
+	loopChords(chords, bpm) {
+		this.stopChords();
+		const playable = chords.filter((chord) => chord.length > 0);
+		if (!playable.length) return;
+		const gen = ++this.chordGen;
+		this.chordOn = true;
+		const bar = 60 / Math.max(40, Math.min(220, bpm)) * 4 * 1e3;
+		let index = 0;
+		const step = () => {
+			if (this.dead || this.chordGen !== gen) return;
+			this.chordIndex = index % playable.length;
+			this.playStrum(playable[this.chordIndex]);
+			this.emit();
+			index += 1;
+			this.chordTimer = window.setTimeout(step, bar);
+		};
+		step();
+	}
+	stopChords() {
+		this.chordGen += 1;
+		if (this.chordTimer !== null) window.clearTimeout(this.chordTimer);
+		this.chordTimer = null;
+		this.chordOn = false;
+		this.chordIndex = -1;
+		this.emit();
+	}
+	reference(freq) {
+		try {
+			this.refOsc?.stop();
+		} catch {}
+		this.refOsc?.disconnect();
+		this.refOsc = null;
+		if (freq == null || this.dead) return;
 		const ctx = this.ensureCtxSync();
-		const now = ctx.currentTime + .03;
+		const osc = ctx.createOscillator();
+		const gain = ctx.createGain();
+		osc.type = "sine";
+		osc.frequency.value = freq;
+		gain.gain.value = .12;
+		osc.connect(gain).connect(ctx.destination);
+		osc.start();
+		this.refOsc = osc;
+	}
+	playStrum(freqs) {
+		const ctx = this.ensureCtxSync();
+		const now = ctx.currentTime + .02;
 		const bus = ctx.createGain();
-		bus.gain.value = .22;
-		bus.connect(ctx.destination);
-		for (const freq of freqs) {
+		const filter = ctx.createBiquadFilter();
+		bus.gain.value = .34;
+		filter.type = "lowpass";
+		filter.frequency.value = 2200;
+		bus.connect(filter).connect(ctx.destination);
+		freqs.forEach((freq, index) => {
 			const osc = ctx.createOscillator();
-			const gain = envGain(ctx, now, .45, 1.05);
+			const body = ctx.createOscillator();
+			const gain = ctx.createGain();
+			const start = now + index * .03;
 			osc.type = "triangle";
+			body.type = "sine";
 			osc.frequency.value = freq;
-			osc.connect(gain).connect(bus);
-			osc.start(now);
-			osc.stop(now + 1.1);
-		}
+			body.frequency.value = freq * 2;
+			gain.gain.setValueAtTime(1e-4, start);
+			gain.gain.exponentialRampToValueAtTime(.42, start + .018);
+			gain.gain.exponentialRampToValueAtTime(1e-4, start + 1.35);
+			osc.connect(gain);
+			body.connect(gain);
+			gain.connect(bus);
+			osc.start(start);
+			body.start(start);
+			osc.stop(start + 1.4);
+			body.stop(start + 1.4);
+		});
 	}
 	async decodeTake(blob) {
 		const ctx = this.ensureCtxSync();
@@ -4180,6 +4789,7 @@ var StudioEngine = class {
 		this.level = 0;
 		this.note = null;
 		this.hint = null;
+		this.freq = null;
 	}
 	readMeter() {
 		if (!this.analyser || !this.ctx) return;
@@ -4190,6 +4800,7 @@ var StudioEngine = class {
 		const pitch = detectPitch(this.meterData, this.ctx.sampleRate);
 		this.note = pitch?.note ?? null;
 		this.hint = pitch ? pitchHint(pitch.cents) : null;
+		this.freq = pitch?.freq ?? null;
 	}
 	position() {
 		if (!this.playing || !this.ctx) return this.pausedAt;
@@ -4202,7 +4813,7 @@ var StudioEngine = class {
 			const length = audioLength(this.song, this.buffers);
 			if (length > .05 && this.position() >= length + .35) this.pause();
 		}
-		const active = this.playing || this.recording || this.counting || this.listening;
+		const active = this.playing || this.recording || this.counting || this.listening || this.chordOn;
 		const now = performance.now();
 		if (active && now - this.lastEmit > 80) {
 			this.lastEmit = now;
@@ -4226,6 +4837,9 @@ var StudioEngine = class {
 			level: this.level,
 			note: this.note,
 			hint: this.hint,
+			freq: this.freq,
+			chords: this.chordOn,
+			chordIndex: this.chordIndex,
 			error: this.error,
 			notice: this.notice
 		};
@@ -4253,6 +4867,8 @@ function useEngine(song) {
 function StudioScreen({ id }) {
 	const [ready, setReady] = (0, import_react.useState)(false);
 	const [job, setJob] = (0, import_react.useState)(null);
+	const [more, setMore] = (0, import_react.useState)(false);
+	const openedFor = (0, import_react.useRef)(null);
 	const [focusId, setFocusId] = (0, import_react.useState)(null);
 	const song = useStudio((state) => state.songs.find((item) => item.id === id) ?? null);
 	const renameSong = useStudio((state) => state.renameSong);
@@ -4266,6 +4882,12 @@ function StudioScreen({ id }) {
 		setFocusId(song.tracks[0]?.id ?? null);
 	}, [song, focusId]);
 	(0, import_react.useEffect)(() => {
+		if (!song || openedFor.current === song.id) return;
+		openedFor.current = song.id;
+		setMore(false);
+		setJob(null);
+	}, [song]);
+	(0, import_react.useEffect)(() => {
 		window.scrollTo(0, 0);
 	}, [job]);
 	if (!ready || !song) return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Shell, { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("main", {
@@ -4278,7 +4900,7 @@ function StudioScreen({ id }) {
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
 				className: "mt-4 font-display text-3xl",
-				children: ready ? "Fant ikke sangen" : "Thorøisjen Jakkobbsen"
+				children: ready ? "Fant ikke sangen" : "ThorSound"
 			}),
 			ready ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 				className: "mt-2 text-muted",
@@ -4290,6 +4912,8 @@ function StudioScreen({ id }) {
 	const looping = length < .05 && (song.drums !== "ingen" || song.click);
 	const advice = producerAdvice(song)[0];
 	const locked = snap.recording || snap.counting;
+	const hasAudio = length >= .05;
+	const groups = hasAudio || more ? JOB_GROUPS : JOB_GROUPS.filter((group) => group.title === "Start");
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(LyricLink, {
 		song,
 		snap,
@@ -4325,7 +4949,7 @@ function StudioScreen({ id }) {
 							type: "button",
 							onClick: () => setJob(null),
 							className: "mb-2 inline-flex min-h-11 items-center gap-1 text-sm text-muted",
-							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronLeft, { className: "size-4" }), "Alle jobbene"]
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(ChevronLeft, { className: "size-4" }), "Tilbake"]
 						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 							className: "rounded-md border border-line bg-raised p-4",
 							children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(JobPanel, {
@@ -4338,14 +4962,14 @@ function StudioScreen({ id }) {
 								go: setJob
 							})
 						})] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
-							advice ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+							advice && hasAudio ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 								type: "button",
 								onClick: () => setJob(advice.job),
 								className: "mb-3 w-full rounded-md border border-line bg-raised px-4 py-3 text-left",
 								children: [
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 										className: "text-xs font-medium tracking-widest text-lamp uppercase",
-										children: "Produsenten sier"
+										children: "Neste"
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
 										className: "mt-1 block font-medium",
@@ -4366,7 +4990,7 @@ function StudioScreen({ id }) {
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 										className: "mt-1 text-sm text-muted",
-										children: "Headset på. Fire slag. Så er du i gang."
+										children: "Trykk Ta opp. Telefonen spør om mikrofonen. Den teller fire slag, så starter opptaket."
 									}),
 									/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 										type: "button",
@@ -4376,7 +5000,7 @@ function StudioScreen({ id }) {
 									})
 								]
 							}) : null,
-							JOB_GROUPS.map((group) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
+							groups.map((group) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", {
 								className: "mb-4",
 								children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
 									className: "mb-2 text-xs font-medium tracking-widest text-muted uppercase",
@@ -4420,7 +5044,13 @@ function StudioScreen({ id }) {
 										}, item.id);
 									})
 								})]
-							}, group.title))
+							}, group.title)),
+							!hasAudio && !more ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+								type: "button",
+								onClick: () => setMore(true),
+								className: "mb-4 min-h-11 text-sm text-muted",
+								children: "Vis alle verktøy"
+							}) : null
 						] })
 					}),
 					snap.error ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
@@ -4442,7 +5072,7 @@ function StudioScreen({ id }) {
 									type: "button",
 									"aria-label": snap.recording ? "Opptak pågår" : "Ta opp",
 									onClick: () => setJob("opptak"),
-									className: `flex size-12 shrink-0 items-center justify-center rounded-md bg-signal text-signal-ink ${snap.recording ? "rec-pulse" : ""}`,
+									className: "flex size-12 shrink-0 items-center justify-center rounded-md bg-signal text-signal-ink",
 									children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Circle, { className: "size-4 fill-current" })
 								}),
 								/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
@@ -4467,7 +5097,7 @@ function StudioScreen({ id }) {
 										onChange: (event) => void engine.current?.seek(Number(event.target.value))
 									}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 										className: "flex justify-between text-xs text-muted tabular-nums",
-										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: formatTime(snap.position) }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: looping ? "trommer til du stopper" : formatTime(length) })]
+										children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: formatTime(snap.position) }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: looping ? "Trommene går til du stopper" : formatTime(length) })]
 									})]
 								})
 							]

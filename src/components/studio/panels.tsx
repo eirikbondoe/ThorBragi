@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { producerAdvice } from "@/lib/studio/advice";
 import type { EngineSnap, StudioEngine } from "@/lib/studio/audio";
 import { activeTake, useStudio } from "@/lib/studio/store";
-import { KEYS, keyInfo } from "@/lib/studio/theory";
+import { KEYS, keyInfo, nearestString, OPEN_CHORDS, stringCents, STRINGS } from "@/lib/studio/theory";
 import type { JobId, SectionName, Song, TrackKind } from "@/lib/studio/types";
 import { KIND_LABEL, SECTION_LABEL } from "@/lib/studio/types";
 import { Choices, formatTime, Meter, PanelHead, Slider, TrackChips, Wave } from "./bits";
@@ -14,6 +14,7 @@ import { UtPanel } from "./community-panel";
 import { KoblePanel } from "./connect-panel";
 import { AdvisorPanel, TryPanel } from "./advisor-panel";
 import { GearGuide } from "./gear-guide";
+import { CleanPanel } from "./clean-panel";
 import { lyricIndex, lyricLines } from "@/lib/studio/lyrics";
 import { Prompter } from "./prompter";
 
@@ -74,6 +75,8 @@ export function JobPanel({ job, ...props }: Common & { job: JobId }) {
       return <AdvisorPanel song={props.song} go={props.go} />;
     case "utstyr":
       return <GearGuide go={props.go} />;
+    case "rens":
+      return <CleanPanel song={props.song} go={props.go} />;
     case "deler":
       return <SectionsPanel {...props} />;
     case "forsok":
@@ -153,7 +156,7 @@ function RecordPanel({ song, engine, snap }: Common) {
     <section>
       <PanelHead
         title="Ta opp"
-        lede="Headset på. Høyttaleren har anstrengelsesastma og blir med på opptaket hvis du lar den. Fire slag, så er du i gang."
+        lede="Headset på, så høyttaleren ikke blir med. Telefonen teller fire slag. Så tar den opp."
       />
       {!busy ? (
         <div className="mb-5 grid grid-cols-2 gap-2">
@@ -188,7 +191,7 @@ function RecordPanel({ song, engine, snap }: Common) {
           <>
             <button
               type="button"
-              className="rec-pulse flex size-28 items-center justify-center rounded-full bg-signal text-sm font-medium text-signal-ink"
+              className="flex size-28 items-center justify-center rounded-full bg-signal text-sm font-medium text-signal-ink"
               onClick={() => void finish()}
             >
               Stopp
@@ -250,7 +253,7 @@ function MonitorPanel({ engine, snap }: Common) {
     <section>
       <PanelHead
         title="Sjekk mikrofon"
-        lede="Vi sender ikke lyden ut i høyttaleren, så den ikke piper. Stolpen skal danse i midten når du spiller normalt."
+        lede="Lyden går ikke ut i høyttaleren. Stolpen skal ligge i midten når du snakker normalt."
       />
       <Button
         variant={snap.listening ? "quiet" : "primary"}
@@ -326,50 +329,187 @@ function DrumPanel({ song }: Common) {
 function KeyPanel({ song, engine, snap }: Common) {
   const setKey = useStudio((state) => state.setKey);
   const info = keyInfo(song.keyName);
-  useEffect(() => () => engine.current?.stopListen(), [engine]);
+  const [tab, setTab] = useState<"akkorder" | "stemmer">("akkorder");
+  const [stringId, setStringId] = useState("A2");
+  const [hearing, setHearing] = useState<string | null>(null);
+  const target = STRINGS.find((item) => item.id === stringId) ?? STRINGS[1]!;
+  const cents = snap.listening && snap.freq ? stringCents(snap.freq, target.freq) : null;
+  const near = snap.listening && snap.freq ? nearestString(snap.freq) : null;
+  const inTune = cents !== null && Math.abs(cents) <= 8;
+  const others = OPEN_CHORDS.filter((chord) => !info.chords.some((own) => own.name === chord.name));
+
+  useEffect(
+    () => () => {
+      engine.current?.stopListen();
+      engine.current?.stopChords();
+      engine.current?.reference(null);
+    },
+    [engine],
+  );
+
+  function hearString(id: string) {
+    const next = STRINGS.find((item) => item.id === id);
+    if (!next) return;
+    setStringId(id);
+    if (hearing === id) {
+      engine.current?.reference(null);
+      setHearing(null);
+      return;
+    }
+    engine.current?.reference(next.freq);
+    setHearing(id);
+  }
+
+  let tuneText = "Velg en streng. Spill den. Nålen skal ligge i midten.";
+  if (snap.listening && cents === null) tuneText = "Jeg hører ingenting ennå. Plukk strengen.";
+  else if (cents !== null && Math.abs(cents) > 60) {
+    tuneText = near && near.id !== target.id ? `Det er ikke denne. Nærmest er ${near.name}.` : "Det er ikke denne strengen.";
+  } else if (inTune) tuneText = "Der. Den stemmer.";
+  else if (cents !== null && cents < 0) tuneText = "Litt slakk. Stram forsiktig.";
+  else if (cents !== null) tuneText = "Litt stram. Slipp forsiktig.";
+
   return (
     <section>
-      <PanelHead title="Grep og stemming" lede="Velg toneart. Trykk på et grep for å høre det. Grunntonen er den du stemmer gitaren mot." />
-      <div className="mb-4 flex flex-wrap gap-2">
-        {KEYS.map((key) => (
-          <button
-            key={key.id}
-            type="button"
-            aria-pressed={song.keyName === key.id}
-            onClick={() => setKey(song.id, key.id)}
-            className={
-              song.keyName === key.id
-                ? "min-h-11 min-w-11 rounded-full border border-lamp bg-surface-2 px-4"
-                : "min-h-11 min-w-11 rounded-full border border-line bg-surface px-4"
+      <PanelHead
+        title="Akkorder og stemming"
+        lede="Spill grepa som en gitar, i låtens tempo. Stem strengene mot en tone, ikke mot hukommelsen."
+      />
+      <div className="mb-4 grid grid-cols-2 gap-2">
+        <button
+          type="button"
+          aria-pressed={tab === "akkorder"}
+          onClick={() => setTab("akkorder")}
+          className={tab === "akkorder" ? "min-h-11 rounded-md border border-lamp bg-surface-2" : "min-h-11 rounded-md border border-line bg-surface"}
+        >
+          Akkorder
+        </button>
+        <button
+          type="button"
+          aria-pressed={tab === "stemmer"}
+          onClick={() => setTab("stemmer")}
+          className={tab === "stemmer" ? "min-h-11 rounded-md border border-lamp bg-surface-2" : "min-h-11 rounded-md border border-line bg-surface"}
+        >
+          Stemmer
+        </button>
+      </div>
+      {tab === "akkorder" ? (
+        <>
+          <div className="mb-4 flex flex-wrap gap-2">
+            {KEYS.map((key) => (
+              <button
+                key={key.id}
+                type="button"
+                aria-pressed={song.keyName === key.id}
+                onClick={() => setKey(song.id, key.id)}
+                className={
+                  song.keyName === key.id
+                    ? "min-h-11 min-w-11 rounded-md border border-lamp bg-surface-2 px-3"
+                    : "min-h-11 min-w-11 rounded-md border border-line bg-surface px-3"
+                }
+              >
+                {key.id}
+              </button>
+            ))}
+          </div>
+          <div className="grid grid-cols-4 gap-2">
+            {info.chords.map((chord, index) => (
+              <button
+                key={chord.name}
+                type="button"
+                onClick={() => {
+                  engine.current?.stopChords();
+                  engine.current?.strum(chord.freqs);
+                }}
+                className={
+                  snap.chords && snap.chordIndex === index
+                    ? "min-h-16 rounded-md border border-lamp bg-surface-2 font-display text-2xl"
+                    : "min-h-16 rounded-md border border-line bg-surface font-display text-2xl"
+                }
+              >
+                {chord.name}
+              </button>
+            ))}
+          </div>
+          <p className="mt-3 text-sm text-muted">Ett grep per takt. {song.bpm} slag.</p>
+          <Button
+            className="mt-3 w-full"
+            onClick={() =>
+              snap.chords
+                ? engine.current?.stopChords()
+                : engine.current?.loopChords(
+                    info.chords.map((chord) => chord.freqs),
+                    song.bpm,
+                  )
             }
           >
-            {key.id}
-          </button>
-        ))}
-      </div>
-      <div className="grid grid-cols-2 gap-2">
-        {info.chords.map((chord) => (
-          <Button key={chord.name} variant="quiet" onClick={() => engine.current?.previewChord(chord.freqs)}>
-            Hør {chord.name}
+            {snap.chords ? "Stopp runden" : "Spill runden"}
           </Button>
-        ))}
-      </div>
-      <div className="mt-4 flex flex-wrap gap-2">
-        <Button variant="primary" onClick={() => engine.current?.previewChord([info.root])}>
-          Hør grunntonen
-        </Button>
-        <Button
-          variant="quiet"
-          onClick={() => (snap.listening ? engine.current?.stopListen() : void engine.current?.startListen())}
-        >
-          {snap.listening ? "Slutt å stemme" : "Stem med mikrofon"}
-        </Button>
-      </div>
-      {snap.listening ? (
-        <p className="mt-4 font-display text-4xl">
-          {snap.note ?? "…"} <span className="text-lg text-muted">{snap.hint ?? "spill en tone"}</span>
-        </p>
-      ) : null}
+          <h3 className="mt-6 text-sm font-medium">Andre grep</h3>
+          <div className="mt-2 grid grid-cols-4 gap-2">
+            {others.map((chord) => (
+              <button
+                key={chord.name}
+                type="button"
+                onClick={() => {
+                  engine.current?.stopChords();
+                  engine.current?.strum(chord.freqs);
+                }}
+                className="min-h-12 rounded-md border border-line bg-surface font-display text-lg"
+              >
+                {chord.name}
+              </button>
+            ))}
+          </div>
+        </>
+      ) : (
+        <>
+          <div className="grid grid-cols-6 gap-1.5">
+            {STRINGS.map((item) => (
+              <button
+                key={item.id}
+                type="button"
+                aria-pressed={stringId === item.id}
+                aria-label={`${item.name}-streng${hearing === item.id ? ", referansetone på" : ""}`}
+                onClick={() => hearString(item.id)}
+                className={
+                  stringId === item.id
+                    ? "flex min-h-16 flex-col items-center justify-center rounded-md border border-lamp bg-surface-2"
+                    : "flex min-h-16 flex-col items-center justify-center rounded-md border border-line bg-surface"
+                }
+              >
+                <span className="font-display text-xl">{item.name}</span>
+                {hearing === item.id || item.id === "E2" || item.id === "E4" ? (
+                  <span className={`text-[10px] ${hearing === item.id ? "text-lamp" : "text-muted"}`}>
+                    {hearing === item.id ? "lyd" : item.id === "E2" ? "lav" : "lys"}
+                  </span>
+                ) : null}
+              </button>
+            ))}
+          </div>
+          <p className="mt-2 text-sm text-muted">Trykk en streng for å høre den. Trykk igjen for å slå den av.</p>
+          <div className="relative mt-5 h-3 rounded-full bg-surface">
+            <span className="absolute top-0 left-1/2 h-3 w-px bg-lamp" />
+            {cents !== null ? (
+              <span
+                className={`absolute top-1/2 size-4 -translate-x-1/2 -translate-y-1/2 rounded-full ${inTune ? "bg-lamp" : "bg-signal"}`}
+                style={{ left: `${50 + Math.max(-50, Math.min(50, cents))}%` }}
+              />
+            ) : null}
+          </div>
+          <p className="mt-3 font-display text-4xl">
+            {snap.listening ? (snap.note ?? "…") : target.name}{" "}
+            <span className="text-lg text-muted">{cents === null ? "" : `${cents > 0 ? "+" : ""}${cents} cent`}</span>
+          </p>
+          <p className="mt-1 text-sm text-muted">{tuneText}</p>
+          <Button
+            className="mt-4"
+            variant={snap.listening ? "quiet" : "primary"}
+            onClick={() => (snap.listening ? engine.current?.stopListen() : void engine.current?.startListen())}
+          >
+            {snap.listening ? "Slutt å lytte" : "Lytt til strengen"}
+          </Button>
+        </>
+      )}
     </section>
   );
 }

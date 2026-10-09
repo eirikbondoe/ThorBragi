@@ -1,7 +1,7 @@
 import { o as __toESM } from "../_runtime.mjs";
 import { J as require_react, S as require_jsx_runtime, y as Link } from "../_libs/@tanstack/react-router+[...].mjs";
-import { _ as songDuration, i as Logo, o as PanelHead, t as Button } from "./mark-lLZAXZY-.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/lyric-link-De0ArgJz.js
+import { _ as songDuration, i as Logo, o as PanelHead, t as Button } from "./mark-Dbp9pnc0.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/lyric-link-DpThLPER.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var FAST_POLL_MS = 400;
@@ -577,7 +577,7 @@ function SammenPanel({ song }) {
 		try {
 			if (nav.share) {
 				await nav.share({
-					title: song.title || "Thorøisjen Jakkobbsen",
+					title: song.title || "ThorSound",
 					text,
 					url
 				});

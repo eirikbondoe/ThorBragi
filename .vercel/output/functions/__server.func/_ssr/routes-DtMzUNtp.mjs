@@ -1,9 +1,9 @@
 import { o as __toESM } from "../_runtime.mjs";
 import { J as require_react, S as require_jsx_runtime, b as useNavigate, y as Link } from "../_libs/@tanstack/react-router+[...].mjs";
-import { O as ChevronRight, c as Trash2 } from "../_libs/lucide-react.mjs";
-import { _ as songDuration, h as hydrateStudio, p as formatTime, t as Button, v as useStudio, y as whenLabel } from "./mark-lLZAXZY-.mjs";
-import { n as Shell, t as GearGuide } from "./shell-K9lprTdv.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-Dnwcfczp.js
+import { c as Trash2, k as ChevronRight } from "../_libs/lucide-react.mjs";
+import { _ as songDuration, h as hydrateStudio, p as formatTime, t as Button, v as useStudio, y as whenLabel } from "./mark-Dbp9pnc0.mjs";
+import { n as Shell, t as GearGuide } from "./shell--g2eojab.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-DtMzUNtp.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function HomeScreen() {
@@ -42,7 +42,7 @@ function HomeScreen() {
 		children: [
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 				className: "text-sm text-muted",
-				children: "Sitt. Syng. La banen vente."
+				children: "Ett steg om gangen."
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 				className: "mt-4 grid grid-cols-2 gap-2",

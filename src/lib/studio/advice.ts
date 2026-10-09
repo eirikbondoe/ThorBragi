@@ -11,7 +11,7 @@ export function producerAdvice(song: Song): Advice[] {
     notes.push({
       id: "start",
       title: "Begynn i ett spor",
-      text: "Syng og spill samtidig. Ett opptak er en hel låt. Headset på. Frisbeegolf får ikke være med på opptaket, og det får ikke høyttaleren heller.",
+      text: "Syng og spill i ett opptak. Headset på, så høyttaleren ikke blir med.",
       job: "opptak",
     });
   }
@@ -23,14 +23,14 @@ export function producerAdvice(song: Song): Advice[] {
       notes.push({
         id: `hot-${track.id}`,
         title: `${track.name} er for sterk`,
-        text: "Du slo i taket. Hold mikrofonen litt unna, og ta et nytt forsøk. Dette er ikke en bakke du skal løpe opp.",
+        text: "Lydnivået slo i taket. Hold mikrofonen litt lenger unna, og ta opp på nytt.",
         job: "opptak",
       });
     } else if (take.peak < 0.06 && take.duration > 0.8) {
       notes.push({
         id: `quiet-${track.id}`,
         title: `${track.name} er nesten borte`,
-        text: "Nærmere mikrofonen, eller opp i Balanse. Hvisking er søtt. Borte er det ikke.",
+        text: "Hold mikrofonen nærmere, eller skru sporet opp i Balanse.",
         job: "balanse",
       });
     }
@@ -39,7 +39,7 @@ export function producerAdvice(song: Song): Advice[] {
       notes.push({
         id: `trim-${track.id}`,
         title: `Stille før ${track.name.toLowerCase()}`,
-        text: "Et tomt strekk før du tør. Klipp det. Låten skal starte når du gjør det.",
+        text: "Det er stille før lyden starter. Klipp det vekk.",
         job: "klipp",
       });
     }
@@ -51,7 +51,7 @@ export function producerAdvice(song: Song): Advice[] {
     notes.push({
       id: "mask",
       title: "Gitaren tar stemmen",
-      text: "Stemmen skal sitte foran. Gitaren er kjekk. Den skal ikke snakke over deg.",
+      text: "Skru stemmen opp, eller gitaren ned, i Balanse.",
       job: "balanse",
     });
   }
@@ -59,8 +59,8 @@ export function producerAdvice(song: Song): Advice[] {
   if (vocal && vocal.room === "tort") {
     notes.push({
       id: "room",
-      title: "Stemmen står i et skap",
-      text: "Litt stue gjør at stemmen setter seg. Kirke er for dem som vil høres ut som de har gått seg vill.",
+      title: "Stemmen er tørr",
+      text: "Velg Stue under Romklang hvis stemmen høres tørr ut.",
       job: "rom",
     });
   }
@@ -69,7 +69,7 @@ export function producerAdvice(song: Song): Advice[] {
     notes.push({
       id: "layer",
       title: "Ett lag til",
-      text: "Ta opp det som mangler oppå det du har. Headset. Du jogger ikke mellom sporene.",
+      text: "Ta opp det som mangler oppå det du har. Headset på.",
       job: "opptak",
     });
   }
@@ -78,14 +78,14 @@ export function producerAdvice(song: Song): Advice[] {
     notes.push({
       id: "video",
       title: "Film det samtidig",
-      text: "Kamera og mikrofon i samme forsøk. Du får en film. Den stikker ikke av gårde selv.",
+      text: "Kamera og mikrofon i samme opptak. Filmen lagres på telefonen.",
       job: "bilde",
     });
   } else {
     notes.push({
       id: "koble",
       title: "Bilde til OBS eller Prism",
-      text: "En lenke de kan legge oppå kameraet. Thorøisjen sender ikke. Han sitter pent.",
+      text: "En lenke OBS eller Prism kan legge oppå kameraet. ThorSound sender ikke.",
       job: "koble",
     });
   }
@@ -94,7 +94,7 @@ export function producerAdvice(song: Song): Advice[] {
     notes.push({
       id: "sammen",
       title: "Flere kan se teksten",
-      text: "Si koden. Teksten går nedover på de andre skjermene. Ingen må løpe etter den.",
+      text: "Si koden. Teksten går nedover på de andre skjermene.",
       job: "sammen",
     });
   }
@@ -103,7 +103,7 @@ export function producerAdvice(song: Song): Advice[] {
     notes.push({
       id: "ut",
       title: "Klar til å legge ut",
-      text: "YouTube, Smule eller en kort film. Du limer inn. Banen får ingen kredit.",
+      text: "YouTube, Smule eller en kort film. Du limer inn selv.",
       job: "ut",
     });
   }
@@ -112,7 +112,7 @@ export function producerAdvice(song: Song): Advice[] {
     notes.push({
       id: "lyrics",
       title: "Teksten er tom",
-      text: "Skriv linjene. De ligger foran deg neste gang du trykker på den røde.",
+      text: "Skriv linjene. De vises store neste gang du tar opp.",
       job: "tekst",
     });
   }
@@ -121,7 +121,7 @@ export function producerAdvice(song: Song): Advice[] {
     notes.push({
       id: "form",
       title: "Låten har ingen deler",
-      text: "Merk vers og refreng. Formen husker du. Banekartet kan noen andre ta.",
+      text: "Merk vers og refreng, så formen er synlig.",
       job: "deler",
     });
   }
@@ -129,8 +129,8 @@ export function producerAdvice(song: Song): Advice[] {
   if (song.bpm >= 140) {
     notes.push({
       id: "bpm",
-      title: "Tempoet er en bakke",
-      text: "Ordene rekker ikke fram. Senk det. Sangen skal pustes, ikke løpes.",
+      title: "Tempoet er høyt",
+      text: "Det går fort. Senk tempoet hvis ordene ikke rekker fram.",
       job: "tempo",
     });
   }
@@ -139,7 +139,7 @@ export function producerAdvice(song: Song): Advice[] {
     notes.push({
       id: "finish",
       title: "Klar for å høres ferdig ut",
-      text: "Prøv Ferdig lyd på Radio, og skru mellom Før og etter. Du mikser ikke. Du velger den frekke.",
+      text: "Velg Ferdig lyd, og hør før og etter.",
       job: "ferdig",
     });
   }

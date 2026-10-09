@@ -14,6 +14,9 @@ export type EngineSnap = {
   level: number;
   note: string | null;
   hint: string | null;
+  freq: number | null;
+  chords: boolean;
+  chordIndex: number;
   error: string | null;
   notice: string | null;
 };
@@ -28,6 +31,9 @@ export const EMPTY_SNAP: EngineSnap = {
   level: 0,
   note: null,
   hint: null,
+  freq: null,
+  chords: false,
+  chordIndex: -1,
   error: null,
   notice: null,
 };
@@ -307,6 +313,12 @@ export class StudioEngine {
   private level = 0;
   private note: string | null = null;
   private hint: string | null = null;
+  private freq: number | null = null;
+  private chordOn = false;
+  private chordIndex = -1;
+  private chordGen = 0;
+  private chordTimer: number | null = null;
+  private refOsc: OscillatorNode | null = null;
   private error: string | null = null;
   private notice: string | null = null;
   private stream: MediaStream | null = null;
@@ -327,6 +339,8 @@ export class StudioEngine {
     this.gen += 1;
     this.recordAbort = true;
     cancelAnimationFrame(this.raf);
+    this.stopChords();
+    this.reference(null);
     this.stopPerformance();
     this.stopStream();
     void this.ctx?.close();
@@ -531,20 +545,90 @@ export class StudioEngine {
   }
 
   previewChord(freqs: number[]) {
-    const ctx = this.ensureCtxSync();
-    const now = ctx.currentTime + 0.03;
-    const bus = ctx.createGain();
-    bus.gain.value = 0.22;
-    bus.connect(ctx.destination);
-    for (const freq of freqs) {
-      const osc = ctx.createOscillator();
-      const gain = envGain(ctx, now, 0.45, 1.05);
-      osc.type = "triangle";
-      osc.frequency.value = freq;
-      osc.connect(gain).connect(bus);
-      osc.start(now);
-      osc.stop(now + 1.1);
+    this.strum(freqs);
+  }
+
+  strum(freqs: number[]) {
+    this.playStrum(freqs);
+  }
+
+  loopChords(chords: number[][], bpm: number) {
+    this.stopChords();
+    const playable = chords.filter((chord) => chord.length > 0);
+    if (!playable.length) return;
+    const gen = ++this.chordGen;
+    this.chordOn = true;
+    const bar = (60 / Math.max(40, Math.min(220, bpm))) * 4 * 1000;
+    let index = 0;
+    const step = () => {
+      if (this.dead || this.chordGen !== gen) return;
+      this.chordIndex = index % playable.length;
+      this.playStrum(playable[this.chordIndex]!);
+      this.emit();
+      index += 1;
+      this.chordTimer = window.setTimeout(step, bar);
+    };
+    step();
+  }
+
+  stopChords() {
+    this.chordGen += 1;
+    if (this.chordTimer !== null) window.clearTimeout(this.chordTimer);
+    this.chordTimer = null;
+    this.chordOn = false;
+    this.chordIndex = -1;
+    this.emit();
+  }
+
+  reference(freq: number | null) {
+    try {
+      this.refOsc?.stop();
+    } catch {
+      /* already stopped */
     }
+    this.refOsc?.disconnect();
+    this.refOsc = null;
+    if (freq == null || this.dead) return;
+    const ctx = this.ensureCtxSync();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = "sine";
+    osc.frequency.value = freq;
+    gain.gain.value = 0.12;
+    osc.connect(gain).connect(ctx.destination);
+    osc.start();
+    this.refOsc = osc;
+  }
+
+  private playStrum(freqs: number[]) {
+    const ctx = this.ensureCtxSync();
+    const now = ctx.currentTime + 0.02;
+    const bus = ctx.createGain();
+    const filter = ctx.createBiquadFilter();
+    bus.gain.value = 0.34;
+    filter.type = "lowpass";
+    filter.frequency.value = 2200;
+    bus.connect(filter).connect(ctx.destination);
+    freqs.forEach((freq, index) => {
+      const osc = ctx.createOscillator();
+      const body = ctx.createOscillator();
+      const gain = ctx.createGain();
+      const start = now + index * 0.03;
+      osc.type = "triangle";
+      body.type = "sine";
+      osc.frequency.value = freq;
+      body.frequency.value = freq * 2;
+      gain.gain.setValueAtTime(0.0001, start);
+      gain.gain.exponentialRampToValueAtTime(0.42, start + 0.018);
+      gain.gain.exponentialRampToValueAtTime(0.0001, start + 1.35);
+      osc.connect(gain);
+      body.connect(gain);
+      gain.connect(bus);
+      osc.start(start);
+      body.start(start);
+      osc.stop(start + 1.4);
+      body.stop(start + 1.4);
+    });
   }
 
   async decodeTake(blob: Blob): Promise<{ audioId: string; duration: number; peak: number; peaks: number[] }> {
@@ -887,6 +971,7 @@ export class StudioEngine {
     this.level = 0;
     this.note = null;
     this.hint = null;
+    this.freq = null;
   }
 
   private readMeter() {
@@ -898,6 +983,7 @@ export class StudioEngine {
     const pitch = detectPitch(this.meterData, this.ctx.sampleRate);
     this.note = pitch?.note ?? null;
     this.hint = pitch ? pitchHint(pitch.cents) : null;
+    this.freq = pitch?.freq ?? null;
   }
 
   private position(): number {
@@ -912,7 +998,7 @@ export class StudioEngine {
       const length = audioLength(this.song, this.buffers);
       if (length > 0.05 && this.position() >= length + 0.35) this.pause();
     }
-    const active = this.playing || this.recording || this.counting || this.listening;
+    const active = this.playing || this.recording || this.counting || this.listening || this.chordOn;
     const now = performance.now();
     if (active && now - this.lastEmit > 80) {
       this.lastEmit = now;
@@ -938,6 +1024,9 @@ export class StudioEngine {
       level: this.level,
       note: this.note,
       hint: this.hint,
+      freq: this.freq,
+      chords: this.chordOn,
+      chordIndex: this.chordIndex,
       error: this.error,
       notice: this.notice,
     };

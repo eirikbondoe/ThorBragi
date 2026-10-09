@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiRtcRouteImport } from './routes/api/rtc'
+import { Route as ApiTranscribeRouteImport } from './routes/api/transcribe'
 import { Route as LagCodeRouteImport } from './routes/lag.$code'
 import { Route as SammenCodeRouteImport } from './routes/sammen.$code'
 import { Route as SangIdRouteImport } from './routes/sang.$id'
@@ -23,6 +24,11 @@ const IndexRoute = IndexRouteImport.update({
 const ApiRtcRoute = ApiRtcRouteImport.update({
   id: '/api/rtc',
   path: '/api/rtc',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiTranscribeRoute = ApiTranscribeRouteImport.update({
+  id: '/api/transcribe',
+  path: '/api/transcribe',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LagCodeRoute = LagCodeRouteImport.update({
@@ -44,6 +50,7 @@ const SangIdRoute = SangIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/api/rtc': typeof ApiRtcRoute
+  '/api/transcribe': typeof ApiTranscribeRoute
   '/lag/$code': typeof LagCodeRoute
   '/sammen/$code': typeof SammenCodeRoute
   '/sang/$id': typeof SangIdRoute
@@ -51,6 +58,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/api/rtc': typeof ApiRtcRoute
+  '/api/transcribe': typeof ApiTranscribeRoute
   '/lag/$code': typeof LagCodeRoute
   '/sammen/$code': typeof SammenCodeRoute
   '/sang/$id': typeof SangIdRoute
@@ -59,22 +67,42 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/api/rtc': typeof ApiRtcRoute
+  '/api/transcribe': typeof ApiTranscribeRoute
   '/lag/$code': typeof LagCodeRoute
   '/sammen/$code': typeof SammenCodeRoute
   '/sang/$id': typeof SangIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/api/rtc' | '/lag/$code' | '/sammen/$code' | '/sang/$id'
+  fullPaths:
+    | '/'
+    | '/api/rtc'
+    | '/api/transcribe'
+    | '/lag/$code'
+    | '/sammen/$code'
+    | '/sang/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/api/rtc' | '/lag/$code' | '/sammen/$code' | '/sang/$id'
+  to:
+    | '/'
+    | '/api/rtc'
+    | '/api/transcribe'
+    | '/lag/$code'
+    | '/sammen/$code'
+    | '/sang/$id'
   id:
-    '__root__' | '/' | '/api/rtc' | '/lag/$code' | '/sammen/$code' | '/sang/$id'
+    | '__root__'
+    | '/'
+    | '/api/rtc'
+    | '/api/transcribe'
+    | '/lag/$code'
+    | '/sammen/$code'
+    | '/sang/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ApiRtcRoute: typeof ApiRtcRoute
+  ApiTranscribeRoute: typeof ApiTranscribeRoute
   LagCodeRoute: typeof LagCodeRoute
   SammenCodeRoute: typeof SammenCodeRoute
   SangIdRoute: typeof SangIdRoute
@@ -94,6 +122,13 @@ declare module '@tanstack/react-router' {
       path: '/api/rtc'
       fullPath: '/api/rtc'
       preLoaderRoute: typeof ApiRtcRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/transcribe': {
+      id: '/api/transcribe'
+      path: '/api/transcribe'
+      fullPath: '/api/transcribe'
+      preLoaderRoute: typeof ApiTranscribeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/lag/$code': {
@@ -123,6 +158,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ApiRtcRoute: ApiRtcRoute,
+  ApiTranscribeRoute: ApiTranscribeRoute,
   LagCodeRoute: LagCodeRoute,
   SammenCodeRoute: SammenCodeRoute,
   SangIdRoute: SangIdRoute,

@@ -40,7 +40,7 @@ export function HomeScreen() {
   return (
     <Shell>
       <main className="flex flex-1 flex-col px-5 pb-10">
-        <p className="text-sm text-muted">Sitt. Syng. La banen vente.</p>
+        <p className="text-sm text-muted">Ett steg om gangen.</p>
         <div className="mt-4 grid grid-cols-2 gap-2">
           {latest ? (
             <Button

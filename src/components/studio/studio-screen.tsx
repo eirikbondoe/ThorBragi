@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { ChevronLeft, ChevronRight, Circle, Play, Square } from "lucide-react";
 import { producerAdvice } from "@/lib/studio/advice";
@@ -14,6 +14,8 @@ import { LyricLink } from "./lyric-link";
 export function StudioScreen({ id }: { id: string }) {
   const [ready, setReady] = useState(false);
   const [job, setJob] = useState<JobId | null>(null);
+  const [more, setMore] = useState(false);
+  const openedFor = useRef<string | null>(null);
   const [focusId, setFocusId] = useState<string | null>(null);
   const song = useStudio((state) => state.songs.find((item) => item.id === id) ?? null);
   const renameSong = useStudio((state) => state.renameSong);
@@ -30,6 +32,13 @@ export function StudioScreen({ id }: { id: string }) {
   }, [song, focusId]);
 
   useEffect(() => {
+    if (!song || openedFor.current === song.id) return;
+    openedFor.current = song.id;
+    setMore(false);
+    setJob(null);
+  }, [song]);
+
+  useEffect(() => {
     window.scrollTo(0, 0);
   }, [job]);
 
@@ -40,7 +49,7 @@ export function StudioScreen({ id }: { id: string }) {
           <Link to="/" className="inline-flex min-h-11 items-center text-sm text-muted">
             Til sangene
           </Link>
-          <h1 className="mt-4 font-display text-3xl">{ready ? "Fant ikke sangen" : "Thorøisjen Jakkobbsen"}</h1>
+          <h1 className="mt-4 font-display text-3xl">{ready ? "Fant ikke sangen" : "ThorSound"}</h1>
           {ready ? <p className="mt-2 text-muted">Den kan ha blitt slettet i denne nettleseren.</p> : null}
         </main>
       </Shell>
@@ -51,6 +60,8 @@ export function StudioScreen({ id }: { id: string }) {
   const looping = length < 0.05 && (song.drums !== "ingen" || song.click);
   const advice = producerAdvice(song)[0];
   const locked = snap.recording || snap.counting;
+  const hasAudio = length >= 0.05;
+  const groups = hasAudio || more ? JOB_GROUPS : JOB_GROUPS.filter((group) => group.title === "Start");
 
   return (
     <LyricLink song={song} snap={snap}>
@@ -76,7 +87,7 @@ export function StudioScreen({ id }: { id: string }) {
               className="mb-2 inline-flex min-h-11 items-center gap-1 text-sm text-muted"
             >
               <ChevronLeft className="size-4" />
-              Alle jobbene
+              Tilbake
             </button>
             <div className="rounded-md border border-line bg-raised p-4">
               <JobPanel
@@ -92,13 +103,13 @@ export function StudioScreen({ id }: { id: string }) {
           </>
         ) : (
           <>
-            {advice ? (
+            {advice && hasAudio ? (
               <button
                 type="button"
                 onClick={() => setJob(advice.job)}
                 className="mb-3 w-full rounded-md border border-line bg-raised px-4 py-3 text-left"
               >
-                <span className="text-xs font-medium tracking-widest text-lamp uppercase">Produsenten sier</span>
+                <span className="text-xs font-medium tracking-widest text-lamp uppercase">Neste</span>
                 <span className="mt-1 block font-medium">{advice.title}</span>
                 <span className="mt-1 block text-sm text-muted">{advice.text}</span>
               </button>
@@ -106,7 +117,7 @@ export function StudioScreen({ id }: { id: string }) {
             {length < 0.05 ? (
               <div className="mb-4 rounded-md border border-line bg-raised p-4">
                 <p className="font-medium">Ingen lyd ennå</p>
-                <p className="mt-1 text-sm text-muted">Headset på. Fire slag. Så er du i gang.</p>
+                <p className="mt-1 text-sm text-muted">Trykk Ta opp. Telefonen spør om mikrofonen. Den teller fire slag, så starter opptaket.</p>
                 <button
                   type="button"
                   onClick={() => setJob("opptak")}
@@ -116,7 +127,7 @@ export function StudioScreen({ id }: { id: string }) {
                 </button>
               </div>
             ) : null}
-            {JOB_GROUPS.map((group) => (
+            {groups.map((group) => (
               <section key={group.title} className="mb-4">
                 <h2 className="mb-2 text-xs font-medium tracking-widest text-muted uppercase">{group.title}</h2>
                 <ul className="overflow-hidden rounded-md border border-line bg-raised">
@@ -146,6 +157,15 @@ export function StudioScreen({ id }: { id: string }) {
                 </ul>
               </section>
             ))}
+            {!hasAudio && !more ? (
+              <button
+                type="button"
+                onClick={() => setMore(true)}
+                className="mb-4 min-h-11 text-sm text-muted"
+              >
+                Vis alle verktøy
+              </button>
+            ) : null}
           </>
         )}
       </div>
@@ -167,7 +187,7 @@ export function StudioScreen({ id }: { id: string }) {
             type="button"
             aria-label={snap.recording ? "Opptak pågår" : "Ta opp"}
             onClick={() => setJob("opptak")}
-            className={`flex size-12 shrink-0 items-center justify-center rounded-md bg-signal text-signal-ink ${snap.recording ? "rec-pulse" : ""}`}
+            className="flex size-12 shrink-0 items-center justify-center rounded-md bg-signal text-signal-ink"
           >
             <Circle className="size-4 fill-current" />
           </button>
@@ -194,7 +214,7 @@ export function StudioScreen({ id }: { id: string }) {
             />
             <div className="flex justify-between text-xs text-muted tabular-nums">
               <span>{formatTime(snap.position)}</span>
-              <span>{looping ? "trommer til du stopper" : formatTime(length)}</span>
+              <span>{looping ? "Trommene går til du stopper" : formatTime(length)}</span>
             </div>
           </div>
         </div>

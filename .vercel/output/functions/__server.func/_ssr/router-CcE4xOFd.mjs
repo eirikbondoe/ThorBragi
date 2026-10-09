@@ -2,7 +2,7 @@ import { o as __toESM } from "../_runtime.mjs";
 import { J as require_react, S as require_jsx_runtime, _ as createFileRoute, d as Scripts, f as HeadContent, g as lazyRouteComponent, h as Outlet, m as createRouter, v as createRootRoute, x as useRouter } from "../_libs/@tanstack/react-router+[...].mjs";
 import { s as TriangleAlert } from "../_libs/lucide-react.mjs";
 import { a as number, c as union, i as literal, l as unknown, n as _enum, o as object, r as discriminatedUnion, s as string, t as number$1 } from "../_libs/zod.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-fKveQLSU.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-CcE4xOFd.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var __defProp = Object.defineProperty;
@@ -306,9 +306,9 @@ function PreviewHostBridge() {
 	}, [router]);
 	return null;
 }
-var styles_default = "/assets/styles-CYa-2PPJ.css";
-var APP_NAME = "Thorøisjen Jakkobbsen";
-var Route$5 = createRootRoute({
+var styles_default = "/assets/styles-BpYOhbuE.css";
+var APP_NAME = "ThorSound";
+var Route$6 = createRootRoute({
 	head: () => ({
 		meta: [
 			{ charSet: "utf-8" },
@@ -319,7 +319,7 @@ var Route$5 = createRootRoute({
 			{ title: APP_NAME },
 			{
 				name: "description",
-				content: "Thorøisjen Jakkobbsen tar opp, rådgir og lar deg prøve. Banen får vente."
+				content: "ThorSound tar opp, renser og skriver tekst. Ett steg om gangen."
 			},
 			{
 				name: "theme-color",
@@ -370,8 +370,8 @@ var Route$5 = createRootRoute({
 		] })]
 	})
 });
-var $$splitComponentImporter$3 = () => import("./routes-Dnwcfczp.mjs");
-var Route$4 = createFileRoute("/")({ component: lazyRouteComponent($$splitComponentImporter$3, "component") });
+var $$splitComponentImporter$3 = () => import("./routes-DtMzUNtp.mjs");
+var Route$5 = createFileRoute("/")({ component: lazyRouteComponent($$splitComponentImporter$3, "component") });
 /**
 * Migration bookkeeping shared by the two appliers — `scripts/migrate.mjs`
 * (deploy, `readdir`) and `src/lib/db.ts` (PGLite preview, `import.meta.glob`).
@@ -694,44 +694,119 @@ async function handleSignaling(request) {
 	}
 }
 var handle = ({ request }) => handleSignaling(request);
-var Route$3 = createFileRoute("/api/rtc")({ server: { handlers: {
+var Route$4 = createFileRoute("/api/rtc")({ server: { handlers: {
 	GET: handle,
 	POST: handle
 } } });
-var $$splitComponentImporter$2 = () => import("./lag._code-f6wipq12.mjs");
+function formatTranscript(data) {
+	const words = (data.words ?? []).filter((word) => word.text);
+	const labeled = words.some((word) => word.speaker != null && word.speaker !== "");
+	if (!words.length || !labeled) return (data.text ?? "").trim();
+	const lines = [];
+	let speaker = "";
+	let line = "";
+	for (const word of words) {
+		const who = String(word.speaker ?? "");
+		if (who !== speaker) {
+			if (line) lines.push(line.trim());
+			speaker = who;
+			const digits = who.replace(/\D/g, "");
+			const n = digits === "" ? NaN : Number(digits);
+			lines.push(Number.isFinite(n) ? `Stemme ${n + 1}` : `Stemme ${who}`);
+			line = word.text ?? "";
+		} else line += `${line ? " " : ""}${word.text ?? ""}`;
+	}
+	if (line) lines.push(line.trim());
+	return lines.join("\n");
+}
+async function transcribe({ request }) {
+	const apiKey = process.env.XAI_API_KEY;
+	if (!apiKey) return Response.json({
+		ok: false,
+		error: "Teksten er ikke tilgjengelig her."
+	}, { status: 503 });
+	let incoming;
+	try {
+		incoming = await request.formData();
+	} catch {
+		return Response.json({
+			ok: false,
+			error: "Mangler lyd."
+		}, { status: 400 });
+	}
+	const file = incoming.get("file");
+	if (!(file instanceof File)) return Response.json({
+		ok: false,
+		error: "Mangler lyd."
+	}, { status: 400 });
+	if (file.size > 41943040) return Response.json({
+		ok: false,
+		error: "Filen er for stor."
+	}, { status: 400 });
+	const body = new FormData();
+	body.append("language", "nb");
+	body.append("format", "true");
+	body.append("diarize", "true");
+	body.append("file", file, "tale.wav");
+	const res = await fetch("https://api.x.ai/v1/stt", {
+		method: "POST",
+		headers: { Authorization: `Bearer ${apiKey}` },
+		body
+	});
+	if (!res.ok) return Response.json({
+		ok: false,
+		error: "Fikk ikke skrevet teksten."
+	}, { status: 502 });
+	const text = formatTranscript(await res.json());
+	if (!text) return Response.json({
+		ok: false,
+		error: "Jeg hørte ingen ord."
+	}, { status: 422 });
+	return Response.json({
+		ok: true,
+		text
+	});
+}
+var Route$3 = createFileRoute("/api/transcribe")({ server: { handlers: { POST: transcribe } } });
+var $$splitComponentImporter$2 = () => import("./lag._code-yemQeDFD.mjs");
 var Route$2 = createFileRoute("/lag/$code")({ component: lazyRouteComponent($$splitComponentImporter$2, "component") });
-var $$splitComponentImporter$1 = () => import("./sammen._code-Bc3HQTb6.mjs");
+var $$splitComponentImporter$1 = () => import("./sammen._code-BDNjNg25.mjs");
 var Route$1 = createFileRoute("/sammen/$code")({ component: lazyRouteComponent($$splitComponentImporter$1, "component") });
-var $$splitComponentImporter = () => import("./sang._id-Bd8V9yMB.mjs");
+var $$splitComponentImporter = () => import("./sang._id-CWaEr59K.mjs");
 var Route = createFileRoute("/sang/$id")({ component: lazyRouteComponent($$splitComponentImporter, "component") });
 var rootRouteChildren = {
-	IndexRoute: Route$4.update({
+	IndexRoute: Route$5.update({
 		id: "/",
 		path: "/",
-		getParentRoute: () => Route$5
+		getParentRoute: () => Route$6
 	}),
-	ApiRtcRoute: Route$3.update({
+	ApiRtcRoute: Route$4.update({
 		id: "/api/rtc",
 		path: "/api/rtc",
-		getParentRoute: () => Route$5
+		getParentRoute: () => Route$6
+	}),
+	ApiTranscribeRoute: Route$3.update({
+		id: "/api/transcribe",
+		path: "/api/transcribe",
+		getParentRoute: () => Route$6
 	}),
 	LagCodeRoute: Route$2.update({
 		id: "/lag/$code",
 		path: "/lag/$code",
-		getParentRoute: () => Route$5
+		getParentRoute: () => Route$6
 	}),
 	SammenCodeRoute: Route$1.update({
 		id: "/sammen/$code",
 		path: "/sammen/$code",
-		getParentRoute: () => Route$5
+		getParentRoute: () => Route$6
 	}),
 	SangIdRoute: Route.update({
 		id: "/sang/$id",
 		path: "/sang/$id",
-		getParentRoute: () => Route$5
+		getParentRoute: () => Route$6
 	})
 };
-var routeTree = Route$5._addFileChildren(rootRouteChildren)._addFileTypes();
+var routeTree = Route$6._addFileChildren(rootRouteChildren)._addFileTypes();
 var router_exports = /* @__PURE__ */ __exportAll({ getRouter: () => getRouter });
 function getRouter() {
 	return createRouter({

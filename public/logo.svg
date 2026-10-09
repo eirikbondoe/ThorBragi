@@ -1,15 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 96">
-  <g clip-path="url(#stone)">
-    <rect width="64" height="36" fill="#2EC8E6"/>
-    <rect y="36" width="64" height="16" fill="#D4A24A"/>
-    <rect y="52" width="64" height="36" fill="#6C4DFF"/>
-  </g>
-  <path d="M18 30 H46 V38 H36 V58 H28 V38 H18 Z" fill="#0A1128"/>
-  <text x="84" y="40" fill="#0A1128" font-family="Montserrat, sans-serif" font-size="28" font-weight="500">Thorøisjen</text>
-  <text x="84" y="72" fill="#0A1128" font-family="Montserrat, sans-serif" font-size="28" font-weight="500">Jakkobbsen</text>
-  <defs>
-    <clipPath id="stone">
-      <path d="M32 4 L60 32 L32 84 L4 32 Z"/>
-    </clipPath>
-  </defs>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 96">
+  <rect width="420" height="96" fill="#0A1128"/>
+  <image href="/mark.jpg" x="6" y="6" width="84" height="84"/>
+  <text x="108" y="58" fill="#F4EFEA" font-family="Montserrat, sans-serif" font-size="32" font-weight="500">ThorSound</text>
 </svg>

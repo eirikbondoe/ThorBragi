@@ -326,7 +326,7 @@ function VideoBooth({ song, engine, snap, graphics }: Props & { graphics: boolea
           </Button>
         ) : null}
         {phase === "rec" ? (
-          <Button variant="signal" className="rec-pulse" onClick={() => recRef.current?.stop()}>
+          <Button variant="signal" onClick={() => recRef.current?.stop()}>
             Stopp
           </Button>
         ) : null}
@@ -500,7 +500,7 @@ export function FilmLagrePanel({ song }: Props) {
     <section>
       <PanelHead
         title="Lagre filmen"
-        lede="Klippet, utseendet og teksten brennes inn i en fil du kan legge ut selv. Thorøisjen sender ikke direkte."
+        lede="Klippet, utseendet og teksten brennes inn i en fil du kan legge ut selv. ThorSound sender ikke direkte."
       />
       <Button onClick={() => void download()} disabled={busy || !take}>
         {busy ? "Klipper…" : "Last ned filmen"}

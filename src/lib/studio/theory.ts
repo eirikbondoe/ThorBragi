@@ -97,7 +97,7 @@ export function keyInfo(name: KeyName): KeyInfo {
 
 const NOTE_NAMES = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
 
-export function detectPitch(samples: Float32Array, sampleRate: number): { note: string; cents: number } | null {
+export function detectPitch(samples: Float32Array, sampleRate: number): { note: string; cents: number; freq: number } | null {
   const size = samples.length;
   if (size < 256) return null;
   let rms = 0;
@@ -124,10 +124,51 @@ export function detectPitch(samples: Float32Array, sampleRate: number): { note: 
   const exact = 69 + 12 * Math.log2(freq / 440);
   const cents = Math.round((exact - midi) * 100);
   const note = NOTE_NAMES[((midi % 12) + 12) % 12] ?? "?";
-  return { note, cents };
+  return { note, cents, freq };
 }
 
 export function pitchHint(cents: number): string {
   if (Math.abs(cents) <= 12) return "treffer";
   return cents < 0 ? "litt under" : "litt over";
+}
+
+export const STRINGS: { id: string; name: string; freq: number }[] = [
+  { id: "E2", name: "E", freq: 82.41 },
+  { id: "A2", name: "A", freq: 110 },
+  { id: "D3", name: "D", freq: 146.83 },
+  { id: "G3", name: "G", freq: 196 },
+  { id: "B3", name: "B", freq: 246.94 },
+  { id: "E4", name: "E", freq: 329.63 },
+];
+
+export const OPEN_CHORDS: Chord[] = [
+  { name: "C", freqs: [261.63, 329.63, 392] },
+  { name: "D", freqs: [146.83, 185, 220] },
+  { name: "E", freqs: [164.81, 207.65, 246.94] },
+  { name: "F", freqs: [174.61, 220, 261.63] },
+  { name: "G", freqs: [196, 246.94, 293.66] },
+  { name: "A", freqs: [220, 277.18, 329.63] },
+  { name: "B", freqs: [246.94, 311.13, 369.99] },
+  { name: "Am", freqs: [220, 261.63, 329.63] },
+  { name: "Dm", freqs: [146.83, 174.61, 220] },
+  { name: "Em", freqs: [164.81, 196, 246.94] },
+  { name: "F#m", freqs: [185, 220, 277.18] },
+  { name: "Bm", freqs: [246.94, 293.66, 369.99] },
+];
+
+export function nearestString(freq: number) {
+  let best = STRINGS[0]!;
+  let bestGap = Infinity;
+  for (const string of STRINGS) {
+    const gap = Math.abs(1200 * Math.log2(freq / string.freq));
+    if (gap < bestGap) {
+      bestGap = gap;
+      best = string;
+    }
+  }
+  return bestGap < 70 ? best : null;
+}
+
+export function stringCents(freq: number, target: number) {
+  return Math.round(1200 * Math.log2(freq / target));
 }

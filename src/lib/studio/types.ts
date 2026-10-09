@@ -61,7 +61,8 @@ export type JobId =
   | "koble"
   | "prov"
   | "ai"
-  | "utstyr";
+  | "utstyr"
+  | "rens";
 
 export type Take = {
   id: string;

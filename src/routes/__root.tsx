@@ -3,7 +3,7 @@ import { AuthProvider } from "@/lib/auth/provider";
 import { PreviewHostBridge } from "@/components/preview-host-bridge";
 import appCss from "../styles.css?url";
 
-const APP_NAME = "Thorøisjen Jakkobbsen";
+const APP_NAME = "ThorSound";
 
 export const Route = createRootRoute({
   head: () => ({
@@ -11,7 +11,7 @@ export const Route = createRootRoute({
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: APP_NAME },
-      { name: "description", content: "Thorøisjen Jakkobbsen tar opp, rådgir og lar deg prøve. Banen får vente." },
+      { name: "description", content: "ThorSound tar opp, renser og skriver tekst. Ett steg om gangen." },
       { name: "theme-color", content: "#0a1128" },
     ],
     links: [

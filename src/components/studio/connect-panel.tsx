@@ -10,7 +10,7 @@ const TARGETS: { id: Target; label: string; text: string }[] = [
   { id: "obs", label: "OBS Studio", text: "Teksten som et gjennomsiktig lag oppå kameraet ditt." },
   { id: "prism", label: "Prism", text: "Samme lag på telefon eller PC. Prism tar skjermen og sender." },
   { id: "samtale", label: "Videosamtale", text: "Meet, Zoom eller Discord. Teksten kan ligge oppå samtalen." },
-  { id: "direkte", label: "Direkte", text: "YouTube og andre. OBS eller Prism sender. Thorøisjen gjør det ikke." },
+  { id: "direkte", label: "Direkte", text: "YouTube og andre. OBS eller Prism sender. ThorSound gjør det ikke." },
 ];
 
 export function KoblePanel({ song }: { song: Song }) {
@@ -80,7 +80,7 @@ export function KoblePanel({ song }: { song: Song }) {
     <section>
       <PanelHead
         title="Koble bilde"
-        lede="OBS, Prism og videosamtale tar imot et bilde. Thorøisjen gir dem teksten og tittelen. Selve sendingen gjør de."
+        lede="OBS, Prism og videosamtale tar imot et bilde. ThorSound gir dem teksten og tittelen. Selve sendingen gjør de."
       />
       <div className="grid gap-2">
         {TARGETS.map((item) => {
@@ -128,7 +128,7 @@ export function KoblePanel({ song }: { song: Song }) {
         <ol className="mt-4 list-decimal space-y-2 pl-5 text-sm">
           <li>Koble teksten til OBS eller Prism, som over.</li>
           <li>Der velger du YouTube eller en annen kanal og trykker send.</li>
-          <li>Thorøisjen ber ikke om strømmenøkkel, og sender ikke selv.</li>
+          <li>ThorSound ber ikke om strømmenøkkel, og sender ikke selv.</li>
         </ol>
       ) : null}
 

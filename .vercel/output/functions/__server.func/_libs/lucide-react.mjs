@@ -360,6 +360,26 @@ var Ear = createLucideIcon("ear", [["path", {
 * This source code is licensed under the ISC license.
 * See the LICENSE file in the root directory of this source tree.
 */
+var FileAudio = createLucideIcon("file-audio", [
+	["path", {
+		d: "M17.5 22h.5a2 2 0 0 0 2-2V7l-5-5H6a2 2 0 0 0-2 2v3",
+		key: "rslqgf"
+	}],
+	["path", {
+		d: "M14 2v4a2 2 0 0 0 2 2h4",
+		key: "tnqrlb"
+	}],
+	["path", {
+		d: "M2 19a2 2 0 1 1 4 0v1a2 2 0 1 1-4 0v-4a6 6 0 0 1 12 0v4a2 2 0 1 1-4 0v-1a2 2 0 1 1 4 0",
+		key: "9f7x3i"
+	}]
+]);
+/**
+* @license lucide-react v0.510.0 - ISC
+*
+* This source code is licensed under the ISC license.
+* See the LICENSE file in the root directory of this source tree.
+*/
 var Headphones = createLucideIcon("headphones", [["path", {
 	d: "M3 14h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-7a9 9 0 0 1 18 0v7a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3",
 	key: "1xhozi"
@@ -937,4 +957,4 @@ var Wind = createLucideIcon("wind", [
 	}]
 ]);
 //#endregion
-export { Cast as A, Headphones as C, Circle as D, Columns2 as E, ArrowUp as F, ArrowDown as I, Activity as L, Cable as M, Bot as N, ChevronRight as O, AudioLines as P, ListMusic as S, Drum as T, Radio as _, Users as a, Mic as b, Trash2 as c, Sparkles as d, SlidersHorizontal as f, Repeat as g, Scissors as h, Video as i, Captions as j, ChevronLeft as k, Timer as l, ScrollText as m, Waves as n, Tv as o, Share2 as p, WandSparkles as r, TriangleAlert as s, Wind as t, Square as u, Play as v, Ear as w, MessageSquare as x, Music2 as y };
+export { ChevronLeft as A, Headphones as C, Columns2 as D, Drum as E, AudioLines as F, ArrowUp as I, ArrowDown as L, Captions as M, Cable as N, Circle as O, Bot as P, Activity as R, ListMusic as S, Ear as T, Radio as _, Users as a, Mic as b, Trash2 as c, Sparkles as d, SlidersHorizontal as f, Repeat as g, Scissors as h, Video as i, Cast as j, ChevronRight as k, Timer as l, ScrollText as m, Waves as n, Tv as o, Share2 as p, WandSparkles as r, TriangleAlert as s, Wind as t, Square as u, Play as v, FileAudio as w, MessageSquare as x, Music2 as y };
