@@ -95,6 +95,7 @@ export async function renderEditedVideo(options: {
   lyrics: string;
   showTitle: boolean;
   showLyrics: boolean;
+  mime?: string;
 }): Promise<Blob> {
   if (typeof HTMLCanvasElement.prototype.captureStream !== "function") {
     throw new Error("Denne nettleseren kan ikke brenne tekst og klipp inn i filmen. Prøv Chrome.");
@@ -127,7 +128,10 @@ export async function renderEditedVideo(options: {
   const dest = audioCtx.createMediaStreamDestination();
   source.connect(dest);
   const mixed = new MediaStream([...picture.getVideoTracks(), ...dest.stream.getAudioTracks()]);
-  const mime = pickVideoMime();
+  const mime =
+    options.mime && typeof MediaRecorder !== "undefined" && MediaRecorder.isTypeSupported(options.mime)
+      ? options.mime
+      : pickVideoMime();
   const recorder = new MediaRecorder(mixed, mime ? { mimeType: mime, videoBitsPerSecond: 2_500_000 } : undefined);
   const chunks: Blob[] = [];
   recorder.ondataavailable = (event) => {
@@ -205,4 +209,43 @@ export async function posterJpeg(blob: Blob, atSeconds: number, mirror: boolean)
   } finally {
     URL.revokeObjectURL(url);
   }
+}
+
+export type ClipPart = { index: number; start: number; end: number };
+
+export const SPLIT_TARGETS = [
+  { id: "to", label: "Del i to", seconds: 0, text: "Ett kutt der du vil." },
+  { id: "tiktok", label: "TikTok", seconds: 60, text: "60 sekunder per del. Stående." },
+  { id: "instagram", label: "Instagram", seconds: 90, text: "90 sekunder per del. Stående." },
+  { id: "shorts", label: "Shorts", seconds: 180, text: "Tre minutter per del. Stående." },
+] as const;
+
+export type SplitId = (typeof SPLIT_TARGETS)[number]["id"];
+
+export function planParts(duration: number, trimStart: number, trimEnd: number, seconds: number): ClipPart[] {
+  const start = Math.max(0, trimStart);
+  const end = Math.max(start, duration - Math.max(0, trimEnd));
+  if (end - start < 0.4 || seconds < 1) return [];
+  const parts: ClipPart[] = [];
+  let cursor = start;
+  let index = 1;
+  while (cursor < end - 0.2 && parts.length < 24) {
+    const next = Math.min(end, cursor + seconds);
+    if (next - cursor < 0.4) break;
+    parts.push({ index, start: cursor, end: next });
+    cursor = next;
+    index += 1;
+  }
+  return parts;
+}
+
+export function splitInTwo(duration: number, trimStart: number, trimEnd: number, at: number): ClipPart[] {
+  const start = Math.max(0, trimStart);
+  const end = Math.max(start, duration - Math.max(0, trimEnd));
+  const cut = Math.min(end - 0.4, Math.max(start + 0.4, at));
+  if (end - start < 0.8) return [{ index: 1, start, end }];
+  return [
+    { index: 1, start, end: cut },
+    { index: 2, start: cut, end },
+  ];
 }

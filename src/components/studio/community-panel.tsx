@@ -5,6 +5,8 @@ import { COMMUNITIES, communityPack, communityPreset, keptSeconds, trimEndForMax
 import { getAudio } from "@/lib/studio/idb";
 import { activeVideoTake, songDuration, useStudio } from "@/lib/studio/store";
 import type { CommunityId, Song } from "@/lib/studio/types";
+import { encodeAudio, downloadBlob } from "@/lib/studio/formats";
+import { FormatPick, useSaveFormats } from "./format-pick";
 import { posterJpeg, renderEditedVideo } from "@/lib/studio/video";
 import { formatTime, PanelHead } from "./bits";
 
@@ -13,12 +15,7 @@ function fileSafe(title: string): string {
 }
 
 function saveBlob(blob: Blob, name: string) {
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = name;
-  link.click();
-  URL.revokeObjectURL(url);
+  downloadBlob(blob, name);
 }
 
 export function UtPanel({ song, engine }: { song: Song; engine: RefObject<StudioEngine | null> }) {
@@ -28,6 +25,8 @@ export function UtPanel({ song, engine }: { song: Song; engine: RefObject<Studio
   const [busy, setBusy] = useState<"film" | "lyd" | "bilde" | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [copied, setCopied] = useState<"tittel" | "tekst" | null>(null);
+  const filmSave = useSaveFormats("video");
+  const audioSave = useSaveFormats("audio");
   const choice = song.outlet;
   const preset = choice ? communityPreset(choice) : null;
   const pack = choice ? communityPack(song, choice) : null;
@@ -66,7 +65,7 @@ export function UtPanel({ song, engine }: { song: Song; engine: RefObject<Studio
   }
 
   async function downloadFilm() {
-    if (!take || !preset) return;
+    if (!take || !preset || !filmSave.format) return;
     setBusy("film");
     setMessage(null);
     try {
@@ -83,9 +82,10 @@ export function UtPanel({ song, engine }: { song: Song; engine: RefObject<Studio
         lyrics: song.lyrics,
         showTitle: true,
         showLyrics: preset.lyrics,
+        mime: filmSave.format.mime,
       });
-      saveBlob(edited, `${fileSafe(song.title)}-${preset.id}.webm`);
-      setMessage("Filmen er lastet ned i riktig format. Lim inn tittel og tekst i appen.");
+      saveBlob(edited, `${fileSafe(song.title)}-${preset.id}.${filmSave.format.ext}`);
+      setMessage(`Filmen er lastet ned som ${filmSave.format.label}. Lim inn tittel og tekst i appen.`);
     } catch (err) {
       setMessage(err instanceof Error ? err.message : "Kunne ikke lage filmen.");
     } finally {
@@ -95,13 +95,14 @@ export function UtPanel({ song, engine }: { song: Song; engine: RefObject<Studio
 
   async function downloadAudio() {
     const engineRef = engine.current;
-    if (!engineRef || !preset) return;
+    if (!engineRef || !preset || !audioSave.format) return;
     setBusy("lyd");
     setMessage(null);
     try {
-      const blob = await engineRef.renderWav(song);
-      saveBlob(blob, `${fileSafe(song.title)}-${preset.id}.wav`);
-      setMessage("Lyden er lastet ned, ferdig og samlet, slik den ligger ved siden av andre sanger.");
+      const buffer = await engineRef.renderBuffer(song);
+      const blob = await encodeAudio(buffer, audioSave.format);
+      saveBlob(blob, `${fileSafe(song.title)}-${preset.id}.${audioSave.format.ext}`);
+      setMessage(`Lyden er lastet ned som ${audioSave.format.label}.`);
     } catch (err) {
       setMessage(err instanceof Error ? err.message : "Kunne ikke lage lydfilen.");
     } finally {
@@ -189,6 +190,10 @@ export function UtPanel({ song, engine }: { song: Song; engine: RefObject<Studio
           <Button variant="quiet" onClick={() => void copy("tekst", pack.body)}>
             {copied === "tekst" ? "Teksten er kopiert" : "Kopier tekst"}
           </Button>
+          <p className="text-sm font-medium">Filmformat</p>
+          <FormatPick formats={filmSave.formats} value={filmSave.id} onChange={filmSave.setId} />
+          <p className="text-sm font-medium">Lydformat</p>
+          <FormatPick formats={audioSave.formats} value={audioSave.id} onChange={audioSave.setId} />
           <div className="flex flex-wrap gap-2">
             <Button onClick={() => void downloadFilm()} disabled={busy !== null || !take}>
               {busy === "film" ? "Klipper…" : "Last ned filmen"}

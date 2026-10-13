@@ -89,7 +89,7 @@ export function StudioScreen({ id }: { id: string }) {
               <ChevronLeft className="size-4" />
               Tilbake
             </button>
-            <div className="rounded-md border border-line bg-raised p-4">
+            <div className="panel-in rounded-md border border-line bg-raised p-4">
               <JobPanel
                 job={job}
                 song={song}
@@ -140,7 +140,7 @@ export function StudioScreen({ id }: { id: string }) {
                         <button
                           type="button"
                           onClick={() => setJob(item.id)}
-                          className="flex w-full items-center gap-3 px-3 py-3 text-left"
+                          className="row-link flex w-full items-center gap-3 px-3 py-3 text-left"
                         >
                           <span className="grid size-10 shrink-0 place-items-center rounded-md bg-surface text-crystal">
                             <Icon className="size-5" aria-hidden />
@@ -149,7 +149,7 @@ export function StudioScreen({ id }: { id: string }) {
                             <span className="block font-medium">{item.title}</span>
                             <span className="mt-0.5 block truncate text-sm text-muted">{item.text}</span>
                           </span>
-                          <ChevronRight className="size-4 shrink-0 text-muted" aria-hidden />
+                          <ChevronRight className="row-chevron size-4 shrink-0 text-muted" aria-hidden />
                         </button>
                       </li>
                     );
@@ -187,7 +187,7 @@ export function StudioScreen({ id }: { id: string }) {
             type="button"
             aria-label={snap.recording ? "Opptak pågår" : "Ta opp"}
             onClick={() => setJob("opptak")}
-            className="flex size-12 shrink-0 items-center justify-center rounded-md bg-signal text-signal-ink"
+            className={`flex size-12 shrink-0 items-center justify-center rounded-md bg-signal text-signal-ink ${snap.recording ? "rec-pulse" : ""}`}
           >
             <Circle className="size-4 fill-current" />
           </button>
@@ -196,7 +196,7 @@ export function StudioScreen({ id }: { id: string }) {
             disabled={locked}
             aria-label={snap.playing ? "Stopp" : "Spill"}
             onClick={() => void engine.current?.toggle()}
-            className="flex size-12 shrink-0 items-center justify-center rounded-md bg-fg text-ink disabled:opacity-40"
+            className={`flex size-12 shrink-0 items-center justify-center rounded-md bg-fg text-ink transition-shadow duration-150 disabled:opacity-40 ${snap.playing ? "is-live" : ""}`}
           >
             {snap.playing ? <Square className="size-5" /> : <Play className="size-5" />}
           </button>
@@ -214,7 +214,13 @@ export function StudioScreen({ id }: { id: string }) {
             />
             <div className="flex justify-between text-xs text-muted tabular-nums">
               <span>{formatTime(snap.position)}</span>
-              <span>{looping ? "Trommene går til du stopper" : formatTime(length)}</span>
+              <span>
+                {song.loop
+                  ? `Loop ${formatTime(song.loop.start)}–${formatTime(song.loop.end)}`
+                  : looping
+                    ? "Trommene går til du stopper"
+                    : formatTime(length)}
+              </span>
             </div>
           </div>
         </div>

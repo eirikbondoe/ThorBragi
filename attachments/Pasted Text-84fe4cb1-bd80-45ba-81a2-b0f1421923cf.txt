@@ -1,0 +1,49 @@
+Her er svarene, med tanke på at de skal brukes til å gjøre ThorSound bedre:
+
+1. «Utstyret virker, men ingen lyd» – første sjekk:
+      Beveger inngangsmåleren seg når du snakker? Hvis nei: riktig inngang valgt i appen, kabel/adapter, phantom power/plug-in power, mute/standby, app-tillatelser. Hvis ja: feilen ligger i utgang, monitorering eller headphone-routing.
+      ThorSound: Ha en «Test inngang»-knapp med levende meter før opptak.
+2. Tre vanlige hjemmeoppsett:
+   · Bare telefon: enkelt, men støyende og lite kontroll.
+   · Mikrofon rett i telefonen: USB/Lightning/TRRS, ofte adapter- og plug-in-power-problemer.
+   · Mikrofon via lydkort: best kontroll, men feil inngang, phantom, gain og monitorering er typiske feil.
+3. Gain før opptak:
+      La de sterkeste partiene toppe rundt -12 til -6 dBFS, med snitt rundt -18 dBFS. For høyt er når det nærmer seg 0, går i rødt eller klipper. Med 24-bit er det bedre å ligge litt lavt enn for høyt.
+4. Hvordan høre feil mikrofonavstand/retning:
+      For nær: boom, plosiver, pust, klikk, distortion. For langt unna: romklang, tynn lyd, bakgrunnsstøy, må skru opp gain. Feil peking: dull/muffled lyd, ujevn nivå, mister konsonanter. Test med samme frase og flytt 5 cm om gangen.
+5. Trygg avstand:
+      Stemme: 15–25 cm, litt off-axis, gjerne popfilter. Akustisk gitar: 20–30 cm mot 12. bånd/body, eller 30–50 cm i et ok rom. I ubehandlet rom bør man nærmere.
+6. Hodetelefoner – når de hjelper og lurer:
+      Bruk dem under opptak, overdub og for å unngå feedback. De lurer deg fordi de skjuler rommet, bass, plassering og latency. Sjekk alltid sluttresultatet på høyttaler/telefon.
+7. Vanligste årsak til piping:
+      Mikrofon og høyttaler i samme rom, for mye gain, eller mic peker mot høyttaler. Første steg: bruk hodetelefoner eller skru av høyttalere. Deretter gain, plassering og EQ.
+8. Filter vs. flytting:
+      Filter kan fjerne jevn rumble, hum, hiss og litt bredbåndsstøy. Du må flytte deg vekk fra trafikk, vifter, tastatur, folk, romklang og ekko. Filter fjerner ikke romklang uten artefakter.
+9. For mye romklang på YouTube-stemme:
+      Når ordene henger igjen etter at du stopper, og talen blir grøtete på telefonhøyttaler. YouTube-tale bør være tørr og nær. Sang kan tåle mer.
+10. Filformat:
+       Mens du jobber: WAV/AIFF, 24-bit. Når du deler: MP3 320 kbps eller AAC 256 kbps. WAV hvis plattformen tar det.
+       ThorSound: Lagre prosjekt i WAV, eksporter MP3/AAC.
+11. Tilkoblingsguide mangler ofte:
+       Valg av inngang i appen, ikke bare OS. Phantom power, mute/standby, TRS vs. TRRS, adaptere, gain, monitorering/latency, sample rate, og «snakk og se at måleren beveger seg».
+12. Adaptere som skaper mest feil:
+       Lightning og USB-C lager mest trøbbel, særlig billige/passive adaptere. Deretter jack TRS/TRRS. USB er stort sett greit. XLR er mest robust.
+13. Lydkort ikke valgt, selv om kabel sitter i:
+       Appens meter står stille, lyd går til datamaskinens høyttalere, opptak blir stille, eller interface lyser men appen bruker default-mikrofon. Sjekk både systeminnstillinger og appens input.
+14. Nivå til YouTube:
+       Ca. -14 LUFS integrert, true peak -1 dBTP. Tale kan ligge -16 til -14 LUFS. For lavt er under -20 LUFS eller så svakt at telefonen må skrus opp. For høyt er over -14 LUFS og clipping.
+15. Enkel master:
+       High-pass, lett EQ, kontroll av topper, lett kompresjon/limiter, loudness mot -14 LUFS og true peak -1. La være: tung kompresjon, stereo-utvidelse, hard EQ, støyfjerning, reverb og clipping. Master skal ikke redde dårlig opptak.
+16. Trommer etterpå:
+       Lurt når du har klikk/fast tempo eller programmerer. Ødelegger når opptaket har rubato, tempo-drift eller livefølelse uten klikk. Da må trommer følge, ikke styre.
+17. Stemme må si med ord:
+       Navn, dato, prosjekt, take, mic, gain, sample rate og eventuelle feil. Ikke bare «test».
+       ThorSound: Lagre dette som metadata/notat.
+18. App-feil når den later som den kan alt:
+       Auto-tune som «synger for deg» gir robot/warbly lyd. Støyfjerning fjerner pust/konsonanter og lager undervannslyd. Live-utsending gir latency, dropouts, ekko og personvernproblemer. Må ha av/på, mengde, preview og undo.
+19. På skjermen under opptak:
+       Vis: inngangsmåler, gain, clipping, tid og record-status. Skjul: avansert ruting, plugins, ads, varsler, animasjoner og sosiale ting.
+20. Tre endringer i ThorSound som gjør flest opptak brukbare:
+21. Input-veiviser med live meter og automatisk feilsøking før opptak.
+22. Automatisk gain-staging med clip-varsel og én-knapp reset.
+23. Monitor/headphone-sjekk + eksportpreset mot -14 LUFS, med WAV for redigering og MP3/AAC for deling.

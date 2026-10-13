@@ -35,6 +35,7 @@ export type JobId =
   | "opptak"
   | "monitor"
   | "tempo"
+  | "loop"
   | "trommer"
   | "grep"
   | "tekst"
@@ -61,6 +62,7 @@ export type JobId =
   | "koble"
   | "prov"
   | "ai"
+  | "lagai"
   | "utstyr"
   | "rens";
 
@@ -71,6 +73,7 @@ export type Take = {
   peak: number;
   peaks: number[];
   createdAt: number;
+  note?: string;
 };
 
 export type Track = {
@@ -81,6 +84,8 @@ export type Track = {
   activeTakeId: string | null;
   trimStart: number;
   trimEnd: number;
+  fadeIn: number;
+  fadeOut: number;
   volume: number;
   muted: boolean;
   solo: boolean;
@@ -92,6 +97,8 @@ export type Track = {
   twin: number;
   trick: Trick;
 };
+
+export type LoopRegion = { start: number; end: number };
 
 export type Section = {
   id: string;
@@ -107,6 +114,7 @@ export type Song = {
   click: boolean;
   drums: DrumPattern;
   lyrics: string;
+  loop: LoopRegion | null;
   sections: Section[];
   tracks: Track[];
   master: MasterStyle;

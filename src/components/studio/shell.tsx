@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { ChevronLeft } from "lucide-react";
-import { Logo } from "./mark";
+import { Logo, Swoosh } from "./mark";
 
 export function Shell({
   children,
@@ -23,7 +23,12 @@ export function Shell({
           ) : (
             <Logo />
           )}
-          {back ? <Logo /> : <span className="text-xs font-medium tracking-widest text-muted uppercase">Bondova</span>}
+          {back ? <Logo /> : (
+            <span className="inline-flex items-center gap-2 text-xs font-medium tracking-widest text-muted uppercase">
+              <Swoosh />
+              Bondova
+            </span>
+          )}
         </div>
       </header>
       {children}

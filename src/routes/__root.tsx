@@ -11,7 +11,7 @@ export const Route = createRootRoute({
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: APP_NAME },
-      { name: "description", content: "ThorSound tar opp, renser og skriver tekst. Ett steg om gangen." },
+      { name: "description", content: "ThorSound kobler utstyret du allerede har, til et hjemmestudio som virker." },
       { name: "theme-color", content: "#0a1128" },
     ],
     links: [

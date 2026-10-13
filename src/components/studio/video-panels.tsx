@@ -5,7 +5,9 @@ import type { EngineSnap, StudioEngine } from "@/lib/studio/audio";
 import { getAudio, putAudio } from "@/lib/studio/idb";
 import { activeVideoTake, useStudio } from "@/lib/studio/store";
 import type { Song, VideoLook, VideoSession } from "@/lib/studio/types";
-import { lyricLine, measureVideo, pickVideoMime, renderEditedVideo } from "@/lib/studio/video";
+import { lyricLine, measureVideo, pickVideoMime, planParts, renderEditedVideo, SPLIT_TARGETS, splitInTwo, type ClipPart, type SplitId } from "@/lib/studio/video";
+import { downloadBlob } from "@/lib/studio/formats";
+import { FormatPick, useSaveFormats } from "./format-pick";
 import { Choices, formatTime, PanelHead, Slider } from "./bits";
 
 type Props = { song: Song; engine: RefObject<StudioEngine | null>; snap: EngineSnap };
@@ -418,9 +420,59 @@ export function FilmklippPanel({ song }: Props) {
   const take = activeVideoTake(song);
   const url = useBlobUrl(take?.videoId ?? null);
   const video = song.video;
+  const [target, setTarget] = useState<SplitId | null>(null);
+  const [cutAt, setCutAt] = useState(0);
+  const [busy, setBusy] = useState<number | null>(null);
+  const [message, setMessage] = useState("");
+  const { formats, id, setId, format } = useSaveFormats("video");
+  const spanStart = video.trimStart;
+  const spanEnd = take ? Math.max(spanStart, take.duration - video.trimEnd) : spanStart;
+  const parts: ClipPart[] =
+    !take || !target
+      ? []
+      : target === "to"
+        ? splitInTwo(take.duration, video.trimStart, video.trimEnd, cutAt || (spanStart + spanEnd) / 2)
+        : planParts(take.duration, video.trimStart, video.trimEnd, SPLIT_TARGETS.find((item) => item.id === target)?.seconds ?? 60);
+
+  async function savePart(part: ClipPart) {
+    if (!take || busy !== null) return;
+    setBusy(part.index);
+    setMessage("");
+    try {
+      const blob = await getAudio(take.videoId);
+      if (!blob) throw new Error("Fant ikke filmen på telefonen.");
+      if (!format) throw new Error("Denne nettleseren kan ikke lage en filmfil.");
+      const social = target === "tiktok" || target === "instagram" || target === "shorts";
+      const edited = await renderEditedVideo({
+        blob,
+        trimStart: part.start,
+        trimEnd: Math.max(0, take.duration - part.end),
+        look: video.look,
+        frame: social ? "telefon" : video.frame,
+        mirror: video.mirror,
+        title: song.title,
+        lyrics: song.lyrics,
+        showTitle: video.showTitle,
+        showLyrics: video.showLyrics,
+        mime: format.mime,
+      });
+      const safe = song.title.replace(/[^\p{L}\p{N}\-_ ]/gu, "").trim() || "film";
+      const stamp = target ?? "del";
+      downloadBlob(edited, `${safe}-${stamp}-del-${part.index}.${format.ext}`);
+      setMessage(`Del ${part.index} er lastet ned som ${format.label}. ${formatTime(part.end - part.start)} lang.`);
+    } catch (err) {
+      setMessage(err instanceof Error ? err.message : "Kunne ikke dele filmen.");
+    } finally {
+      setBusy(null);
+    }
+  }
+
   return (
     <section>
-      <PanelHead title="Klipp filmen" lede="Kutt stillhet før du begynner, og det som henger igjen etterpå. Bildet og lyden klippes sammen." />
+      <PanelHead
+        title="Klipp filmen"
+        lede="Kutt stillhet i endene. Deretter kan du dele resten i to, eller i lengder som passer TikTok, Instagram og Shorts. Én del lastes ned om gangen."
+      />
       {take && url ? (
         <div className="space-y-4">
           <FilmPreview song={song} video={video} url={url} />
@@ -442,6 +494,60 @@ export function FilmklippPanel({ song }: Props) {
             display={formatTime(video.trimEnd)}
             onChange={(value) => patchVideo(song.id, { trimEnd: value })}
           />
+          <div>
+            <p className="text-sm font-medium">Format</p>
+            <div className="mt-2">
+              <FormatPick formats={formats} value={id} onChange={setId} />
+            </div>
+            <p className="mt-4 text-sm font-medium">Del opp</p>
+            <div className="mt-2 flex flex-wrap gap-2">
+              {SPLIT_TARGETS.map((item) => (
+                <Button
+                  key={item.id}
+                  variant={target === item.id ? "primary" : "quiet"}
+                  aria-pressed={target === item.id}
+                  onClick={() => {
+                    setTarget(item.id);
+                    setCutAt((spanStart + spanEnd) / 2);
+                    setMessage("");
+                  }}
+                >
+                  {item.label}
+                </Button>
+              ))}
+            </div>
+            {target ? <p className="mt-2 text-sm text-muted">{SPLIT_TARGETS.find((item) => item.id === target)?.text}</p> : null}
+          </div>
+          {target === "to" && spanEnd - spanStart >= 0.8 ? (
+            <Slider
+              label="Kuttet"
+              min={spanStart + 0.4}
+              max={spanEnd - 0.4}
+              step={0.1}
+              value={Math.min(spanEnd - 0.4, Math.max(spanStart + 0.4, cutAt || (spanStart + spanEnd) / 2))}
+              display={formatTime(cutAt || (spanStart + spanEnd) / 2)}
+              onChange={setCutAt}
+            />
+          ) : null}
+          {target && parts.length > 0 ? (
+            <ul className="divide-y divide-line border-y border-line">
+              {parts.map((part) => (
+                <li key={part.index} className="flex items-center justify-between gap-3 py-3">
+                  <span className="text-sm">
+                    Del {part.index}
+                    <span className="mt-0.5 block tabular-nums text-muted">
+                      {formatTime(part.start)}–{formatTime(part.end)}
+                    </span>
+                  </span>
+                  <Button variant="quiet" disabled={busy !== null} onClick={() => void savePart(part)}>
+                    {busy === part.index ? "Lager…" : "Last ned"}
+                  </Button>
+                </li>
+              ))}
+            </ul>
+          ) : null}
+          {target && parts.length === 24 ? <p className="text-sm text-muted">De første 24 delene. Resten er ikke med.</p> : null}
+          {message ? <p className="text-sm text-muted">{message}</p> : null}
         </div>
       ) : (
         <p className="text-muted">Ta opp et bilde først.</p>
@@ -454,9 +560,10 @@ export function FilmLagrePanel({ song }: Props) {
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const take = activeVideoTake(song);
+  const { formats, id, setId, format } = useSaveFormats("video");
 
   async function download() {
-    if (!take) return;
+    if (!take || !format) return;
     setBusy(true);
     setMessage(null);
     try {
@@ -473,22 +580,11 @@ export function FilmLagrePanel({ song }: Props) {
         lyrics: song.lyrics,
         showTitle: song.video.showTitle,
         showLyrics: song.video.showLyrics,
+        mime: format.mime,
       });
-      const name = `${song.title.replace(/[^\p{L}\p{N}\-_ ]/gu, "").trim() || "film"}.webm`;
-      const file = new File([edited], name, { type: edited.type || "video/webm" });
-      const nav = navigator as Navigator & { canShare?: (data: ShareData) => boolean };
-      if (nav.share && nav.canShare?.({ files: [file] })) {
-        await nav.share({ files: [file], title: song.title });
-        setMessage("Filmen er klar til å sendes.");
-        return;
-      }
-      const url = URL.createObjectURL(edited);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = name;
-      link.click();
-      URL.revokeObjectURL(url);
-      setMessage("Filmen er lastet ned, med klipp, utseende og tekst.");
+      const name = `${song.title.replace(/[^\p{L}\p{N}\-_ ]/gu, "").trim() || "film"}.${format.ext}`;
+      downloadBlob(edited, name);
+      setMessage(`Filmen er lastet ned som ${format.label}, med klipp, utseende og tekst.`);
     } catch (err) {
       setMessage(err instanceof Error ? err.message : "Kunne ikke lage filmen.");
     } finally {
@@ -500,10 +596,11 @@ export function FilmLagrePanel({ song }: Props) {
     <section>
       <PanelHead
         title="Lagre filmen"
-        lede="Klippet, utseendet og teksten brennes inn i en fil du kan legge ut selv. ThorSound sender ikke direkte."
+        lede="Velg format. WebM virker i de fleste nettlesere. MP4 vises bare hvis denne nettleseren kan skrive MP4. ThorSound legger ikke ut filen."
       />
-      <Button onClick={() => void download()} disabled={busy || !take}>
-        {busy ? "Klipper…" : "Last ned filmen"}
+      <FormatPick formats={formats} value={id} onChange={setId} />
+      <Button className="mt-4" onClick={() => void download()} disabled={busy || !take || !format}>
+        {busy ? "Klipper…" : `Last ned ${format?.label ?? "filmen"}`}
       </Button>
       {!take ? <p className="mt-3 text-sm text-muted">Ta opp et bilde først.</p> : null}
       {message ? <p className="mt-3 text-sm text-muted">{message}</p> : null}

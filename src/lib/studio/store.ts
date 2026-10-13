@@ -18,6 +18,8 @@ export function makeTrack(kind: TrackKind, name: string): Track {
     activeTakeId: null,
     trimStart: 0,
     trimEnd: 0,
+    fadeIn: 0,
+    fadeOut: 0,
     volume: kind === "gitar" ? 0.78 : 0.9,
     muted: false,
     solo: false,
@@ -45,6 +47,7 @@ export function makeSong(title: string): Song {
     click: false,
     drums: "ro",
     lyrics: "Vers\nJeg skulle gått en runde\nmen beina sa nei\n\nRefreng\nJeg blir her\njeg synger i stedet\nfrisbeegolf får vente",
+    loop: null,
     sections,
     tracks: [],
     master: "hjemme",
@@ -91,6 +94,7 @@ export function ensureRoom(song: Song): Song {
   const outlet = next.outlet;
   const known = outlet === null || outlet === "youtube" || outlet === "shorts" || outlet === "smule" || outlet === "kort";
   if (!known) next = { ...next, outlet: null };
+  if (!next.loop || next.loop.end <= next.loop.start) next = { ...next, loop: null };
   const tracks = next.tracks.map((track) => {
     if (track.trick === "ingen" || track.trick === "telefon" || track.trick === "kor" || track.trick === "robot") return track;
     return { ...track, trick: "ingen" as const };

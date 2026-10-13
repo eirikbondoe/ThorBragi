@@ -1,7 +1,7 @@
 import { getAudio, putAudio } from "./idb";
 import { activeTake } from "./store";
 import { detectPitch, pitchHint } from "./theory";
-import type { DrumPattern, EchoPreset, MasterStyle, RoomPreset, Song, TonePreset } from "./types";
+import type { DrumPattern, EchoPreset, LoopRegion, MasterStyle, RoomPreset, Song, TonePreset } from "./types";
 import { encodeWav, measureBuffer } from "./wav";
 
 export type EngineSnap = {
@@ -151,7 +151,8 @@ function structureKey(song: Song): string {
     bpm: song.bpm,
     click: song.click,
     drums: song.drums,
-    tracks: song.tracks.map((track) => [track.id, track.activeTakeId, track.trimStart, track.trimEnd]),
+    loop: song.loop,
+    tracks: song.tracks.map((track) => [track.id, track.activeTakeId, track.trimStart, track.trimEnd, track.fadeIn ?? 0, track.fadeOut ?? 0]),
   });
 }
 
@@ -380,8 +381,9 @@ export class StudioEngine {
       const current = this.song;
       if (!current || token !== this.gen || this.dead) return;
       const length = audioLength(current, this.buffers);
+      const region = activeLoop(current, length);
       const musical = current.drums !== "ingen" || current.click;
-      if (length < 0.05 && !musical) {
+      if (length < 0.05 && !musical && !region) {
         this.playing = false;
         this.notice = "Ingenting å spille av ennå. Ta opp, eller skru på trommer.";
         this.emit();
@@ -390,11 +392,12 @@ export class StudioEngine {
       this.stopPerformance();
       this.notice = null;
       this.error = null;
-      this.looping = length < 0.05;
+      const from = region && offset >= region.end - 0.05 ? region.start : offset;
+      this.looping = !region && length < 0.05;
       this.playing = true;
-      this.startedOffset = offset;
+      this.startedOffset = from;
       this.startedCtx = ctx.currentTime;
-      this.pausedAt = offset;
+      this.pausedAt = from;
       const when = ctx.currentTime + 0.05;
       const hold: AudioScheduledSourceNode[] = [];
       this.hold = hold;
@@ -404,11 +407,13 @@ export class StudioEngine {
         this.noise!,
         ctx.destination,
         when,
-        offset,
-        this.looping ? 0 : Math.max(0, length - offset),
+        from,
+        this.looping || region ? 0 : Math.max(0, length - from),
         hold,
+        region,
       );
       if (this.looping && this.live) this.startLoop(current, this.live.drum);
+      if (region && this.live) this.startRegionDrums(current, this.live.drum, from, region, when);
       this.emit();
     } catch (err) {
       this.playing = false;
@@ -431,7 +436,7 @@ export class StudioEngine {
     this.emit();
   }
 
-  async beginRecord() {
+  async beginRecord(count = true) {
     if (this.recording || this.counting || !this.song) return;
     if (typeof MediaRecorder === "undefined") {
       this.error = "Denne nettleseren kan ikke ta opp lyd.";
@@ -454,15 +459,19 @@ export class StudioEngine {
       return;
     }
     this.listening = true;
-    this.counting = true;
     this.error = null;
-    this.emit();
-    await this.countIn(this.song);
-    if (this.recordAbort || this.dead) {
-      this.counting = false;
-      this.countLeft = null;
+    if (count) {
+      this.counting = true;
       this.emit();
-      return;
+      await this.countIn(this.song);
+      if (this.recordAbort || this.dead) {
+        this.counting = false;
+        this.countLeft = null;
+        this.emit();
+        return;
+      }
+    } else {
+      this.emit();
     }
     const mime = pickMime();
     const rec = new MediaRecorder(this.stream, mime ? { mimeType: mime } : undefined);
@@ -642,7 +651,7 @@ export class StudioEngine {
     return { audioId, duration: audio.duration, peak, peaks };
   }
 
-  async renderWav(song: Song): Promise<Blob> {
+  async renderBuffer(song: Song): Promise<AudioBuffer> {
     const live = this.ensureCtxSync();
     await this.ensureBuffers(song);
     const recorded = audioLength(song, this.buffers);
@@ -652,8 +661,11 @@ export class StudioEngine {
     const noise = makeNoise(offline);
     const when = 0.02;
     this.build(offline, song, noise, offline.destination, when, 0, span, []);
-    const rendered = await offline.startRendering();
-    return encodeWav(rendered);
+    return offline.startRendering();
+  }
+
+  async renderWav(song: Song): Promise<Blob> {
+    return encodeWav(await this.renderBuffer(song));
   }
 
   private ensureCtxSync(): AudioContext {
@@ -721,6 +733,7 @@ export class StudioEngine {
     offset: number,
     span: number,
     hold: AudioScheduledSourceNode[],
+    region: LoopRegion | null = null,
   ): Live {
     const bus = ctx.createGain();
     const masterLow = ctx.createBiquadFilter();
@@ -763,9 +776,34 @@ export class StudioEngine {
       if (dur <= 0.03 || start >= buffer.duration) continue;
       const source = ctx.createBufferSource();
       source.buffer = buffer;
+      if (region) {
+        const loopStart = Math.max(0, Math.min(buffer.duration - 0.05, track.trimStart + region.start));
+        const loopEnd = Math.min(buffer.duration, track.trimStart + region.end);
+        if (loopEnd - loopStart >= 0.2) {
+          source.loop = true;
+          source.loopStart = loopStart;
+          source.loopEnd = loopEnd;
+        }
+      }
       const nodes = this.wireTrack(ctx, verb, bus);
-      source.connect(nodes.hp);
-      source.start(when, start, dur);
+      const fade = ctx.createGain();
+      const fadeIn = Math.min(Math.max(0, track.fadeIn ?? 0), dur / 2);
+      const fadeOut = Math.min(Math.max(0, track.fadeOut ?? 0), Math.max(0, dur / 2));
+      source.connect(fade);
+      fade.connect(nodes.hp);
+      if (!source.loop && (fadeIn > 0.02 || fadeOut > 0.02)) {
+        fade.gain.setValueAtTime(fadeIn > 0.02 ? 0.0001 : 1, when);
+        if (fadeIn > 0.02) fade.gain.linearRampToValueAtTime(1, when + fadeIn);
+        const outAt = Math.max(when + fadeIn + 0.01, when + dur - fadeOut);
+        if (fadeOut > 0.02 && outAt < when + dur - 0.01) {
+          fade.gain.setValueAtTime(1, outAt);
+          fade.gain.linearRampToValueAtTime(0.0001, when + dur);
+        }
+      } else {
+        fade.gain.setValueAtTime(1, when);
+      }
+      if (source.loop) source.start(when, Math.min(start, buffer.duration - 0.02));
+      else source.start(when, start, dur);
       hold.push(source);
       live.tracks.set(track.id, nodes);
       hold.push(...nodes.extras);
@@ -914,6 +952,37 @@ export class StudioEngine {
     glide(live.out.gain, master.out, ctx);
   }
 
+  private startRegionDrums(song: Song, drum: GainNode, offset: number, region: LoopRegion, when: number) {
+    const ctx = this.ctx;
+    const noise = this.noise;
+    if (!ctx || !noise || (song.drums === "ingen" && !song.click)) return;
+    let pos = offset;
+    let cursor = when;
+    this.drumTimer = window.setInterval(() => {
+      if (!this.playing || !this.song?.loop) return;
+      const step = 60 / (this.song.bpm || 96) / 2;
+      const horizon = ctx.currentTime + 0.3;
+      while (cursor < horizon) {
+        const grid = Math.ceil((pos + 0.0001) / step) * step;
+        const wrap = grid >= region.end - 0.0001;
+        const dest = wrap ? region.end : grid;
+        const du = dest - pos;
+        if (du <= 0.0001) {
+          pos = region.start;
+          continue;
+        }
+        if (!wrap) hit(ctx, drum, noise, this.song, Math.round(grid / step), cursor + du, this.hold);
+        cursor += du;
+        if (wrap) {
+          const onGrid = Math.abs(region.start / step - Math.round(region.start / step)) < 0.02;
+          if (onGrid) hit(ctx, drum, noise, this.song, Math.round(region.start / step), cursor, this.hold);
+          pos = region.start;
+        } else pos = dest;
+        if (this.hold.length > 120) this.hold.splice(0, 40);
+      }
+    }, 40);
+  }
+
   private startLoop(song: Song, drum: GainNode) {
     const ctx = this.ctx;
     const noise = this.noise;
@@ -988,7 +1057,9 @@ export class StudioEngine {
 
   private position(): number {
     if (!this.playing || !this.ctx) return this.pausedAt;
-    return this.startedOffset + (this.ctx.currentTime - this.startedCtx);
+    const raw = this.startedOffset + (this.ctx.currentTime - this.startedCtx);
+    const length = this.song ? audioLength(this.song, this.buffers) : 0;
+    return wrappedPosition(raw, this.song ? activeLoop(this.song, length) : null);
   }
 
   private tick = () => {
@@ -996,7 +1067,8 @@ export class StudioEngine {
     this.readMeter();
     if (this.playing && !this.looping && this.song) {
       const length = audioLength(this.song, this.buffers);
-      if (length > 0.05 && this.position() >= length + 0.35) this.pause();
+      const region = activeLoop(this.song, length);
+      if (!region && length > 0.05 && this.position() >= length + 0.35) this.pause();
     }
     const active = this.playing || this.recording || this.counting || this.listening || this.chordOn;
     const now = performance.now();
@@ -1031,4 +1103,20 @@ export class StudioEngine {
       notice: this.notice,
     };
   }
+}
+
+export function activeLoop(song: Song, length: number): LoopRegion | null {
+  const loop = song.loop;
+  if (!loop) return null;
+  const start = Math.max(0, loop.start);
+  const end = length > 0.05 ? Math.min(loop.end, length) : loop.end;
+  if (end - start < 0.25) return null;
+  return { start, end };
+}
+
+export function wrappedPosition(raw: number, loop: LoopRegion | null): number {
+  if (!loop) return raw;
+  const span = loop.end - loop.start;
+  if (span < 0.25 || raw < loop.end) return raw;
+  return loop.start + ((raw - loop.end) % span);
 }

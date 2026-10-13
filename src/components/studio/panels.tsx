@@ -2,6 +2,12 @@ import { useEffect, useRef, useState, type RefObject } from "react";
 import { ArrowDown, ArrowUp, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { producerAdvice } from "@/lib/studio/advice";
+import { encodeAudio, downloadBlob, audioFormats } from "@/lib/studio/formats";
+import { gainSentence, readGain } from "@/lib/studio/level";
+import { shapeForYoutube } from "@/lib/studio/loudness";
+import { FormatPick, useSaveFormats } from "./format-pick";
+import { LoopPanel } from "./loop-panel";
+import { MakePanel } from "./make-panel";
 import type { EngineSnap, StudioEngine } from "@/lib/studio/audio";
 import { activeTake, useStudio } from "@/lib/studio/store";
 import { KEYS, keyInfo, nearestString, OPEN_CHORDS, stringCents, STRINGS } from "@/lib/studio/theory";
@@ -16,6 +22,7 @@ import { AdvisorPanel, TryPanel } from "./advisor-panel";
 import { GearGuide } from "./gear-guide";
 import { CleanPanel } from "./clean-panel";
 import { lyricIndex, lyricLines } from "@/lib/studio/lyrics";
+import { ChordBand, LyricRead } from "./lyric-band";
 import { Prompter } from "./prompter";
 
 type Common = {
@@ -43,10 +50,14 @@ function focusedTrack(song: Song, focusId: string | null) {
 }
 
 function levelText(level: number, listening: boolean): string {
-  if (!listening) return "Trykk under, og snakk eller spill som du skal gjøre på opptaket.";
-  if (level > 0.9) return "For sterkt. Litt lenger unna mikrofonen.";
-  if (level < 0.06) return "Vi hører nesten ingenting. Kom nærmere.";
-  return "Bra styrke. Sånn skal det ligge.";
+  if (!listening) return "Trykk Test inngang, og snakk eller spill som du skal gjøre på opptaket.";
+  return gainSentence(readGain(level));
+}
+
+function distanceLine(kind: TrackKind): string {
+  if (kind === "gitar") return "Gitar: 20–30 cm mot 12. bånd. I et ekko-rom, nærmere.";
+  if (kind === "piano") return "Piano: ikke inni lokket. En halv meter unna, mot strengene.";
+  return "Stemme: 15–25 cm, litt til siden for munnen.";
 }
 
 export function JobPanel({ job, ...props }: Common & { job: JobId }) {
@@ -57,6 +68,8 @@ export function JobPanel({ job, ...props }: Common & { job: JobId }) {
       return <MonitorPanel {...props} />;
     case "tempo":
       return <TempoPanel {...props} />;
+    case "loop":
+      return <LoopPanel song={props.song} snap={props.snap} engine={props.engine} />;
     case "trommer":
       return <DrumPanel {...props} />;
     case "grep":
@@ -77,6 +90,8 @@ export function JobPanel({ job, ...props }: Common & { job: JobId }) {
       return <GearGuide go={props.go} />;
     case "rens":
       return <CleanPanel song={props.song} go={props.go} />;
+    case "lagai":
+      return <MakePanel song={props.song} />;
     case "deler":
       return <SectionsPanel {...props} />;
     case "forsok":
@@ -122,16 +137,23 @@ function RecordPanel({ song, engine, snap }: Common) {
   const [kind, setKind] = useState<TrackKind>("samtidig");
   const [saving, setSaving] = useState(false);
   const [localError, setLocalError] = useState<string | null>(null);
+  const [heard, setHeard] = useState(0);
+  const [mic, setMic] = useState("");
   const trackRef = useRef<string | null>(null);
   const ensureTrack = useStudio((state) => state.ensureTrack);
   const addTrack = useStudio((state) => state.addTrack);
   const addTake = useStudio((state) => state.addTake);
   const vocal = kind === "stemme" || kind === "kor" || kind === "samtidig";
+  const live = snap.listening || snap.recording || snap.counting;
 
-  async function start(asNew: boolean) {
+  useEffect(() => {
+    if (live && snap.level > heard) setHeard(snap.level);
+  }, [live, snap.level, heard]);
+
+  async function start(asNew: boolean, count = true) {
     setLocalError(null);
     trackRef.current = asNew ? addTrack(song.id, kind) : ensureTrack(song.id, kind);
-    await engine.current?.beginRecord();
+    await engine.current?.beginRecord(count);
   }
 
   async function finish() {
@@ -142,7 +164,9 @@ function RecordPanel({ song, engine, snap }: Common) {
       const trackId = trackRef.current;
       if (!blob || !trackId) throw new Error("Opptaket ble tomt. Prøv en gang til.");
       const meta = await engine.current!.decodeTake(blob);
-      addTake(song.id, trackId, { id: crypto.randomUUID(), createdAt: Date.now(), ...meta });
+      const when = new Date().toLocaleString("nb-NO");
+      const note = [song.title || "Uten navn", when, KIND_LABEL[kind], mic.trim()].filter(Boolean).join(" · ");
+      addTake(song.id, trackId, { id: crypto.randomUUID(), createdAt: Date.now(), note, ...meta });
     } catch (err) {
       setLocalError(err instanceof Error ? err.message : "Kunne ikke lagre opptaket.");
     } finally {
@@ -151,12 +175,14 @@ function RecordPanel({ song, engine, snap }: Common) {
   }
 
   const busy = snap.counting || snap.recording || saving;
+  const read = readGain(live ? Math.max(heard, snap.level) : heard);
+  const silent = snap.listening && heard < 0.02;
 
   return (
     <section>
       <PanelHead
         title="Ta opp"
-        lede="Headset på, så høyttaleren ikke blir med. Telefonen teller fire slag. Så tar den opp."
+        lede="Test inngangen først. Hodetelefoner på, så høyttaleren ikke piper. Telefonen teller fire slag, så starter opptaket."
       />
       {!busy ? (
         <div className="mb-5 grid grid-cols-2 gap-2">
@@ -178,6 +204,42 @@ function RecordPanel({ song, engine, snap }: Common) {
           ))}
         </div>
       ) : null}
+      {!busy ? (
+        <div className="mb-4 space-y-3">
+          <Button
+            variant={snap.listening ? "quiet" : "primary"}
+            onClick={() => (snap.listening ? engine.current?.stopListen() : void engine.current?.startListen())}
+          >
+            {snap.listening ? "Stopp testen" : "Test inngang"}
+          </Button>
+          <Meter level={Math.max(heard, snap.listening ? snap.level : 0)} />
+          <p className="text-sm">{gainSentence(read)}</p>
+          <p className="text-sm text-muted">{distanceLine(kind)}</p>
+          {silent ? (
+            <ul className="space-y-1 text-sm text-muted">
+              <li>Måleren står stille. Sjekk disse, i denne rekkefølgen:</li>
+              <li>1. Riktig mikrofon er valgt i telefonen.</li>
+              <li>2. Kabel og adapter sitter i.</li>
+              <li>3. Mikrofonen er på, ikke på standby. Kondensatormikrofon trenger 48 volt.</li>
+              <li>4. Appen har fått lov til å bruke mikrofonen.</li>
+            </ul>
+          ) : null}
+          <div className="flex flex-wrap gap-2">
+            <Button variant="ghost" onClick={() => setHeard(0)}>
+              Nullstill måleren
+            </Button>
+          </div>
+          <label className="block text-sm text-muted" htmlFor="mic-note">
+            Mikrofon, hvis du vil huske den
+          </label>
+          <input
+            id="mic-note"
+            value={mic}
+            onChange={(event) => setMic(event.target.value)}
+            className="w-full min-h-11 rounded-md border border-line px-3"
+          />
+        </div>
+      ) : null}
       <div className="flex flex-col items-center gap-4 py-4">
         {snap.counting ? (
           <>
@@ -189,6 +251,7 @@ function RecordPanel({ song, engine, snap }: Common) {
           </>
         ) : snap.recording ? (
           <>
+            <p className="text-sm font-medium text-signal">Opptak pågår</p>
             <button
               type="button"
               className="flex size-28 items-center justify-center rounded-full bg-signal text-sm font-medium text-signal-ink"
@@ -209,10 +272,10 @@ function RecordPanel({ song, engine, snap }: Common) {
           </button>
         )}
       </div>
-      {(snap.listening || snap.recording || snap.counting) && (
+      {(snap.recording || snap.counting) && (
         <div className="space-y-2">
           <Meter level={snap.level} />
-          <p className="text-sm text-muted">{levelText(snap.level, true)}</p>
+          <p className="text-sm text-muted">{gainSentence(readGain(snap.level))}</p>
           {vocal && snap.note ? (
             <p className="font-display text-2xl">
               {snap.note} <span className="text-base text-muted">{snap.hint}</span>
@@ -224,12 +287,16 @@ function RecordPanel({ song, engine, snap }: Common) {
       {song.lyrics.trim() && (snap.recording || snap.counting || snap.playing) ? (
         <div className="mt-5">
           <Prompter compact lines={lyricLines(song.lyrics)} index={lyricIndex(song, snap.position)} />
+          <ChordBand song={song} position={snap.position} active={snap.playing || snap.recording} />
         </div>
       ) : null}
       {!busy ? (
-        <div className="mt-4">
+        <div className="mt-4 flex flex-wrap gap-2">
           <Button variant="ghost" onClick={() => void start(true)}>
             Legg som nytt spor
+          </Button>
+          <Button variant="ghost" onClick={() => void start(false, false)}>
+            Ta opp uten telling
           </Button>
         </div>
       ) : null}
@@ -253,7 +320,7 @@ function MonitorPanel({ engine, snap }: Common) {
     <section>
       <PanelHead
         title="Sjekk mikrofon"
-        lede="Lyden går ikke ut i høyttaleren. Stolpen skal ligge i midten når du snakker normalt."
+        lede="Hodetelefoner på. Lyden går ikke ut i høyttaleren. La det sterkeste ligge mellom -12 og -6. Sjekk den ferdige lyden på en høyttaler etterpå. Hodetelefoner skjuler rommet."
       />
       <Button
         variant={snap.listening ? "quiet" : "primary"}
@@ -266,9 +333,9 @@ function MonitorPanel({ engine, snap }: Common) {
         <p className="text-sm text-muted">{levelText(snap.level, snap.listening)}</p>
       </div>
       <ul className="mt-6 space-y-2 text-sm text-muted">
-        <li>Headset på hodet, ikke mikrofonen mot en høyttaler.</li>
+        <li>Piping kommer når mikrofonen hører høyttaleren. Skru av høyttaleren.</li>
         <li>Syng og spill så høyt som du skal gjøre på ordentlig.</li>
-        <li>Rød stolpe betyr for nærme. Nesten tom stolpe betyr for langt unna.</li>
+        <li>Rød stolpe er for sterkt. En stolpe som ikke rører seg, er feil inngang eller dempet mikrofon.</li>
       </ul>
     </section>
   );
@@ -311,7 +378,10 @@ function DrumPanel({ song }: Common) {
   const setDrums = useStudio((state) => state.setDrums);
   return (
     <section>
-      <PanelHead title="Trommer" lede="En rytme å hvile sangen på. Skru dem av når du vil være alene. De klager ikke, og de peser ikke." />
+      <PanelHead
+        title="Trommer"
+        lede="Legg trommer etterpå bare hvis du spilte mot klikk, eller tempoet er jevnt. Uten klikk vil trommene dra fra opptaket."
+      />
       <Choices
         value={song.drums}
         onChange={(drums) => setDrums(song.id, drums)}
@@ -322,6 +392,9 @@ function DrumPanel({ song }: Common) {
           { id: "ballade", label: "Ballade", text: "Store slag, god plass mellom" },
         ]}
       />
+      {song.drums !== "ingen" && !song.click ? (
+        <p className="mt-3 text-sm text-muted">Klikket er av. Skru det på før du tar opp, ellers passer ikke trommene.</p>
+      ) : null}
     </section>
   );
 }
@@ -514,18 +587,24 @@ function KeyPanel({ song, engine, snap }: Common) {
   );
 }
 
-function LyricsPanel({ song }: Common) {
+function LyricsPanel({ song, snap }: Common) {
   const setLyrics = useStudio((state) => state.setLyrics);
+  const moving = snap.playing || snap.recording;
   return (
     <section>
-      <PanelHead title="Tekst" lede="Skriv som du vil. Vers og refreng kan stå som overskrifter. Teksten blir stor når du tar opp, så du slipper å huske den i motvind." />
+      <PanelHead
+        title="Tekst"
+        lede="Skriv som du vil. Vers og refreng kan stå som overskrifter. Når lyden går, blir linjen som synges cyan. Grepene ligger i båndet under."
+      />
       <textarea
         value={song.lyrics}
         onChange={(event) => setLyrics(song.id, event.target.value)}
-        rows={12}
+        rows={8}
         aria-label="Tekst"
         className="w-full rounded-md border border-line px-4 py-3 font-display text-xl leading-snug"
       />
+      <LyricRead song={song} position={snap.position} active={moving} />
+      <ChordBand song={song} position={snap.position} active={moving} />
     </section>
   );
 }
@@ -620,6 +699,7 @@ function TakesPanel({ song }: Common) {
                       <span>Forsøk {index + 1}</span>
                       <span className="tabular-nums text-muted">{formatTime(take.duration)}</span>
                     </div>
+                    {take.note ? <p className="mb-2 text-sm text-muted">{take.note}</p> : null}
                     <Wave peaks={take.peaks} />
                     <div className="mt-3 flex gap-2">
                       <Button variant={on ? "primary" : "quiet"} onClick={() => useTake(song.id, track.id, take.id)} aria-pressed={on}>
@@ -646,7 +726,7 @@ function TrimPanel({ song, focusId, setFocusId }: Common) {
   const take = track ? activeTake(track) : null;
   return (
     <section>
-      <PanelHead title="Klipp" lede="Dra bort det som er stille før du begynner, og det som henger igjen etterpå. Selve spillet blir liggende." />
+      <PanelHead title="Klipp" lede="Kutt stillhet i endene. Fade inn og fade ut gjør starten og slutten myk." />
       <TrackChips song={song} trackId={track?.id ?? null} onPick={setFocusId} />
       {track && take ? (
         <div className="space-y-4">
@@ -668,6 +748,24 @@ function TrimPanel({ song, focusId, setFocusId }: Common) {
             value={track.trimEnd}
             display={formatTime(track.trimEnd)}
             onChange={(value) => patchTrack(song.id, track.id, { trimEnd: value })}
+          />
+          <Slider
+            label="Fade inn"
+            min={0}
+            max={Math.max(0, Math.min(4, (take.duration - track.trimStart - track.trimEnd) / 2))}
+            step={0.1}
+            value={track.fadeIn ?? 0}
+            display={formatTime(track.fadeIn ?? 0)}
+            onChange={(value) => patchTrack(song.id, track.id, { fadeIn: value })}
+          />
+          <Slider
+            label="Fade ut"
+            min={0}
+            max={Math.max(0, Math.min(4, (take.duration - track.trimStart - track.trimEnd) / 2))}
+            step={0.1}
+            value={track.fadeOut ?? 0}
+            display={formatTime(track.fadeOut ?? 0)}
+            onChange={(value) => patchTrack(song.id, track.id, { fadeOut: value })}
           />
         </div>
       ) : (
@@ -694,12 +792,23 @@ function BalancePanel({ song }: Common) {
             <Slider
               label="Styrke"
               min={0}
-              max={100}
+              max={150}
               value={Math.round(track.volume * 100)}
               display={String(Math.round(track.volume * 100))}
               onChange={(value) => patchTrack(song.id, track.id, { volume: value / 100 })}
             />
             <div className="flex flex-wrap gap-2">
+              <Button
+                variant="quiet"
+                onClick={() => {
+                  const take = activeTake(track);
+                  if (!take || take.peak < 0.01) return;
+                  const volume = Math.min(1.5, Math.max(0.05, 0.5 / take.peak));
+                  patchTrack(song.id, track.id, { volume });
+                }}
+              >
+                Løft til -6
+              </Button>
               <Button variant={track.muted ? "primary" : "quiet"} aria-pressed={track.muted} onClick={() => patchTrack(song.id, track.id, { muted: !track.muted })}>
                 {track.muted ? "Er stille" : "Hysj"}
               </Button>
@@ -766,7 +875,7 @@ function RoomPanel({ song, focusId, setFocusId }: Common) {
   const track = focusedTrack(song, focusId);
   return (
     <section>
-      <PanelHead title="Romklang" lede="Et tørt opptak høres ut som et skap. Stue er det de fleste sanger vil ha. Kirke er til det som skal være stort." />
+      <PanelHead title="Romklang" lede="Tale til YouTube skal være tørr og nær. Sang tåler mer. For mye rom er når ordene henger igjen etter at du stopper." />
       <TrackChips song={song} trackId={track?.id ?? null} onPick={setFocusId} />
       {track ? (
         <Choices
@@ -872,7 +981,10 @@ function MasterPanel({ song }: Common) {
   const setMaster = useStudio((state) => state.setMaster);
   return (
     <section>
-      <PanelHead title="Ferdig lyd" lede="Det siste en produsent gjør: få låten til å sitte samlet, uten at du drar i ti knotter." />
+      <PanelHead
+        title="Ferdig lyd"
+        lede="Et lett løft: litt bunn vekk, litt jevnere topper. Det redder ikke et dårlig opptak. Tung kompresjon, støyfjerning og romklang hører ikke hjemme her."
+      />
       <Choices
         value={song.master}
         onChange={(master) => setMaster(song.id, master)}
@@ -908,16 +1020,60 @@ function AdvicePanel({ song, go }: Common) {
 function SharePanel({ song, engine }: Common) {
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
+  const { formats, id, setId, format } = useSaveFormats("audio");
 
-  async function makeFile(): Promise<File | null> {
+  async function render() {
     const engineRef = engine.current;
     if (!engineRef) return null;
+    return engineRef.renderBuffer(song);
+  }
+
+  async function saveWav() {
     setBusy(true);
     setMessage(null);
     try {
-      const blob = await engineRef.renderWav(song);
-      const name = `${safeName(song.title)}.wav`;
-      return new File([blob], name, { type: "audio/wav" });
+      const buffer = await render();
+      if (!buffer) return;
+      const wav = audioFormats().find((item) => item.id === "wav");
+      if (!wav) return;
+      const blob = await encodeAudio(buffer, wav);
+      downloadBlob(blob, `${safeName(song.title)}.wav`);
+      setMessage("WAV, urørt. Denne er til å jobbe videre med.");
+    } catch (err) {
+      setMessage(err instanceof Error ? err.message : "Kunne ikke lage WAV.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function saveYoutube() {
+    setBusy(true);
+    setMessage(null);
+    try {
+      const buffer = await render();
+      if (!buffer) return;
+      const shaped = shapeForYoutube(buffer);
+      const mp3 = audioFormats().find((item) => item.id === "mp3");
+      if (!mp3) return;
+      const blob = await encodeAudio(shaped.buffer, mp3);
+      downloadBlob(blob, `${safeName(song.title)}-youtube.mp3`);
+      setMessage(shaped.note);
+    } catch (err) {
+      setMessage(err instanceof Error ? err.message : "Kunne ikke lage MP3.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  async function makeFile(): Promise<File | null> {
+    const engineRef = engine.current;
+    if (!engineRef || !format) return null;
+    setBusy(true);
+    setMessage(null);
+    try {
+      const buffer = await engineRef.renderBuffer(song);
+      const blob = await encodeAudio(buffer, format);
+      return new File([blob], `${safeName(song.title)}.${format.ext}`, { type: blob.type || format.mime });
     } catch (err) {
       setMessage(err instanceof Error ? err.message : "Kunne ikke lage lydfilen.");
       return null;
@@ -929,13 +1085,8 @@ function SharePanel({ song, engine }: Common) {
   async function download() {
     const file = await makeFile();
     if (!file) return;
-    const url = URL.createObjectURL(file);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = file.name;
-    link.click();
-    URL.revokeObjectURL(url);
-    setMessage("Lydfilen er lastet ned, slik låten høres ut nå.");
+    downloadBlob(file, file.name);
+    setMessage(`Lydfilen er lastet ned som ${format?.label ?? "fil"}. Uten loudness-justering.`);
   }
 
   async function share() {
@@ -946,12 +1097,7 @@ function SharePanel({ song, engine }: Common) {
       await nav.share({ files: [file], title: song.title });
       return;
     }
-    const url = URL.createObjectURL(file);
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = file.name;
-    link.click();
-    URL.revokeObjectURL(url);
+    downloadBlob(file, file.name);
     setMessage("Deling fra nettleseren finnes ikke her. Filen ble lastet ned i stedet.");
   }
 
@@ -959,13 +1105,25 @@ function SharePanel({ song, engine }: Common) {
     <section>
       <PanelHead
         title="Lagre og del"
-        lede="Låtene blir liggende i denne nettleseren, på telefonen. En lydfil kan du sende til noen, eller ta med videre."
+        lede="WAV er arbeidsfilen, urørt. YouTube-MP3 løftes mot omtrent -14 LUFS, og toppen holdes under -1. MP3 er 320 kbps."
       />
       <div className="flex flex-wrap gap-2">
-        <Button onClick={() => void download()} disabled={busy}>
-          {busy ? "Gjør klar…" : "Last ned lydfil"}
+        <Button onClick={() => void saveWav()} disabled={busy}>
+          {busy ? "Gjør klar…" : "Lagre WAV"}
         </Button>
-        <Button variant="quiet" onClick={() => void share()} disabled={busy}>
+        <Button variant="quiet" onClick={() => void saveYoutube()} disabled={busy}>
+          Lagre for YouTube
+        </Button>
+      </div>
+      <p className="mt-6 text-sm text-muted">Andre formater, uten loudness-justering. M4A vises hvis nettleseren kan skrive den.</p>
+      <div className="mt-3">
+        <FormatPick formats={formats} value={id} onChange={setId} />
+      </div>
+      <div className="mt-4 flex flex-wrap gap-2">
+        <Button variant="quiet" onClick={() => void download()} disabled={busy || !format}>
+          {busy ? "Gjør klar…" : `Last ned ${format?.label ?? "lyd"}`}
+        </Button>
+        <Button variant="ghost" onClick={() => void share()} disabled={busy || !format}>
           Del
         </Button>
       </div>

@@ -7,9 +7,9 @@
       "status": 200,
       "title": "ThorSound",
       "hasCanvas": false,
-      "bodyTextLen": 279,
-      "bodyTextHash": "dfafd965adacfa4ad51610ca37cbd74ccc8bcfdc81e5c3629d62d87fdc705992",
-      "bodyTextPrefix": "ThorSound BONDOVA Ett steg om gangen. Fortsett Cycling Trivialit",
+      "bodyTextLen": 364,
+      "bodyTextHash": "a0e3b9cc2c4e103c36f5a208bf719e32dd1d46171dfb0b398dd010793c1dc463",
+      "bodyTextPrefix": "ThorSound BONDOVA Fra utstyret du har, til lyd som virker. Utsty",
       "horizontalOverflow": false,
       "consoleErrors": [],
       "pageErrors": [],
@@ -21,9 +21,9 @@
       "status": 200,
       "title": "ThorSound",
       "hasCanvas": false,
-      "bodyTextLen": 279,
-      "bodyTextHash": "dfafd965adacfa4ad51610ca37cbd74ccc8bcfdc81e5c3629d62d87fdc705992",
-      "bodyTextPrefix": "ThorSound BONDOVA Ett steg om gangen. Fortsett Cycling Trivialit",
+      "bodyTextLen": 364,
+      "bodyTextHash": "a0e3b9cc2c4e103c36f5a208bf719e32dd1d46171dfb0b398dd010793c1dc463",
+      "bodyTextPrefix": "ThorSound BONDOVA Fra utstyret du har, til lyd som virker. Utsty",
       "horizontalOverflow": false,
       "consoleErrors": [],
       "pageErrors": [],
@@ -36,8 +36,8 @@
   "divergesFromBaseline": true,
   "baselineReasons": [
     "desktop: title changed (\"Lydvenn\" -> \"ThorSound\")",
-    "desktop: body text changed (375 -> 279 chars, hash mismatch)",
+    "desktop: body text replaced (similar length, page start changed)",
     "mobile: title changed (\"Lydvenn\" -> \"ThorSound\")",
-    "mobile: body text changed (411 -> 279 chars, hash mismatch)"
+    "mobile: body text changed (411 -> 364 chars, hash mismatch)"
   ]
 }

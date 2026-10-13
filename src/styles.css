@@ -62,7 +62,80 @@
 
 .crystal-rule {
   height: 3px;
-  background: linear-gradient(90deg, var(--color-lamp), var(--color-gold) 52%, var(--color-violet));
+  background: linear-gradient(90deg, var(--color-lamp), var(--color-gold) 52%, var(--color-violet), var(--color-lamp));
+  background-size: 200% 100%;
+  animation: crystal-drift 14s linear infinite;
+}
+@keyframes crystal-drift {
+  to {
+    background-position: 200% 0;
+  }
+}
+
+.signal-path svg {
+  overflow: visible;
+}
+.signal-track,
+.signal-live {
+  fill: none;
+  stroke-width: 2;
+}
+.signal-track {
+  stroke: var(--color-line);
+}
+.signal-live {
+  stroke: var(--color-lamp);
+  stroke-dasharray: 28 240;
+  animation: signal-run 2.8s linear infinite;
+}
+.signal-node {
+  fill: var(--color-bg);
+  stroke: var(--color-lamp);
+  stroke-width: 2;
+}
+@keyframes signal-run {
+  to {
+    stroke-dashoffset: -268;
+  }
+}
+
+.panel-in {
+  animation: panel-in 220ms ease-out;
+}
+@keyframes panel-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+.row-link .row-chevron {
+  transition: transform 150ms ease-out;
+}
+.row-link:hover .row-chevron,
+.row-link:focus-visible .row-chevron {
+  transform: translateX(3px);
+}
+.is-live {
+  box-shadow: 0 0 0 2px var(--color-crystal);
+}
+.step-list {
+  counter-reset: step;
+}
+.step-list > li {
+  counter-increment: step;
+}
+.step-list > li > p:first-child::before {
+  content: counter(step);
+  display: inline-grid;
+  place-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  margin-right: 0.5rem;
+  border: 1px solid var(--color-lamp);
+  border-radius: 999px;
+  color: var(--color-lamp);
+  font-size: 0.75rem;
+  vertical-align: middle;
 }
 
 .studio-range {
@@ -83,6 +156,10 @@
   border-radius: 999px;
   background: var(--color-crystal);
   border: 0;
+  transition: transform 150ms ease-out;
+}
+.studio-range:active::-webkit-slider-thumb {
+  transform: scale(1.2);
 }
 .studio-range::-moz-range-track {
   height: 2px;
@@ -159,7 +236,46 @@ html.overlay-clear body {
   color: var(--color-muted);
 }
 .prompter-line.is-on {
-  color: var(--color-fg);
+  color: var(--color-lamp);
+}
+.lyric-read {
+  max-height: 14rem;
+  margin-top: 0.75rem;
+  overflow: auto;
+}
+.lyric-line {
+  padding: 0.35rem 0;
+  color: var(--color-muted);
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  line-height: 1.3;
+}
+.lyric-line.is-on {
+  color: var(--color-lamp);
+}
+.chord-band {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-top: 0.75rem;
+  overflow: hidden;
+  border: 1px solid var(--color-line);
+  background: var(--color-surface);
+}
+.chord-band span {
+  display: grid;
+  min-height: 2.75rem;
+  place-items: center;
+  border-right: 1px solid var(--color-line);
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+  color: var(--color-muted);
+}
+.chord-band span:last-child {
+  border-right: 0;
+}
+.chord-band span.is-on {
+  background: var(--color-lamp);
+  color: var(--color-ink);
 }
 .prompter-bar {
   position: absolute;
@@ -175,7 +291,14 @@ html.overlay-clear body {
   letter-spacing: 0.28em;
 }
 @media (prefers-reduced-motion: reduce) {
-  .rec-pulse {
+  .rec-pulse,
+  .crystal-rule,
+  .signal-live,
+  .panel-in {
     animation: none;
+  }
+  .row-link .row-chevron,
+  .studio-range::-webkit-slider-thumb {
+    transition: none;
   }
 }
