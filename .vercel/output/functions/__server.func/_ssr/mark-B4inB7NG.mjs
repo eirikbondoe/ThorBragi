@@ -2,7 +2,7 @@ import { S as require_jsx_runtime } from "../_libs/@tanstack/react-router+[...].
 import { n as clsx, t as cva } from "../_libs/class-variance-authority+clsx.mjs";
 import { t as twMerge } from "../_libs/tailwind-merge.mjs";
 import { n as persist, r as create, t as createJSONStorage } from "../_libs/zustand.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/mark-DIabbQ3z.js
+//#region node_modules/.nitro/vite/services/ssr/assets/mark-B4inB7NG.js
 var import_jsx_runtime = require_jsx_runtime();
 function cn(...inputs) {
 	return twMerge(clsx(inputs));
@@ -627,25 +627,23 @@ function Mark({ className = "h-12 w-12" }) {
 		className: `${className} rounded-md object-cover`
 	});
 }
-function Swoosh({ className = "h-6 w-16" }) {
-	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("svg", {
-		className,
-		viewBox: "0 0 120 36",
-		"aria-hidden": true,
-		children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
-			d: "M4 28 C28 28 40 8 78 10 C96 11 108 16 116 8",
-			fill: "none",
-			stroke: "#2ec8e6",
-			strokeWidth: "3",
-			strokeLinecap: "round"
-		}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
-			d: "M8 30 C34 26 48 14 86 16 C100 17 110 20 116 14",
-			fill: "none",
-			stroke: "#f4efea",
-			strokeWidth: "1.5",
-			strokeLinecap: "round",
-			opacity: "0.7"
-		})]
+function BondovaMark() {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
+		className: "inline-flex max-w-[11rem] flex-col items-end gap-1 text-right",
+		children: [
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+				className: "font-display text-xs font-medium tracking-[0.22em] uppercase",
+				children: "Bondova"
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+				className: "crystal-rule block h-px w-full",
+				"aria-hidden": true
+			}),
+			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+				className: "text-[11px] leading-tight text-muted",
+				children: "Mennesker og muligheter."
+			})
+		]
 	});
 }
 function Logo({ large = false }) {
@@ -655,7 +653,7 @@ function Logo({ large = false }) {
 			className: "min-w-0",
 			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
 				className: large ? "font-display text-4xl leading-none" : "font-display text-base leading-none",
-				children: "ThorSound"
+				children: "ThorBragi"
 			}), large ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 				className: "mt-2 text-xs font-medium tracking-widest text-muted uppercase",
 				children: "Bondova · Bondø Human AI"
@@ -664,4 +662,4 @@ function Logo({ large = false }) {
 	});
 }
 //#endregion
-export { putAudio as _, Meter as a, whenLabel as b, Slider as c, Wave as d, activeTake as f, hydrateStudio as g, getAudio as h, Logo as i, Swoosh as l, formatTime as m, Choices as n, PanelHead as o, activeVideoTake as p, KIND_LABEL as r, SECTION_LABEL as s, Button as t, TrackChips as u, songDuration as v, useStudio as y };
+export { putAudio as _, Logo as a, whenLabel as b, SECTION_LABEL as c, Wave as d, activeTake as f, hydrateStudio as g, getAudio as h, KIND_LABEL as i, Slider as l, formatTime as m, Button as n, Meter as o, activeVideoTake as p, Choices as r, PanelHead as s, BondovaMark as t, TrackChips as u, songDuration as v, useStudio as y };

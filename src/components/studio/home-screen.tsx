@@ -44,23 +44,24 @@ export function HomeScreen() {
               <details className="rounded-md border border-line bg-raised px-4 py-3">
                 <summary className="cursor-pointer font-medium">Om appen</summary>
                 <div className="mt-3 space-y-3 text-sm text-muted">
-                  <p>ThorSound er et hjemmestudio i nettleseren. Du har utstyret. Appen viser hvordan det kobles, og sier ifra når lyden er sterk nok til å tas opp.</p>
+                  <p>ThorBragi er et hjemmestudio i nettleseren. Du har utstyret. Appen viser hvordan det kobles, og sier ifra når lyden er sterk nok til å tas opp.</p>
                   <p>Utstyr. Du velger mikrofon, lydkort, mikser, kamera, adapter og hodetelefoner. Deretter får du en oppskrift for det oppsettet, og hjelp hvis det er stille.</p>
                   <p>Opptak. Test inngangen først. Måleren skal ligge mellom -12 og -6. Du kan telle fire slag, eller starte med en gang. Du kan ta opp flere spor, sette tempo og klikk, lage en loop, stemme, og la teksten følge sangen med akkorder under.</p>
                   <p>Etterpå. Du kan kutte endene, fade inn og ut, og løfte et spor så det sterkeste ligger rundt -6. Du kan også sette styrke, tone, jevnhet, rom og ekko. Ferdig lyd er et lett løft. Den redder ikke et dårlig opptak. Trommer passer bare hvis du spilte mot klikk. Støy i en samtale kan dempes, og talen kan skrives ut som tekst.</p>
                   <p>Lagring. WAV er urørt, til å jobbe videre med. MP3 for YouTube løftes mot omtrent -14 LUFS, og toppen holdes under -1.</p>
-                  <p>Bilde og deling. Du kan ta opp video, og dele en lang film i lengder for TikTok, Instagram og Shorts. En tekstkode lar en annen synge med. OBS og videosamtale får teksten og tittelen. ThorSound sender ikke selv.</p>
+                  <p>Bilde og deling. Du kan ta opp video, og dele en lang film i lengder for TikTok, Instagram og Shorts. En tekstkode lar en annen synge med. OBS og videosamtale får teksten og tittelen. ThorBragi sender ikke selv.</p>
                   <p>Utkast. Korte lydfiler kan bli et utkast til sang eller rap. To bilder kan bli et utkast til musikkvideo. Du hører og ser resultatet før du bruker det.</p>
                 </div>
               </details>
               <details className="mt-3 rounded-md border border-line bg-raised px-4 py-3">
                 <summary className="cursor-pointer font-medium">Om Thor</summary>
                 <div className="mt-3 space-y-3 text-sm">
-                  <p>Mich-Thor Patrick Jakkobbsen er 19 og et halvt år. Han er 163 cm og har store blonde krøller.</p>
-                  <p>Han er fra Myre, men vokste opp i Alta. Foreldrene ville ikke vedkjenne seg ham. Det begynte på en sommerfest i 1990, da Rune Rudberg og Per Heimly møtte Gunvor Hals.</p>
-                  <p>Etter årene i Alta, og ufrivillig tett kontakt med onkelen Rune Gregory, dro han til Trondheim på skateboard.</p>
-                  <p>Han har hatt brudd i øyehulen, flere alvorlige hårbrister, forstuing, voksesmerter i ørene og anstrengelsesastma.</p>
-                  <p>Trenger du noen å snakke med, er det ikke en hjelpetelefon. Setningen er en del av historien: ring Mich-Thor Patrick Jakkobbsen på telefonkiosken ved Trondheim torg, sett deg ned, og vent på elefanten.</p>
+                  <p>Jeg har en god kamerat som heter Thor. Ettersom jeg hadde begynt å fylle gaps i andre programmeringer, ble også tankesettet formet. Hva skal til for å automatisere det der?</p>
+                  <p>Thor er en utmerket gitarist, bowlingspiller, biljardspiller, skater, snowboarder, gitarspiller og frisbeegolfspiller. Ikke er han så verst på kampsport heller.</p>
+                  <p>En dag vi var hjemme hos han sa han at han hadde mikrofon, gitar, pc og en slags mikser, men han ante ikke hvordan han skulle sette det sammen som et slags studiomiksebord. Derfor lager jeg ThorBragi.</p>
+                  <p>Bragi er den norrøne guden for diktning, sang og det som blir sagt så det sitter. Ordet bragr betyr både poesi og «den fremste».</p>
+                  <p>Thor har hendene: gitar, skate, snowboard, bowling, biljard, frisbeegolf og kampsport. Han hadde allerede mikrofon, gitar, PC og mikser. Det som manglet, var noen som fikk det til å henge sammen.</p>
+                  <p>ThorBragi er det stykket. Ikke et nytt talent, men stemmen som gjør det han allerede kan, til noe man kan høre og ta vare på.</p>
                 </div>
               </details>
               <div className="mb-2 mt-8 flex items-baseline justify-between">

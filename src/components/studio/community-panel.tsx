@@ -133,7 +133,7 @@ export function UtPanel({ song, engine }: { song: Song; engine: RefObject<Studio
     <section>
       <PanelHead
         title="Legg ut"
-        lede="Velg hvor sangen skal bo. Bildet, lengden og teksten tilpasses. ThorSound legger ikke ut selv. Du limer inn."
+        lede="Velg hvor sangen skal bo. Bildet, lengden og teksten tilpasses. ThorBragi legger ikke ut selv. Du limer inn."
       />
       <div className="grid gap-2">
         {COMMUNITIES.map((item) => {

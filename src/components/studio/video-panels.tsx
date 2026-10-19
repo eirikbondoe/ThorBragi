@@ -596,7 +596,7 @@ export function FilmLagrePanel({ song }: Props) {
     <section>
       <PanelHead
         title="Lagre filmen"
-        lede="Velg format. WebM virker i de fleste nettlesere. MP4 vises bare hvis denne nettleseren kan skrive MP4. ThorSound legger ikke ut filen."
+        lede="Velg format. WebM virker i de fleste nettlesere. MP4 vises bare hvis denne nettleseren kan skrive MP4. ThorBragi legger ikke ut filen."
       />
       <FormatPick formats={formats} value={id} onChange={setId} />
       <Button className="mt-4" onClick={() => void download()} disabled={busy || !take || !format}>

@@ -2,7 +2,7 @@ import { o as __toESM } from "../_runtime.mjs";
 import { S as require_jsx_runtime, Y as require_react, _ as createFileRoute, d as Scripts, f as HeadContent, g as lazyRouteComponent, h as Outlet, m as createRouter, v as createRootRoute, x as useRouter } from "../_libs/@tanstack/react-router+[...].mjs";
 import { s as TriangleAlert } from "../_libs/lucide-react.mjs";
 import { a as number, c as union, i as literal, l as unknown, n as _enum, o as object, r as discriminatedUnion, s as string, t as number$1 } from "../_libs/zod.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-BRYx0h_P.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-prTfFpa-.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var __defProp = Object.defineProperty;
@@ -306,8 +306,8 @@ function PreviewHostBridge() {
 	}, [router]);
 	return null;
 }
-var styles_default = "/assets/styles-Be8rbdwa.css";
-var APP_NAME = "ThorSound";
+var styles_default = "/assets/styles-bNJZGhfI.css";
+var APP_NAME = "ThorBragi";
 var Route$6 = createRootRoute({
 	head: () => ({
 		meta: [
@@ -319,7 +319,7 @@ var Route$6 = createRootRoute({
 			{ title: APP_NAME },
 			{
 				name: "description",
-				content: "ThorSound kobler utstyret du allerede har, til et hjemmestudio som virker."
+				content: "ThorBragi kobler utstyret du allerede har, til et hjemmestudio som virker."
 			},
 			{
 				name: "theme-color",
@@ -370,7 +370,7 @@ var Route$6 = createRootRoute({
 		] })]
 	})
 });
-var $$splitComponentImporter$3 = () => import("./routes-xWQeaDxt.mjs");
+var $$splitComponentImporter$3 = () => import("./routes-CeAGdHb1.mjs");
 var Route$5 = createFileRoute("/")({ component: lazyRouteComponent($$splitComponentImporter$3, "component") });
 /**
 * Migration bookkeeping shared by the two appliers — `scripts/migrate.mjs`
@@ -768,11 +768,11 @@ async function transcribe({ request }) {
 	});
 }
 var Route$3 = createFileRoute("/api/transcribe")({ server: { handlers: { POST: transcribe } } });
-var $$splitComponentImporter$2 = () => import("./lag._code-RD20XTXP.mjs");
+var $$splitComponentImporter$2 = () => import("./lag._code-CpoEqIqf.mjs");
 var Route$2 = createFileRoute("/lag/$code")({ component: lazyRouteComponent($$splitComponentImporter$2, "component") });
-var $$splitComponentImporter$1 = () => import("./sammen._code-XJgwOtJr.mjs");
+var $$splitComponentImporter$1 = () => import("./sammen._code-CoOBVJ5T.mjs");
 var Route$1 = createFileRoute("/sammen/$code")({ component: lazyRouteComponent($$splitComponentImporter$1, "component") });
-var $$splitComponentImporter = () => import("./sang._id-CNAw84BE.mjs");
+var $$splitComponentImporter = () => import("./sang._id-DYCH3Fen.mjs");
 var Route = createFileRoute("/sang/$id")({ component: lazyRouteComponent($$splitComponentImporter, "component") });
 var rootRouteChildren = {
 	IndexRoute: Route$5.update({

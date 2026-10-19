@@ -38,7 +38,7 @@ export function AdvisorPanel({ song, go }: { song: Song; go: (job: JobId) => voi
     <section>
       <PanelHead
         title="Rådgiveren"
-        lede="ThorSound hører på det som ligger i låten og sier ifra. Han sitter i telefonen. Ingenting sendes ut."
+        lede="ThorBragi hører på det som ligger i låten og sier ifra. Han sitter i telefonen. Ingenting sendes ut."
       />
       <div className="grid gap-2">
         {ASKS.map((item) => (
@@ -56,7 +56,7 @@ export function AdvisorPanel({ song, go }: { song: Song; go: (job: JobId) => voi
       </div>
       {shown ? (
         <div className="mt-5 border-l-2 border-lamp pl-4">
-          <p className="text-xs font-medium tracking-widest text-lamp uppercase">ThorSound sier</p>
+          <p className="text-xs font-medium tracking-widest text-lamp uppercase">ThorBragi sier</p>
           <p className="mt-2 text-lg leading-snug">{answer.text}</p>
           {answer.moves.length > 0 ? (
             <div className="mt-4 flex flex-wrap gap-2">

@@ -49,7 +49,7 @@ export function StudioScreen({ id }: { id: string }) {
           <Link to="/" className="inline-flex min-h-11 items-center text-sm text-muted">
             Til sangene
           </Link>
-          <h1 className="mt-4 font-display text-3xl">{ready ? "Fant ikke sangen" : "ThorSound"}</h1>
+          <h1 className="mt-4 font-display text-3xl">{ready ? "Fant ikke sangen" : "ThorBragi"}</h1>
           {ready ? <p className="mt-2 text-muted">Den kan ha blitt slettet i denne nettleseren.</p> : null}
         </main>
       </Shell>

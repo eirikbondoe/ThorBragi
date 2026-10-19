@@ -85,7 +85,7 @@ export function producerAdvice(song: Song): Advice[] {
     notes.push({
       id: "koble",
       title: "Bilde til OBS eller Prism",
-      text: "En lenke OBS eller Prism kan legge oppå kameraet. ThorSound sender ikke.",
+      text: "En lenke OBS eller Prism kan legge oppå kameraet. ThorBragi sender ikke.",
       job: "koble",
     });
   }

@@ -1,13 +1,13 @@
 import { o as __toESM } from "../_runtime.mjs";
 import { S as require_jsx_runtime, Y as require_react, y as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { A as ChevronLeft, C as Headphones, D as Columns2, E as Drum, F as AudioLines, I as ArrowUp, L as ArrowDown, M as Captions, N as Cable, O as Circle, P as Bot, R as Activity, S as ListMusic, T as Ear, _ as Radio, a as Users, b as Mic, c as Trash2, d as Sparkles, f as SlidersHorizontal, g as Repeat, h as Scissors, i as Video, j as Cast, k as ChevronRight, l as Timer, m as ScrollText, n as Waves, o as Tv, p as Share2, r as WandSparkles, t as Wind, u as Square, v as Play, w as FileAudio, x as MessageSquare, y as Music2 } from "../_libs/lucide-react.mjs";
-import { n as Route } from "./router-BRYx0h_P.mjs";
-import { _ as putAudio, a as Meter, c as Slider, d as Wave, f as activeTake, g as hydrateStudio, h as getAudio, m as formatTime, n as Choices, o as PanelHead, p as activeVideoTake, r as KIND_LABEL, s as SECTION_LABEL, t as Button, u as TrackChips, v as songDuration, y as useStudio } from "./mark-DIabbQ3z.mjs";
-import { i as SammenPanel, l as useLyricLink, n as LyricLink, o as lyricIndex, r as Prompter, s as lyricLines } from "./lyric-link-D151QNXi.mjs";
+import { n as Route } from "./router-prTfFpa-.mjs";
+import { _ as putAudio, c as SECTION_LABEL, d as Wave, f as activeTake, g as hydrateStudio, h as getAudio, i as KIND_LABEL, l as Slider, m as formatTime, n as Button, o as Meter, p as activeVideoTake, r as Choices, s as PanelHead, u as TrackChips, v as songDuration, y as useStudio } from "./mark-B4inB7NG.mjs";
+import { i as SammenPanel, l as useLyricLink, n as LyricLink, o as lyricIndex, r as Prompter, s as lyricLines } from "./lyric-link-DGOpMYJR.mjs";
 import { n as TSS_SERVER_FUNCTION, r as getServerFnById, t as createServerFn } from "./ssr.mjs";
-import { n as Shell, t as Rig } from "./shell-Bcg0cluM.mjs";
+import { n as Shell, t as Rig } from "./shell-qQgO9_d-.mjs";
 import { t as Sr } from "../_libs/breezystack__lamejs.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/sang._id-CNAw84BE.js
+//#region node_modules/.nitro/vite/services/ssr/assets/sang._id-DYCH3Fen.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function producerAdvice(song) {
@@ -70,7 +70,7 @@ function producerAdvice(song) {
 	else notes.push({
 		id: "koble",
 		title: "Bilde til OBS eller Prism",
-		text: "En lenke OBS eller Prism kan legge oppå kameraet. ThorSound sender ikke.",
+		text: "En lenke OBS eller Prism kan legge oppå kameraet. ThorBragi sender ikke.",
 		job: "koble"
 	});
 	if (song.lyrics.trim()) notes.push({
@@ -2841,7 +2841,7 @@ function FilmLagrePanel({ song }) {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", { children: [
 		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(PanelHead, {
 			title: "Lagre filmen",
-			lede: "Velg format. WebM virker i de fleste nettlesere. MP4 vises bare hvis denne nettleseren kan skrive MP4. ThorSound legger ikke ut filen."
+			lede: "Velg format. WebM virker i de fleste nettlesere. MP4 vises bare hvis denne nettleseren kan skrive MP4. ThorBragi legger ikke ut filen."
 		}),
 		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(FormatPick, {
 			formats,
@@ -2918,7 +2918,7 @@ function communityPack(song, id) {
 	const hook = lines.split("\n")[0] || name;
 	if (id === "smule") return {
 		title: name,
-		body: `${lines}\n\nSyng med meg. Kode ${song.roomCode}.\nÅpne ThorSound, trykk Tekstkode, og skriv koden.`.trim()
+		body: `${lines}\n\nSyng med meg. Kode ${song.roomCode}.\nÅpne ThorBragi, trykk Tekstkode, og skriv koden.`.trim()
 	};
 	if (id === "kort") return {
 		title: hook.slice(0, 80),
@@ -3048,7 +3048,7 @@ function UtPanel({ song, engine }) {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", { children: [
 		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(PanelHead, {
 			title: "Legg ut",
-			lede: "Velg hvor sangen skal bo. Bildet, lengden og teksten tilpasses. ThorSound legger ikke ut selv. Du limer inn."
+			lede: "Velg hvor sangen skal bo. Bildet, lengden og teksten tilpasses. ThorBragi legger ikke ut selv. Du limer inn."
 		}),
 		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 			className: "grid gap-2",
@@ -3220,7 +3220,7 @@ var TARGETS = [
 	{
 		id: "direkte",
 		label: "Direkte",
-		text: "YouTube og andre. OBS eller Prism sender. ThorSound gjør det ikke."
+		text: "YouTube og andre. OBS eller Prism sender. ThorBragi gjør det ikke."
 	}
 ];
 function KoblePanel({ song }) {
@@ -3287,7 +3287,7 @@ function KoblePanel({ song }) {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", { children: [
 		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(PanelHead, {
 			title: "Koble bilde",
-			lede: "OBS, Prism og videosamtale tar imot et bilde. ThorSound gir dem teksten og tittelen. Selve sendingen gjør de."
+			lede: "OBS, Prism og videosamtale tar imot et bilde. ThorBragi gir dem teksten og tittelen. Selve sendingen gjør de."
 		}),
 		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 			className: "grid gap-2",
@@ -3341,7 +3341,7 @@ function KoblePanel({ song }) {
 			children: [
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: "Koble teksten til OBS eller Prism, som over." }),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: "Der velger du YouTube eller en annen kanal og trykker send." }),
-				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: "ThorSound ber ikke om strømmenøkkel, og sender ikke selv." })
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: "ThorBragi ber ikke om strømmenøkkel, og sender ikke selv." })
 			]
 		}) : null,
 		/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
@@ -3546,7 +3546,7 @@ function AdvisorPanel({ song, go }) {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", { children: [
 		/* @__PURE__ */ (0, import_jsx_runtime.jsx)(PanelHead, {
 			title: "Rådgiveren",
-			lede: "ThorSound hører på det som ligger i låten og sier ifra. Han sitter i telefonen. Ingenting sendes ut."
+			lede: "ThorBragi hører på det som ligger i låten og sier ifra. Han sitter i telefonen. Ingenting sendes ut."
 		}),
 		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
 			className: "grid gap-2",
@@ -3564,7 +3564,7 @@ function AdvisorPanel({ song, go }) {
 			children: [
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 					className: "text-xs font-medium tracking-widest text-lamp uppercase",
-					children: "ThorSound sier"
+					children: "ThorBragi sier"
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 					className: "mt-2 text-lg leading-snug",
@@ -6445,7 +6445,7 @@ function StudioScreen({ id }) {
 			}),
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
 				className: "mt-4 font-display text-3xl",
-				children: ready ? "Fant ikke sangen" : "ThorSound"
+				children: ready ? "Fant ikke sangen" : "ThorBragi"
 			}),
 			ready ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 				className: "mt-2 text-muted",

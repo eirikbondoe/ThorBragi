@@ -74,7 +74,7 @@ export function communityPack(song: Song, id: CommunityId): { title: string; bod
   if (id === "smule") {
     return {
       title: name,
-      body: `${lines}\n\nSyng med meg. Kode ${song.roomCode}.\nÅpne ThorSound, trykk Tekstkode, og skriv koden.`.trim(),
+      body: `${lines}\n\nSyng med meg. Kode ${song.roomCode}.\nÅpne ThorBragi, trykk Tekstkode, og skriv koden.`.trim(),
     };
   }
   if (id === "kort") {

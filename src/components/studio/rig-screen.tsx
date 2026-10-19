@@ -23,12 +23,26 @@ import type { JobId } from "@/lib/studio/types";
 
 type View = "home" | "katalog" | "guider" | "bygger" | "feil" | "guide" | "prove";
 
-const ORDER: GearKind[] = ["vert", "mikrofon", "lydkort", "mikser", "kamera", "adapter", "hodetelefon"];
+const ORDER: GearKind[] = ["vert", "mikrofon", "lydkort", "mikser", "hoyttaler", "kamera", "adapter", "hodetelefon"];
+
+const EVENSEN = ["ipad", "peavey-mp400", "peavey-hoyttaler", "mic-xlr"];
+
+const ASK: Record<Goal, string[]> = {
+  karaoke: EVENSEN,
+  hore: ["mic-xlr", "mic-usb", "mic-innebygd", "peavey-mp400", "peavey-hoyttaler", "headset", "telefon"],
+  stemme: ["mic-xlr", "mic-usb", "mic-innebygd", "lydkort", "telefon", "data", "peavey-mp400"],
+  gitar: ["mic-xlr", "lydkort", "peavey-mp400", "peavey-hoyttaler", "ipad", "data", "telefon"],
+  film: ["telefon", "kamera-tlf", "kamera", "mic-xlr"],
+  samtale: ["telefon", "headset", "bluetooth"],
+};
+
+const PATH = ["iPad → AUX", "Gitar → LINE", "Mikrofon → XLR", "Bak → to høyttalere"];
 
 export function Rig({ footer, go }: { footer?: ReactNode; go?: (job: JobId) => void }) {
   const [view, setView] = useState<View>("home");
   const [kind, setKind] = useState<GearKind | "alle">("alle");
   const [goal, setGoal] = useState<Goal | null>(null);
+  const [q, setQ] = useState<1 | 2>(1);
   const [owned, setOwned] = useState<string[]>([]);
   const [guide, setGuide] = useState<Guide | null>(null);
   const [built, setBuilt] = useState(false);
@@ -70,11 +84,21 @@ export function Rig({ footer, go }: { footer?: ReactNode; go?: (job: JobId) => v
       <section>
         <Back onClick={back} label="Tilbake" />
         <h2 className="font-display text-3xl">{guide.title}</h2>
-        <p className="mt-2 text-sm text-muted">{guide.result}</p>
+        {guide.id === "peavey-karaoke" ? (
+          <>
+            <Info>
+              iPaden viser teksten. Mikseren blander gitar, mikrofon og videoen. De to Peavey-høyttalerne spiller det.
+            </Info>
+            <Path items={PATH} />
+          </>
+        ) : (
+          <p className="mt-2 text-sm text-muted">{guide.result}</p>
+        )}
         <ol className="step-list mt-4 divide-y divide-line border-y border-line">
           {guide.steps.map((step) => (
             <li key={step.title} className="py-4">
               <p className="font-medium">{step.title}</p>
+              <p className="mt-2 text-xs font-medium tracking-widest text-muted uppercase">Derfor</p>
               <p className="mt-1 text-sm text-muted">{step.text}</p>
             </li>
           ))}
@@ -197,7 +221,7 @@ export function Rig({ footer, go }: { footer?: ReactNode; go?: (job: JobId) => v
         <h2 className="font-display text-3xl">Oppsett</h2>
         <p className="mt-2 text-sm text-muted">Ett oppsett om gangen. Følg stegene i rekkefølge.</p>
         <ul className="mt-4 divide-y divide-line border-y border-line">
-          {GUIDES.map((item) => (
+          {[...GUIDES].sort((a, b) => Number(b.id === "peavey-karaoke") - Number(a.id === "peavey-karaoke")).map((item) => (
             <li key={item.id}>
               <button type="button" onClick={() => openGuide(item)} className="w-full py-4 text-left">
                 <span className="block font-medium">{item.title}</span>
@@ -250,62 +274,87 @@ export function Rig({ footer, go }: { footer?: ReactNode; go?: (job: JobId) => v
   if (view === "bygger") {
     const found = goal ? matchGuides(goal, owned) : [];
     const near = goal && built && found.length === 0 ? closestGuide(goal, owned) : null;
+    const choices = goal ? ASK[goal] : [];
     return (
       <section>
         <Back onClick={back} label="Tilbake" />
         <h2 className="font-display text-3xl">Lag oppsett</h2>
-        <p className="mt-2 text-sm text-muted">Først hva du vil få til. Så hva du har. Så en oppskrift.</p>
-        <h3 className="mt-5 text-sm font-medium">1. Hva vil du få til?</h3>
-        <div className="mt-2 grid gap-2">
-          {GOALS.map((item) => (
-            <button
-              key={item.id}
-              type="button"
-              aria-pressed={goal === item.id}
-              onClick={() => {
-                setGoal(item.id);
-                setBuilt(false);
-              }}
-              className={
-                goal === item.id
-                  ? "rounded-md border border-lamp bg-surface-2 px-4 py-3 text-left"
-                  : "rounded-md border border-line bg-surface px-4 py-3 text-left"
-              }
-            >
-              <span className="block font-medium">{item.label}</span>
-              <span className="mt-1 block text-sm text-muted">{item.text}</span>
+        {q === 1 ? (
+          <>
+            <h3 className="mt-5 font-medium">Hva skal dere gjøre?</h3>
+            <Info>Velg én. Du kan gå tilbake og bytte.</Info>
+            <div className="mt-3 grid gap-2">
+              {GOALS.map((item) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  aria-pressed={goal === item.id}
+                  onClick={() => {
+                    setGoal(item.id);
+                    setBuilt(false);
+                    if (item.id === "karaoke") {
+                      setOwned((current) => {
+                        const next = [...new Set([...current, ...EVENSEN])];
+                        saveOwned(next);
+                        return next;
+                      });
+                    }
+                  }}
+                  className={
+                    goal === item.id
+                      ? "rounded-md border border-lamp bg-surface-2 px-4 py-3 text-left"
+                      : "rounded-md border border-line bg-surface px-4 py-3 text-left"
+                  }
+                >
+                  <span className="block font-medium">{item.label}</span>
+                  <span className="mt-1 block text-sm text-muted">{item.text}</span>
+                </button>
+              ))}
+            </div>
+            <Button className="mt-5 w-full" disabled={!goal} onClick={() => setQ(2)}>
+              Neste
+            </Button>
+          </>
+        ) : (
+          <>
+            <p className="mt-4 text-sm text-muted">Valgt: {GOALS.find((item) => item.id === goal)?.label}</p>
+            <button type="button" className="mt-1 min-h-11 text-sm text-crystal" onClick={() => setQ(1)}>
+              Bytt
             </button>
-          ))}
-        </div>
-        <h3 className="mt-6 text-sm font-medium">2. Hva har du?</h3>
-        {ORDER.map((group) => (
-          <div key={group} className="mt-4">
-            <p className="text-xs font-medium tracking-widest text-muted uppercase">{KIND_LABEL[group]}</p>
-            <div className="mt-2 grid gap-2">
-              {PIECES.filter((piece) => piece.kind === group).map((piece) => {
-                const on = owned.includes(piece.id);
+            <h3 className="mt-4 font-medium">Hva har dere her?</h3>
+            <Info>
+              {goal === "karaoke"
+                ? "Evensenmodus bruker disse. De er huket av. Ta bort det som ikke stemmer."
+                : "Trykk på det dere har. Lys kant betyr valgt. Du trenger ikke alt."}
+            </Info>
+            <div className="mt-3 grid gap-2">
+              {choices.map((id) => {
+                const piece = pieceById(id);
+                if (!piece) return null;
+                const on = owned.includes(id);
                 return (
                   <button
-                    key={piece.id}
+                    key={id}
                     type="button"
                     aria-pressed={on}
-                    onClick={() => toggle(piece.id)}
+                    onClick={() => toggle(id)}
                     className={
                       on
-                        ? "min-h-11 rounded-md border border-lamp bg-surface-2 px-3 text-left text-sm"
-                        : "min-h-11 rounded-md border border-line bg-surface px-3 text-left text-sm"
+                        ? "rounded-md border border-lamp bg-surface-2 px-4 py-3 text-left"
+                        : "rounded-md border border-line bg-surface px-4 py-3 text-left"
                     }
                   >
-                    {piece.name}
+                    <span className="block font-medium">{piece.name}</span>
+                    <span className="mt-1 block text-sm text-muted">{piece.into}</span>
                   </button>
                 );
               })}
             </div>
-          </div>
-        ))}
-        <Button className="mt-5 w-full" disabled={!goal} onClick={() => setBuilt(true)}>
-          Vis oppskriften
-        </Button>
+            <Button className="mt-5 w-full" onClick={() => setBuilt(true)}>
+              Vis oppskriften
+            </Button>
+          </>
+        )}
         {built && found[0] ? (
           <div className="mt-4 rounded-md border border-line bg-raised p-4">
             <p className="text-xs font-medium tracking-widest text-muted uppercase">Dette passer</p>
@@ -320,8 +369,7 @@ export function Rig({ footer, go }: { footer?: ReactNode; go?: (job: JobId) => v
           <div className="mt-4 rounded-md border border-line bg-raised p-4">
             <p className="font-medium">Ingen ferdig oppskrift med akkurat det du huket av.</p>
             <p className="mt-2 text-sm text-muted">
-              Nærmest er {near.guide.title}. Du mangler{" "}
-              {near.missing.map((id) => pieceById(id)?.name ?? id).join(", ")}.
+              Nærmest er {near.guide.title}. Du mangler {near.missing.map((id) => pieceById(id)?.name ?? id).join(", ")}.
             </p>
           </div>
         ) : null}
@@ -332,24 +380,30 @@ export function Rig({ footer, go }: { footer?: ReactNode; go?: (job: JobId) => v
   return (
     <section>
       <p className="text-sm text-muted">Fra utstyret du har, til lyd som virker.</p>
-      <div className="signal-path mt-4" aria-hidden="true">
-        <svg viewBox="0 0 360 36" className="h-9 w-full">
-          <path className="signal-track" d="M18 18 H342" />
-          <path className="signal-live" d="M18 18 H342" />
-          <circle className="signal-node" cx="18" cy="18" r="6" />
-          <circle className="signal-node" cx="126" cy="18" r="6" />
-          <circle className="signal-node" cx="234" cy="18" r="6" />
-          <circle className="signal-node" cx="342" cy="18" r="6" />
-        </svg>
-        <div className="grid grid-cols-4 text-center text-xs text-muted">
-          <span>Utstyr</span>
-          <span>Kabel</span>
-          <span>App</span>
-          <span>Lyd</span>
-        </div>
-      </div>
+      <p className="mt-1 text-xs text-muted">Bondova. Mennesker og muligheter.</p>
+      <button
+        type="button"
+        onClick={() => {
+          const next = GUIDES.find((item) => item.id === "peavey-karaoke");
+          if (next) openGuide(next);
+        }}
+        className="mt-4 w-full rounded-md border border-lamp bg-surface-2 p-4 text-left"
+      >
+        <p className="text-xs font-medium tracking-widest text-muted uppercase">Oppsett</p>
+        <p className="mt-1 font-display text-3xl">Evensenmodus</p>
+        <p className="mt-2 text-sm">iPad med YouTube-karaoke, gitar og mikrofon inn i Peavey MP 400.</p>
+        <Path items={PATH} />
+      </button>
       <div className="mt-4 grid gap-2">
-        <Button size="lg" className="w-full" onClick={() => setView("bygger")}>
+        <Button
+          size="lg"
+          className="w-full"
+          onClick={() => {
+            setQ(1);
+            setBuilt(false);
+            setView("bygger");
+          }}
+        >
           Lag et oppsett
         </Button>
         <Button variant="quiet" onClick={() => setView("guider")}>
@@ -390,5 +444,22 @@ function Filter({ on, label, onClick }: { on: boolean; label: string; onClick: (
     >
       {label}
     </button>
+  );
+}
+
+function Info({ children }: { children: ReactNode }) {
+  return <p className="mt-2 rounded-md border border-line bg-raised px-3 py-3 text-sm text-muted">{children}</p>;
+}
+
+function Path({ items }: { items: string[] }) {
+  return (
+    <ol className="mt-3 grid gap-2">
+      {items.map((item, index) => (
+        <li key={item} className="flex items-center gap-2 text-sm">
+          <span className="grid size-6 shrink-0 place-items-center rounded-full border border-lamp text-xs text-crystal">{index + 1}</span>
+          {item}
+        </li>
+      ))}
+    </ol>
   );
 }

@@ -1,8 +1,8 @@
 import { o as __toESM } from "../_runtime.mjs";
 import { S as require_jsx_runtime, Y as require_react, y as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { A as ChevronLeft } from "../_libs/lucide-react.mjs";
-import { i as Logo, l as Swoosh, t as Button } from "./mark-DIabbQ3z.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/shell-Bcg0cluM.js
+import { a as Logo, n as Button, t as BondovaMark } from "./mark-B4inB7NG.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/shell-qQgO9_d-.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 var KIND_LABEL = {
@@ -10,6 +10,7 @@ var KIND_LABEL = {
 	mikrofon: "Mikrofoner",
 	lydkort: "Lydkort",
 	mikser: "Miksere",
+	hoyttaler: "Høyttalere",
 	kamera: "Kameraer",
 	adapter: "Adaptere og kabler",
 	hodetelefon: "Hodetelefoner"
@@ -17,18 +18,23 @@ var KIND_LABEL = {
 var GOALS = [
 	{
 		id: "hore",
-		label: "Høre meg selv",
-		text: "Uten ekko, uten at høyttaleren blir med."
+		label: "Høre oss",
+		text: "Lyden i høyttalerne. Ingenting tas opp."
 	},
 	{
 		id: "stemme",
 		label: "Ta opp stemme",
-		text: "Snakke eller synge inn i én mikrofon."
+		text: "Én mikrofon. Snakke eller synge."
 	},
 	{
 		id: "gitar",
-		label: "Stemme og gitar",
-		text: "Begge deler, samtidig."
+		label: "Ta opp gitar og stemme",
+		text: "Begge samtidig."
+	},
+	{
+		id: "karaoke",
+		label: "YouTube-karaoke på iPad",
+		text: "Videoen med tekst blir på iPaden. Dette oppsettet heter Evensenmodus."
 	},
 	{
 		id: "film",
@@ -37,8 +43,8 @@ var GOALS = [
 	},
 	{
 		id: "samtale",
-		label: "Være i en samtale",
-		text: "Video eller telefon, uten dobbel lyd."
+		label: "Snakke i en samtale",
+		text: "Video eller telefon. Én lyd, ikke to."
 	}
 ];
 var PIECES = [
@@ -48,6 +54,13 @@ var PIECES = [
 		name: "Telefon",
 		into: "Lyden skal inn i telefonen.",
 		note: "Mikrofonen sitter som regel ved ladeporten."
+	},
+	{
+		id: "ipad",
+		kind: "vert",
+		name: "iPad med YouTube-karaoke",
+		into: "Videoen med tekst blir på skjermen. Lyden går i AUX.",
+		note: "Eget valg i oppsettet. Bluetooth av. Dette er starten på Evensenmodus."
 	},
 	{
 		id: "data",
@@ -97,6 +110,20 @@ var PIECES = [
 		name: "Mikser uten USB",
 		into: "Utgangen må videre til et lydkort. En mikser alene når ikke telefonen.",
 		note: "Main out er sterkt. Det skal inn på line, ikke mic, hvis lydkortet har begge."
+	},
+	{
+		id: "peavey-mp400",
+		kind: "mikser",
+		name: "Peavey MP 400",
+		into: "Fire kanaler. XLR er mikrofon. 6,3 mm er gitar. Ingen USB, så PC-en ser den ikke.",
+		note: "Bak står det 80 watt i 4 ohm, 50 watt i 8 ohm. Laveste last er 4 ohm. De to høyttalerutgangene er parallellkoblet."
+	},
+	{
+		id: "peavey-hoyttaler",
+		kind: "hoyttaler",
+		name: "To Peavey-høyttalere",
+		into: "To kasser. Hver får sin kabel fra høyttalerutgangene bak på MP 400.",
+		note: "Ikke i AUX, MAIN eller OUTPUT foran. To kasser på 8 ohm er greit. To på 4 ohm er for lavt. Da bruker du bare én."
 	},
 	{
 		id: "kamera-tlf",
@@ -379,6 +406,138 @@ var GUIDES = [
 		]
 	},
 	{
+		id: "peavey-hore",
+		title: "Peavey MP 400 i rommet",
+		goals: [
+			"hore",
+			"stemme",
+			"gitar"
+		],
+		needs: ["peavey-mp400"],
+		result: "Du hører mikrofon og gitar i begge Peavey-høyttalerne. Ingenting går til PC-en.",
+		steps: [
+			{
+				title: "Grønt lys",
+				text: "POWER på. Lyset betyr strøm, ikke at lyden er oppe."
+			},
+			{
+				title: "Mikrofon i XLR",
+				text: "LOW Z på kanal 1, 2, 3 eller 4. Ikke i AUX, INPUTS eller REMOTE SWITCH ved master."
+			},
+			{
+				title: "Gitar i 6,3 mm",
+				text: "HIGH Z på en annen kanal. Samme kanal tar ikke imot XLR og 6,3 mm samtidig."
+			},
+			{
+				title: "XLR har 15 volt alltid",
+				text: "Bare en balansert mikrofon der. En gitarplugg skal ikke i XLR."
+			},
+			{
+				title: "LEVEL, så MASTER LEVEL",
+				text: "Kanalen først, omtrent midt på. MASTER LEVEL etterpå. Ikke start med master på fullt."
+			},
+			{
+				title: "EQ i midten",
+				text: "MASTER EQUALIZATION, LOW, MID og HIGH, i midtstilling. Det er flatt."
+			},
+			{
+				title: "REVERB på null",
+				text: "Både kanalens reverb og MASTER REVERB. Skru det opp etter at stemmen høres."
+			},
+			{
+				title: "To høyttalere bak",
+				text: "Begge kablene sitter i utgangene bak. De er parallellkoblet. Samlet last skal ikke under 4 ohm. 8 ohm på begge kasser blir 4, og det er greit. 4 ohm på begge blir 2, og det er for lavt. Tallet på kassen står ved kontakten, ikke på mikseren."
+			}
+		]
+	},
+	{
+		id: "peavey-pc",
+		title: "Peavey MP 400 til PC",
+		goals: ["stemme", "gitar"],
+		needs: [
+			"peavey-mp400",
+			"lydkort",
+			"data"
+		],
+		result: "Mikseren lager miksen. Lydkortet tar linje-utgangen inn i PC-en.",
+		steps: [
+			{
+				title: "Kanalene først",
+				text: "Mikrofon i XLR. Gitar i 6,3 mm på en annen kanal. LEVEL opp."
+			},
+			{
+				title: "OUTPUT foran",
+				text: "Linje-utgangen foran. Ikke høyttalerutgangen bak."
+			},
+			{
+				title: "Inn i lydkortets line",
+				text: "Ikke mic-inngangen. Main out er sterkt."
+			},
+			{
+				title: "Lydkortet i USB",
+				text: "Velg lydkortet som inngang på PC-en. Ikke den innebygde mikrofonen."
+			},
+			{
+				title: "MASTER LEVEL lavt",
+				text: "Skru opp til stemmen er tydelig. Stopp før det spraker."
+			},
+			{
+				title: "Rød plugg",
+				text: "En plugg i AUX eller INPUTS ved master er ikke mikrofonkanalen."
+			}
+		]
+	},
+	{
+		id: "peavey-karaoke",
+		title: "Evensenmodus",
+		goals: [
+			"karaoke",
+			"hore",
+			"gitar",
+			"stemme"
+		],
+		needs: [
+			"peavey-mp400",
+			"peavey-hoyttaler",
+			"ipad"
+		],
+		result: "iPaden spiller videoen med tekst. Gitar og mikrofon går i hver sin kanal. Lyden kommer i begge Peavey-høyttalerne.",
+		steps: [
+			{
+				title: "Videoen på iPaden",
+				text: "Åpne karaokevideoen på YouTube. Teksten blir på skjermen. Skru av Bluetooth."
+			},
+			{
+				title: "iPad inn i AUX",
+				text: "AUX står under INPUTS ved master, ikke under OUTPUTS. Hodetelefonutgangen på iPaden dit. USB-C trenger adapter til 3,5 mm, og den til 6,3 mm hvis hullet er stort. Volum på iPaden omtrent halvveis. MAIN er en utgang. Ikke sett iPaden der."
+			},
+			{
+				title: "Gitar på egen kanal",
+				text: "Kabel fra gitaren til LINE, merket HIGH Z, for eksempel kanal 1. Ikke i AUX. Ikke i XLR."
+			},
+			{
+				title: "Mikrofon i XLR",
+				text: "MIC, merket LOW Z, på en annen kanal. Der er det 15 volt, ikke 48. En vanlig mikrofon tåler det. En studiomikrofon som krever 48 volt blir ofte stille. Ikke gjennom iPaden."
+			},
+			{
+				title: "LEVEL, så MASTER LEVEL",
+				text: "Gitar og mikrofon hver for seg, omtrent midt på. MASTER LEVEL etterpå. Karaoke for høy: skru ned iPaden, ikke gitaren."
+			},
+			{
+				title: "REVERB på null",
+				text: "Til gitar og stemme sitter. Karaoke tåler lite romklang."
+			},
+			{
+				title: "To Peavey-høyttalere",
+				text: "Begge kablene sitter allerede i utgangene bak. Mikseren sier 4 ohm som laveste last, og at utgangene er parallellkoblet. 8 ohm på begge kasser er greit. 4 ohm på begge er for lavt. Tallet står på kassen, ved kontakten."
+			},
+			{
+				title: "Start videoen",
+				text: "Du skal høre karaoke, gitar og stemme i begge høyttalerne. Teksten leses på iPaden."
+			}
+		]
+	},
+	{
 		id: "film-telefon",
 		title: "Film med telefonen",
 		goals: ["film"],
@@ -543,6 +702,19 @@ var FAULTS = [
 		]
 	},
 	{
+		id: "peavey",
+		title: "Peavey MP 400 er stille",
+		signs: "Grønt lys, men ingen lyd. Eller PC-en hører ingenting.",
+		checks: [
+			"LEVEL på kanalen og MASTER LEVEL må begge være oppe.",
+			"Mikrofonen skal i XLR på kanal 1 til 4. Ikke i AUX ved master.",
+			"XLR og 6,3 mm på samme kanal virker ikke samtidig.",
+			"Denne mikseren har ingen USB. PC-en ser den ikke.",
+			"Til PC: OUTPUT foran, inn i et lydkort på line, lydkortet i USB.",
+			"De to utgangene bak går til hver sin Peavey-kasse. Ikke til AUX foran."
+		]
+	},
+	{
 		id: "bluetooth",
 		title: "Bluetooth kommer for sent",
 		signs: "Du hører deg selv etter at du har sunget, eller samtalen hakker.",
@@ -598,14 +770,69 @@ var ORDER = [
 	"mikrofon",
 	"lydkort",
 	"mikser",
+	"hoyttaler",
 	"kamera",
 	"adapter",
 	"hodetelefon"
+];
+var EVENSEN = [
+	"ipad",
+	"peavey-mp400",
+	"peavey-hoyttaler",
+	"mic-xlr"
+];
+var ASK = {
+	karaoke: EVENSEN,
+	hore: [
+		"mic-xlr",
+		"mic-usb",
+		"mic-innebygd",
+		"peavey-mp400",
+		"peavey-hoyttaler",
+		"headset",
+		"telefon"
+	],
+	stemme: [
+		"mic-xlr",
+		"mic-usb",
+		"mic-innebygd",
+		"lydkort",
+		"telefon",
+		"data",
+		"peavey-mp400"
+	],
+	gitar: [
+		"mic-xlr",
+		"lydkort",
+		"peavey-mp400",
+		"peavey-hoyttaler",
+		"ipad",
+		"data",
+		"telefon"
+	],
+	film: [
+		"telefon",
+		"kamera-tlf",
+		"kamera",
+		"mic-xlr"
+	],
+	samtale: [
+		"telefon",
+		"headset",
+		"bluetooth"
+	]
+};
+var PATH = [
+	"iPad → AUX",
+	"Gitar → LINE",
+	"Mikrofon → XLR",
+	"Bak → to høyttalere"
 ];
 function Rig({ footer, go }) {
 	const [view, setView] = (0, import_react.useState)("home");
 	const [kind, setKind] = (0, import_react.useState)("alle");
 	const [goal, setGoal] = (0, import_react.useState)(null);
+	const [q, setQ] = (0, import_react.useState)(1);
 	const [owned, setOwned] = (0, import_react.useState)([]);
 	const [guide, setGuide] = (0, import_react.useState)(null);
 	const [built, setBuilt] = (0, import_react.useState)(false);
@@ -646,7 +873,7 @@ function Rig({ footer, go }) {
 			className: "font-display text-3xl",
 			children: guide.title
 		}),
-		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+		guide.id === "peavey-karaoke" ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Info, { children: "iPaden viser teksten. Mikseren blander gitar, mikrofon og videoen. De to Peavey-høyttalerne spiller det." }), /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Path, { items: PATH })] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
 			className: "mt-2 text-sm text-muted",
 			children: guide.result
 		}),
@@ -654,13 +881,20 @@ function Rig({ footer, go }) {
 			className: "step-list mt-4 divide-y divide-line border-y border-line",
 			children: guide.steps.map((step) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("li", {
 				className: "py-4",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-					className: "font-medium",
-					children: step.title
-				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-					className: "mt-1 text-sm text-muted",
-					children: step.text
-				})]
+				children: [
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						className: "font-medium",
+						children: step.title
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						className: "mt-2 text-xs font-medium tracking-widest text-muted uppercase",
+						children: "Derfor"
+					}),
+					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+						className: "mt-1 text-sm text-muted",
+						children: step.text
+					})
+				]
 			}, step.title))
 		}),
 		go ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
@@ -831,7 +1065,7 @@ function Rig({ footer, go }) {
 		}),
 		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
 			className: "mt-4 divide-y divide-line border-y border-line",
-			children: GUIDES.map((item) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+			children: [...GUIDES].sort((a, b) => Number(b.id === "peavey-karaoke") - Number(a.id === "peavey-karaoke")).map((item) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("li", { children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 				type: "button",
 				onClick: () => openGuide(item),
 				className: "w-full py-4 text-left",
@@ -898,6 +1132,7 @@ function Rig({ footer, go }) {
 	if (view === "bygger") {
 		const found = goal ? matchGuides(goal, owned) : [];
 		const near = goal && built && found.length === 0 ? closestGuide(goal, owned) : null;
+		const choices = goal ? ASK[goal] : [];
 		return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("section", { children: [
 			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Back, {
 				onClick: back,
@@ -907,62 +1142,85 @@ function Rig({ footer, go }) {
 				className: "font-display text-3xl",
 				children: "Lag oppsett"
 			}),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-				className: "mt-2 text-sm text-muted",
-				children: "Først hva du vil få til. Så hva du har. Så en oppskrift."
-			}),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-				className: "mt-5 text-sm font-medium",
-				children: "1. Hva vil du få til?"
-			}),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-				className: "mt-2 grid gap-2",
-				children: GOALS.map((item) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+			q === 1 ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+					className: "mt-5 font-medium",
+					children: "Hva skal dere gjøre?"
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Info, { children: "Velg én. Du kan gå tilbake og bytte." }),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "mt-3 grid gap-2",
+					children: GOALS.map((item) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+						type: "button",
+						"aria-pressed": goal === item.id,
+						onClick: () => {
+							setGoal(item.id);
+							setBuilt(false);
+							if (item.id === "karaoke") setOwned((current) => {
+								const next = [.../* @__PURE__ */ new Set([...current, ...EVENSEN])];
+								saveOwned(next);
+								return next;
+							});
+						},
+						className: goal === item.id ? "rounded-md border border-lamp bg-surface-2 px-4 py-3 text-left" : "rounded-md border border-line bg-surface px-4 py-3 text-left",
+						children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "block font-medium",
+							children: item.label
+						}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+							className: "mt-1 block text-sm text-muted",
+							children: item.text
+						})]
+					}, item.id))
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+					className: "mt-5 w-full",
+					disabled: !goal,
+					onClick: () => setQ(2),
+					children: "Neste"
+				})
+			] }) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, { children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("p", {
+					className: "mt-4 text-sm text-muted",
+					children: ["Valgt: ", GOALS.find((item) => item.id === goal)?.label]
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
 					type: "button",
-					"aria-pressed": goal === item.id,
-					onClick: () => {
-						setGoal(item.id);
-						setBuilt(false);
-					},
-					className: goal === item.id ? "rounded-md border border-lamp bg-surface-2 px-4 py-3 text-left" : "rounded-md border border-line bg-surface px-4 py-3 text-left",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-						className: "block font-medium",
-						children: item.label
-					}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-						className: "mt-1 block text-sm text-muted",
-						children: item.text
-					})]
-				}, item.id))
-			}),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
-				className: "mt-6 text-sm font-medium",
-				children: "2. Hva har du?"
-			}),
-			ORDER.map((group) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				className: "mt-4",
-				children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-					className: "text-xs font-medium tracking-widest text-muted uppercase",
-					children: KIND_LABEL[group]
-				}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-					className: "mt-2 grid gap-2",
-					children: PIECES.filter((piece) => piece.kind === group).map((piece) => {
-						const on = owned.includes(piece.id);
-						return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("button", {
+					className: "mt-1 min-h-11 text-sm text-crystal",
+					onClick: () => setQ(1),
+					children: "Bytt"
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("h3", {
+					className: "mt-4 font-medium",
+					children: "Hva har dere her?"
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Info, { children: goal === "karaoke" ? "Evensenmodus bruker disse. De er huket av. Ta bort det som ikke stemmer." : "Trykk på det dere har. Lys kant betyr valgt. Du trenger ikke alt." }),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+					className: "mt-3 grid gap-2",
+					children: choices.map((id) => {
+						const piece = pieceById(id);
+						if (!piece) return null;
+						const on = owned.includes(id);
+						return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
 							type: "button",
 							"aria-pressed": on,
-							onClick: () => toggle(piece.id),
-							className: on ? "min-h-11 rounded-md border border-lamp bg-surface-2 px-3 text-left text-sm" : "min-h-11 rounded-md border border-line bg-surface px-3 text-left text-sm",
-							children: piece.name
-						}, piece.id);
+							onClick: () => toggle(id),
+							className: on ? "rounded-md border border-lamp bg-surface-2 px-4 py-3 text-left" : "rounded-md border border-line bg-surface px-4 py-3 text-left",
+							children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "block font-medium",
+								children: piece.name
+							}), /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+								className: "mt-1 block text-sm text-muted",
+								children: piece.into
+							})]
+						}, id);
 					})
-				})]
-			}, group)),
-			/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
-				className: "mt-5 w-full",
-				disabled: !goal,
-				onClick: () => setBuilt(true),
-				children: "Vis oppskriften"
-			}),
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
+					className: "mt-5 w-full",
+					onClick: () => setBuilt(true),
+					children: "Vis oppskriften"
+				})
+			] }),
 			built && found[0] ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 				className: "mt-4 rounded-md border border-line bg-raised p-4",
 				children: [
@@ -995,8 +1253,7 @@ function Rig({ footer, go }) {
 					children: [
 						"Nærmest er ",
 						near.guide.title,
-						". Du mangler",
-						" ",
+						". Du mangler ",
 						near.missing.map((id) => pieceById(id)?.name ?? id).join(", "),
 						"."
 					]
@@ -1009,55 +1266,32 @@ function Rig({ footer, go }) {
 			className: "text-sm text-muted",
 			children: "Fra utstyret du har, til lyd som virker."
 		}),
-		/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-			className: "signal-path mt-4",
-			"aria-hidden": "true",
-			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("svg", {
-				viewBox: "0 0 360 36",
-				className: "h-9 w-full",
-				children: [
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
-						className: "signal-track",
-						d: "M18 18 H342"
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
-						className: "signal-live",
-						d: "M18 18 H342"
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("circle", {
-						className: "signal-node",
-						cx: "18",
-						cy: "18",
-						r: "6"
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("circle", {
-						className: "signal-node",
-						cx: "126",
-						cy: "18",
-						r: "6"
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("circle", {
-						className: "signal-node",
-						cx: "234",
-						cy: "18",
-						r: "6"
-					}),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("circle", {
-						className: "signal-node",
-						cx: "342",
-						cy: "18",
-						r: "6"
-					})
-				]
-			}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-				className: "grid grid-cols-4 text-center text-xs text-muted",
-				children: [
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Utstyr" }),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Kabel" }),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "App" }),
-					/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { children: "Lyd" })
-				]
-			})]
+		/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+			className: "mt-1 text-xs text-muted",
+			children: "Bondova. Mennesker og muligheter."
+		}),
+		/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
+			type: "button",
+			onClick: () => {
+				const next = GUIDES.find((item) => item.id === "peavey-karaoke");
+				if (next) openGuide(next);
+			},
+			className: "mt-4 w-full rounded-md border border-lamp bg-surface-2 p-4 text-left",
+			children: [
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "text-xs font-medium tracking-widest text-muted uppercase",
+					children: "Oppsett"
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "mt-1 font-display text-3xl",
+					children: "Evensenmodus"
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+					className: "mt-2 text-sm",
+					children: "iPad med YouTube-karaoke, gitar og mikrofon inn i Peavey MP 400."
+				}),
+				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Path, { items: PATH })
+			]
 		}),
 		/* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 			className: "mt-4 grid gap-2",
@@ -1065,7 +1299,11 @@ function Rig({ footer, go }) {
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
 					size: "lg",
 					className: "w-full",
-					onClick: () => setView("bygger"),
+					onClick: () => {
+						setQ(1);
+						setBuilt(false);
+						setView("bygger");
+					},
 					children: "Lag et oppsett"
 				}),
 				/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button, {
@@ -1108,6 +1346,24 @@ function Filter({ on, label, onClick }) {
 		children: label
 	});
 }
+function Info({ children }) {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+		className: "mt-2 rounded-md border border-line bg-raised px-3 py-3 text-sm text-muted",
+		children
+	});
+}
+function Path({ items }) {
+	return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ol", {
+		className: "mt-3 grid gap-2",
+		children: items.map((item, index) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("li", {
+			className: "flex items-center gap-2 text-sm",
+			children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+				className: "grid size-6 shrink-0 place-items-center rounded-full border border-lamp text-xs text-crystal",
+				children: index + 1
+			}), item]
+		}, item))
+	});
+}
 function Shell({ children, back }) {
 	return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 		className: "mx-auto flex min-h-dvh w-full max-w-3xl flex-col",
@@ -1122,10 +1378,7 @@ function Shell({ children, back }) {
 						className: "size-4",
 						"aria-hidden": true
 					}), back.label]
-				}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Logo, {}), back ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Logo, {}) : /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("span", {
-					className: "inline-flex items-center gap-2 text-xs font-medium tracking-widest text-muted uppercase",
-					children: [/* @__PURE__ */ (0, import_jsx_runtime.jsx)(Swoosh, {}), "Bondova"]
-				})]
+				}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Logo, {}), back ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Logo, {}) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(BondovaMark, {})]
 			})]
 		}), children]
 	});

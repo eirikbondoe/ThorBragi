@@ -1,9 +1,9 @@
 import { o as __toESM } from "../_runtime.mjs";
 import { S as require_jsx_runtime, Y as require_react, b as useNavigate, y as Link } from "../_libs/@tanstack/react-router+[...].mjs";
 import { c as Trash2, k as ChevronRight } from "../_libs/lucide-react.mjs";
-import { b as whenLabel, g as hydrateStudio, m as formatTime, t as Button, v as songDuration, y as useStudio } from "./mark-DIabbQ3z.mjs";
-import { n as Shell, t as Rig } from "./shell-Bcg0cluM.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/routes-xWQeaDxt.js
+import { b as whenLabel, g as hydrateStudio, m as formatTime, n as Button, v as songDuration, y as useStudio } from "./mark-B4inB7NG.mjs";
+import { n as Shell, t as Rig } from "./shell-qQgO9_d-.mjs";
+//#region node_modules/.nitro/vite/services/ssr/assets/routes-CeAGdHb1.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_runtime = require_jsx_runtime();
 function HomeScreen() {
@@ -48,12 +48,12 @@ function HomeScreen() {
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "mt-3 space-y-3 text-sm text-muted",
 						children: [
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "ThorSound er et hjemmestudio i nettleseren. Du har utstyret. Appen viser hvordan det kobles, og sier ifra når lyden er sterk nok til å tas opp." }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "ThorBragi er et hjemmestudio i nettleseren. Du har utstyret. Appen viser hvordan det kobles, og sier ifra når lyden er sterk nok til å tas opp." }),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "Utstyr. Du velger mikrofon, lydkort, mikser, kamera, adapter og hodetelefoner. Deretter får du en oppskrift for det oppsettet, og hjelp hvis det er stille." }),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "Opptak. Test inngangen først. Måleren skal ligge mellom -12 og -6. Du kan telle fire slag, eller starte med en gang. Du kan ta opp flere spor, sette tempo og klikk, lage en loop, stemme, og la teksten følge sangen med akkorder under." }),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "Etterpå. Du kan kutte endene, fade inn og ut, og løfte et spor så det sterkeste ligger rundt -6. Du kan også sette styrke, tone, jevnhet, rom og ekko. Ferdig lyd er et lett løft. Den redder ikke et dårlig opptak. Trommer passer bare hvis du spilte mot klikk. Støy i en samtale kan dempes, og talen kan skrives ut som tekst." }),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "Lagring. WAV er urørt, til å jobbe videre med. MP3 for YouTube løftes mot omtrent -14 LUFS, og toppen holdes under -1." }),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "Bilde og deling. Du kan ta opp video, og dele en lang film i lengder for TikTok, Instagram og Shorts. En tekstkode lar en annen synge med. OBS og videosamtale får teksten og tittelen. ThorSound sender ikke selv." }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "Bilde og deling. Du kan ta opp video, og dele en lang film i lengder for TikTok, Instagram og Shorts. En tekstkode lar en annen synge med. OBS og videosamtale får teksten og tittelen. ThorBragi sender ikke selv." }),
 							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "Utkast. Korte lydfiler kan bli et utkast til sang eller rap. To bilder kan bli et utkast til musikkvideo. Du hører og ser resultatet før du bruker det." })
 						]
 					})]
@@ -66,11 +66,12 @@ function HomeScreen() {
 					}), /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
 						className: "mt-3 space-y-3 text-sm",
 						children: [
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "Mich-Thor Patrick Jakkobbsen er 19 og et halvt år. Han er 163 cm og har store blonde krøller." }),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "Han er fra Myre, men vokste opp i Alta. Foreldrene ville ikke vedkjenne seg ham. Det begynte på en sommerfest i 1990, da Rune Rudberg og Per Heimly møtte Gunvor Hals." }),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "Etter årene i Alta, og ufrivillig tett kontakt med onkelen Rune Gregory, dro han til Trondheim på skateboard." }),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "Han har hatt brudd i øyehulen, flere alvorlige hårbrister, forstuing, voksesmerter i ørene og anstrengelsesastma." }),
-							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "Trenger du noen å snakke med, er det ikke en hjelpetelefon. Setningen er en del av historien: ring Mich-Thor Patrick Jakkobbsen på telefonkiosken ved Trondheim torg, sett deg ned, og vent på elefanten." })
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "Jeg har en god kamerat som heter Thor. Ettersom jeg hadde begynt å fylle gaps i andre programmeringer, ble også tankesettet formet. Hva skal til for å automatisere det der?" }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "Thor er en utmerket gitarist, bowlingspiller, biljardspiller, skater, snowboarder, gitarspiller og frisbeegolfspiller. Ikke er han så verst på kampsport heller." }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "En dag vi var hjemme hos han sa han at han hadde mikrofon, gitar, pc og en slags mikser, men han ante ikke hvordan han skulle sette det sammen som et slags studiomiksebord. Derfor lager jeg ThorBragi." }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "Bragi er den norrøne guden for diktning, sang og det som blir sagt så det sitter. Ordet bragr betyr både poesi og «den fremste»." }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "Thor har hendene: gitar, skate, snowboard, bowling, biljard, frisbeegolf og kampsport. Han hadde allerede mikrofon, gitar, PC og mikser. Det som manglet, var noen som fikk det til å henge sammen." }),
+							/* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", { children: "ThorBragi er det stykket. Ikke et nytt talent, men stemmen som gjør det han allerede kan, til noe man kan høre og ta vare på." })
 						]
 					})]
 				}),

@@ -90,7 +90,7 @@ export function SammenPanel({ song }: { song: Song }) {
     const nav = navigator as Navigator & { share?: (data: ShareData) => Promise<void> };
     try {
       if (nav.share) {
-        await nav.share({ title: song.title || "ThorSound", text, url });
+        await nav.share({ title: song.title || "ThorBragi", text, url });
         return;
       }
       await navigator.clipboard.writeText(`${text} ${url}`);
